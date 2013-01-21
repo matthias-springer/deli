@@ -56,6 +56,8 @@ Deli::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
 
-  match 'login' => 'login#index', :via => :get
-  match 'login' => 'login#handle_login', :via => :post
+  match 'login' => 'login#index', :via => :get, :as => :login
+  match 'login' => 'login#handle_login', :via => :post, :as => :handle_login
+  match 'login/signup' => 'login#signup', :via => :get, :as => :signup
+  match 'login/signup' => 'login#handle_signup', :via => :post, :as => :handle_signup
 end
