@@ -1,0 +1,9 @@
+<h1>User signup result</h1>
+
+<% if @user.valid? %>
+  <p>Everything's fine! User was created.</p>
+<% else %>
+  <p>User data is invalid! <%= @user.errors.inspect %></p>
+<% end %>
+
+
