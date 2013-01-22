@@ -60,4 +60,5 @@ Deli::Application.routes.draw do
   match 'login' => 'login#handle_login', :via => :post, :as => :handle_login
   match 'login/signup' => 'login#signup', :via => :get, :as => :signup
   match 'login/signup' => 'login#handle_signup', :via => :post, :as => :handle_signup
+  match 'lectures' => 'lecture#index', via: :get
 end
