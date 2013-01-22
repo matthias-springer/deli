@@ -4,4 +4,8 @@ class LectureController < ApplicationController
     # render input form
   end
 
+  def create
+
+  end
+
 end
