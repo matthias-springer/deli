@@ -55,10 +55,10 @@ Deli::Application.routes.draw do
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
-
+  resources :lectures
+  
   match 'login' => 'login#index', :via => :get, :as => :login
   match 'login' => 'login#handle_login', :via => :post, :as => :handle_login
   match 'login/signup' => 'login#signup', :via => :get, :as => :signup
   match 'login/signup' => 'login#handle_signup', :via => :post, :as => :handle_signup
-  match 'lectures' => 'lecture#index', via: :get
 end

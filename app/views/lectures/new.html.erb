@@ -1,0 +1,16 @@
+<%= form_for @lecture, :url => { :action => "create" } do |f| %>
+  <% if @lecture.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@lecture.errors.count, "error") %> prohibited_save</h2>
+      <ul>
+      <% @lecture.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.text_field :title %>
+  <%= f.text_area :description, :size => "40x9" %>
+  <%= f.submit "Create" %>
+<% end %>
