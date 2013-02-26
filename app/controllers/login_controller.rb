@@ -13,10 +13,14 @@ class LoginController < ApplicationController
   end
 
   def handle_signup
-    puts "Handle signup with #{params}!"
-  
-    @user = User.new(params[:user])
-    Maglev.save if user.valid?
+    MaglevRecord.reset
+   
+    Maglev.persistent do
+      @user = User.new(params[:user])
+    end
+   
+    MaglevRecord.save if @user.valid?
+   
   end
 
 end

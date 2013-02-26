@@ -20,7 +20,7 @@ class LecturesController < ApplicationController
       @lecture = Lecture.new(params[:lecture])
     end
 
-    puts "PTINT!!!!!!!!!!!!!!!!! #{@lecture}"
+    puts "PRINT!!!!!!!!!!!!!!!!! #{@lecture}"
     
     if @lecture.valid?
       MaglevRecord.save
