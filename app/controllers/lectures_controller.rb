@@ -20,12 +20,10 @@ class LecturesController < ApplicationController
       @lecture = Lecture.new(params[:lecture])
     end
 
-    puts "PRINT!!!!!!!!!!!!!!!!! #{@lecture}"
-    
     if @lecture.valid?
       MaglevRecord.save
     end
-
+    render :action => :index
   end
 
 end
