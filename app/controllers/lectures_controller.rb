@@ -2,7 +2,10 @@ require 'maglev_record'
 class LecturesController < ApplicationController
   
   def index
-    # render index
+    Lecture.each do |lec|
+      puts lec.class == Lecture
+    end
+    @lectures = Lecture.all
   end
 
   def new
@@ -16,14 +19,12 @@ class LecturesController < ApplicationController
 
   def create
     MaglevRecord.reset
-    Maglev.persistent do
-      @lecture = Lecture.new(params[:lecture])
-    end
 
-    if @lecture.valid?
-      MaglevRecord.save
-    end
-    render :action => :index
+    @lecture = Lecture.new(params[:lecture]) #
+
+    MaglevRecord.save
+
+    redirect_to :action => :index
   end
 
 end

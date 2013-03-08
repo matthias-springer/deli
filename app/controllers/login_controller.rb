@@ -19,7 +19,7 @@ class LoginController < ApplicationController
       @user = User.new(params[:user])
     end
    
-    MaglevRecord.save if @user.valid?
+    MaglevRecord.save #if @user.valid?
    
   end
 
