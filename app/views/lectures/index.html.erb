@@ -1,15 +1,28 @@
-<h1>Lectures</h1>
+<h2>Vorlesungen</h2>
 
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Description</th>
-  </tr>
- 
-<% @lectures.each do |lecture| %>
-  <tr>
-    <td><%= lecture.title %></td>
-    <td><%= lecture.description %></td>
-  </tr>
+<div class="row-fluid">
+  <div class="span12">
+    <%=mini_button "Vorlesung erstellen", {:controller => "lectures", :action => "new"}, :class => 'btn-success pull-right'%>
+  </div>
+</div>
+<% if not @lectures.empty? %>
+  <div class="row-fluid">
+    <div class="span12">
+      <table class="table table-stripped">
+        <tr>
+          <th>Titel</th>
+          <th>Beschreibung</th>
+        </tr>
+     
+        <% @lectures.each do |lecture| %>
+          <tr>
+            <td><%= lecture.title %></td>
+            <td><%= lecture.description %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+<% else %>
+  <div class="alert alert-info">Keine Vorlesungen vorhanden!</div>
 <% end %>
-</table>

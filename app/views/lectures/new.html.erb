@@ -1,5 +1,12 @@
-<%= form_for @lecture, :url => { :action => "create" } do |f| %>
-  <%= f.text_field :title %>
-  <%= f.text_area :description, :size => "40x9" %>
-  <%= f.submit "Create" %>
+
+<h2>Neue Vorlesung erstellen</h2>
+
+
+<%= form_for @lecture, :url => { :action => "create" }, :builder => StandardFormBuilder, :html=>{:class => "form-horizontal"} do |f| %>
+  <%= f.text_field :title, "Titel" %>
+  <%= f.text_area :description, "Beschreibung", :size => "40x9" %>
+  <div class="form-actions">
+    <%= f.submit "Erstellen", :class=>"btn btn-success pull-right" %>
+    <%= link_to "Zurück", {:controller => "lectures", :action => "index"}, :class=>"btn btn-primary pull-left" %>
+  </div>
 <% end %>

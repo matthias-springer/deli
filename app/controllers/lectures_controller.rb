@@ -2,9 +2,6 @@ require 'maglev_record'
 class LecturesController < ApplicationController
   
   def index
-    Lecture.each do |lec|
-      puts lec.class == Lecture
-    end
     @lectures = Lecture.all
   end
 
