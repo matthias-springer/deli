@@ -5,6 +5,10 @@ class LecturesController < ApplicationController
     @lectures = Lecture.all
   end
 
+  def edit
+    @post = Post.find(params[:lecture])
+  end
+
   def new
     @lecture = Lecture.new
 

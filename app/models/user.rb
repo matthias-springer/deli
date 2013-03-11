@@ -2,7 +2,7 @@ require "maglev_record"
 
 puts "====> Loading User"
 
-Maglev.persistent do
+# Maglev.persistent do
   class User
     include MaglevRecord::RootedBase
 
@@ -14,4 +14,4 @@ Maglev.persistent do
     # validates :email, :presence => true
     # validates :password, :presence => true
   end
-end
+# end

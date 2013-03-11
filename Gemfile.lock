@@ -47,7 +47,7 @@ GEM
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.7.5)
-    maglevrecord (0.0.3)
+    maglevrecord (0.0.4)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)

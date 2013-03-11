@@ -12,12 +12,16 @@
         <tr>
           <th>Titel</th>
           <th>Beschreibung</th>
+          <th></th>
         </tr>
      
         <% @lectures.each do |lecture| %>
           <tr>
             <td><%= lecture.title %></td>
             <td><%= lecture.description %></td>
+            <td>
+              <%= link_to 'Edit', edit_lecture_path(lecture)%>
+            </td>
           </tr>
         <% end %>
       </table>

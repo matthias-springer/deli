@@ -7,9 +7,9 @@ Exception.install_debug_block do |e|
   case e.class.name
     #when 'RubyThrowException', 'Errno::ENOENT', 'LoadError', 'RubyBreakException'
       #ignore
-    when 'TransactionError'
+    when 'NoMethodError'
       #m = Maglev::PERSISTENT_ROOT
-      #nil.pause #if msg =~ /encode_www_form_component/
+      # nil.pause if msg =~ /\+/
     else
     #ignore
       #puts "-- #{e}    (#{e.class.name})"

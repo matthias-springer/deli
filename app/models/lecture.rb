@@ -1,7 +1,7 @@
 require "maglev_record"
 
 puts "====> Loading Lecture"
-Maglev.persistent do
+# Maglev.persistent do
   class Lecture
     include MaglevRecord::RootedBase
 
@@ -15,4 +15,4 @@ Maglev.persistent do
       "#{title}, #{description}"
     end
   end
-end
+# end
