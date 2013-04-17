@@ -1,4 +1,4 @@
-require 'maglev_record'
+
 class LecturesController < ApplicationController
   
   def index

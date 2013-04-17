@@ -1,0 +1,1 @@
+Dir.glob("#{Rails.root}/app/models/*.rb").sort.each { |file| Kernel.require file }
