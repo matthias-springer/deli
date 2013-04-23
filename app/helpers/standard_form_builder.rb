@@ -9,6 +9,25 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     labeled_control_group(label, super(field_name, options))
   end
 
+  def errors(errs)
+    if errs
+      errs.inject(nil) do |oldErrs, newErr|
+        if oldErrs.nil?
+          __error_as_div(newErr)
+        else
+          oldErrs + __error_as_div(newErr)
+        end
+      end
+    end
+  end
+
+  def __error_as_div(message)
+    @template.content_tag(:div, :class => 'alert alert-error') do
+      @template.content_tag(:div, :class => "close", :type => "button", :'data-dismiss' => "alert") do "×" end + # + is important!
+      message
+    end
+  end
+
   def labeled_control_group(label, element)
     @template.content_tag(:div, :class => 'control-group') do
       @template.label_tag("#{@object_name}_#{label}", label.to_s.humanize, :class => 'control-label') + # + is important!
