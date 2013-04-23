@@ -58,9 +58,10 @@ Deli::Application.routes.draw do
   root :to => 'welcome#index'
   
   resources :lectures
+  resources :users
   
-  match 'login' => 'login#index', :via => :get, :as => :login
-  match 'login' => 'login#handle_login', :via => :post, :as => :handle_login
-  match 'login/signup' => 'login#signup', :via => :get, :as => :signup
-  match 'login/signup' => 'login#handle_signup', :via => :post, :as => :handle_signup
+  match 'login' => 'login#index',                 :via => :get,   :as => :login
+  match 'login' => 'login#handle_login',          :via => :post,  :as => :handle_login
+  # match 'login/signup' => 'login#signup',         :via => :get,   :as => :signup
+  # match 'login/signup' => 'login#handle_signup',  :via => :post,  :as => :handle_signup
 end

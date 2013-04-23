@@ -9,6 +9,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     labeled_control_group(label, super(field_name, options))
   end
 
+  def password_field(field_name, label = nil, options = {})
+    label ||= field_name
+    labeled_control_group(label, super(field_name, options))
+  end
+
   def errors(errs)
     if errs
       errs.inject(nil) do |oldErrs, newErr|
@@ -27,6 +32,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       message
     end
   end
+
+
+
 
   def labeled_control_group(label, element)
     @template.content_tag(:div, :class => 'control-group') do
