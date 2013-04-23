@@ -10,12 +10,25 @@ class LecturesController < ApplicationController
   end
 
   def edit
+    # first get possible errors
+    @errors = flash[:errors]
+
+    # then reset, to get the newest content
+    MaglevRecord.reset
     @lecture = Lecture.find_by_objectid(params[:id])
   end
 
   def update
-    @lecture.update_attributes(params[:lecture])
-    redirect_to :action => :index
+    MaglevRecord.reset
+    obj = Lecture.find_by_objectid(params[:id]).update_attributes(params[:lecture])
+
+    if obj.valid?
+      MaglevRecord.save
+      redirect_to :action => :index
+    else
+      flash[:errors] = obj.errors.full_messages
+      redirect_to :action => :edit
+    end
   end
 
   def destroy
