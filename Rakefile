@@ -4,4 +4,6 @@
 
 require File.expand_path('../config/application', __FILE__)
 
+require 'maglev_record/raketasks'
+
 Deli::Application.load_tasks
