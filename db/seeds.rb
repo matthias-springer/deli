@@ -5,3 +5,19 @@
 #
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Emanuel', :city => cities.first)
+require "rubygems"
+require "maglev_record"
+require "app/models/user"
+
+
+MaglevRecord.reset
+
+User.clear
+User.create({
+  :first_name => "User",
+  :last_name => "Test",
+  :email => "user@test.com",
+  :password => "password"
+  })
+
+MaglevRecord.save
