@@ -43,6 +43,7 @@ class LecturesController < ApplicationController
 
     if @lecture.valid?
       MaglevRecord.save
+      flash[:message] = "Vorlesung erfolgreich erstellt!"
       redirect_to :action => :index
     else
       render "new"

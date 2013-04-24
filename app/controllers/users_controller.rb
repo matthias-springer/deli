@@ -24,7 +24,6 @@ class UsersController < ApplicationController
   end
 
   def new
-    # first get possible errors
     @user = User.new
   end
 
@@ -35,6 +34,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     if @user.valid?
       MaglevRecord.save
+      flash[:message] = "User erfolgreich erstellt!"
       redirect_to :action => :index
     else
       render "new"
