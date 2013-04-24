@@ -33,6 +33,7 @@ class UsersController < ApplicationController
 
     @user = User.new(params[:user])
     if @user.valid?
+      @user.clear_sensibles
       MaglevRecord.save
       flash[:message] = "User erfolgreich erstellt!"
       redirect_to :action => :index
