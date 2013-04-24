@@ -1,11 +1,3 @@
 <h2>Vorlesung bearbeiten</h2>
 
-<%= form_for @lecture, :builder => StandardFormBuilder, :html => {:class => "form-horizontal", :method => "put"} do |f| %>
-  <%= f.errors @lecture.errors.full_messages %>
-
-  <%= f.text_field :title, "Titel" %>
-  <%= f.text_area :description, "Beschreibung", :size => "40x9" %>
-  <div class="form-actions">
-    <%= f.submit "Speichern" %>
-  </div>
-<% end %>
+<%= render 'form'%>

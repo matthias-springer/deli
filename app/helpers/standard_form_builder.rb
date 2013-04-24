@@ -15,8 +15,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def errors(errs)
-    if errs
-      errs.inject(nil) do |oldErrs, newErr|
+    if not errs.nil? and errs.any?
+      errs.full_messages.inject(nil) do |oldErrs, newErr|
         if oldErrs.nil?
           __error_as_div(newErr)
         else

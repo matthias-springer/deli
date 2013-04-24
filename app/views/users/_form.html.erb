@@ -1,6 +1,6 @@
 <%= form_for @user, :builder => StandardFormBuilder, :html=>{:class => "form-horizontal"} do |f| %>
-  <%= f.errors @user.errors.full_messages%>
-  
+  <%= f.errors @user.errors%>
+
   <%= f.text_field :first_name, "Vorname" %>
   <%= f.text_field :last_name, "Nachname" %>
   <%= f.text_field :email, "E-Mail" %>
