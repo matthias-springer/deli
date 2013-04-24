@@ -33,9 +33,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-
-
-
   def labeled_control_group(label, element)
     @template.content_tag(:div, :class => 'control-group') do
       @template.label_tag("#{@object_name}_#{label}", label.to_s.humanize, :class => 'control-label') + # + is important!

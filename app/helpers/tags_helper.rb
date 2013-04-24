@@ -1,7 +1,7 @@
 module TagsHelper
-  def labeled_control_group(name, form_element)
+  def labeled_control_group(name, form_element, field_name)
     content_tag(:div, :class => 'control-group') do
-      label_tag(name, nil, :class => 'control-label') + # + is important!
+      label_tag(name, field_name, :class => 'control-label') + # + is important!
       content_tag(:div, :class => 'controls') do 
         form_element
       end
