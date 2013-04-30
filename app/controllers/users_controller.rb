@@ -1,12 +1,10 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
   
-  def index
-
-  end
-
   def show
-    redirect_to :action => :index
+    MaglevRecord.reset
+    @user = User.find_by_objectid(params[:id])
+    render "profile" if current_user and current_user == @user
   end
 
   def edit

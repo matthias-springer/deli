@@ -20,6 +20,7 @@
           <% if current_user %>
             <ul class="nav">
               <li><%=link_to "Vorlesungen", :controller => "lectures", :action => "index"%></li>
+              <li><%=link_to "Profil", user_path(current_user.id) %></li>
             </ul>
             <ul class="nav pull-right">
               <li><%=link_to "Logout", :controller => "sessions", :action => "destroy" %></li>
@@ -48,6 +49,10 @@
           <%= flash[:error]%>
         </div>
       <% end %>
+
+      <%= link_to "Zurück", url_for(:back), :class => "btn btn-mini btn-primary pull-right" %>
+
+
       <%= yield %>
     </div> <!-- /container -->
 </body>

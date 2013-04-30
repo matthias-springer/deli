@@ -6,6 +6,7 @@ class StudentgroupsController < ApplicationController
   end
 
   def show
+    @group = Studentgroup.find_by_objectid(params[:id])
   end
 
   def edit

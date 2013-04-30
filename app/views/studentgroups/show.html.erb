@@ -1,0 +1,33 @@
+<h2>Gruppe <%= @group%></h2>
+<table class="table table-striped">
+  <tbody>
+    <tr>
+      <th>Tutoren</th>
+      <td>
+        <% if !@group.tutors.blank? %>
+          <% for tutor in @group.tutors %>
+            <%= link_to tutor, user_path(tutor.id) %> <br>
+          <% end %>
+        <% else %>
+          <span class="badge badge-info">
+            keine Studenten zugeordnet
+          </span>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <th>Studenten</th>
+      <td>
+        <% if !@group.students.blank? %>
+          <% for student in @group.students %>
+            <%= link_to student, user_path(student.id) %> <br>
+          <% end %>
+        <% else %>
+          <span class="badge badge-info">
+            keine Studenten zugeordnet
+          </span>
+        <% end %>
+      </td>
+    </tr>
+  </tbody>
+</table>

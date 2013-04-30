@@ -64,8 +64,8 @@ Deli::Application.routes.draw do
   root :to => 'welcome#index'
   
   resources :lectures
-  resources :users
-  resources :studentgroups
+  resources :users,           :except => :index
+  resources :studentgroups,   :except => :index
   resources :sessions
   
 end
