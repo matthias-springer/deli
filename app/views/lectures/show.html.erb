@@ -1,0 +1,91 @@
+<h2>Vorlesung</h2>
+<%= mini_button "Zurück", {:controller => "lectures", :action => "index"}, :class => "btn-success pull-left"%>
+<h3><%= @lecture.title %></h3>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th colspan="2">Allgemeine Informationen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Dozent</th>
+      <td>
+        <%= link_to @lecture.lecturer.to_s, user_path(@lecture.lecturer.id) %>
+      </td>
+    </tr>
+
+    <tr>
+      <th>Assistenten</th>
+      <td>
+        <% if !@lecture.staff.blank? %>
+          <% for staff in @lecture.staff %>
+            <%= link_to staff.to_s, user_path(staff.id) %> <br>        
+          <% end %>
+        <% else %>
+          <p class="badge badge-info">Noch keine Assistenten zugeordnet</p>
+        <% end %>
+      </td>
+    </tr>
+
+    <tr>
+      <th>Tutoren</th>
+      <td>
+        <% if !@lecture.tutors.blank? %>
+          <% for tutor in @lecture.tutors %>
+            <%= link_to tutor.to_s, user_path(tutor.id) %> <br>        
+          <% end %>
+        <% else %>
+          <p class="badge badge-info">Noch keine Tutoren zugeordnet</p>
+        <% end %>
+      </td>
+    </tr>
+  </tbody>
+
+</table>
+
+<table class="table table-striped">
+  <% if !@lecture.groups.blank? %>
+    <thead>
+      <tr>
+        <th colspan="2">eingetragene Gruppen</th>
+      </tr>
+      <tr>
+        <th>Gruppe</th>
+        <th>Studenten</th>
+      </tr>
+    </thead>
+    <tbody>
+        <% for group in @lecture.groups %>
+          <tr>
+            <td>
+              <%= link_to "##{group.id}", studentgroup_path(group.id) %> <br>        
+            </td>
+            <td>
+              <% if !group.students.blank? %>
+                <% for student in group.students %>
+                  <%= link_to student.to_s, user_path(student.id) %> <br>        
+                <% end %>
+              <% else %>
+                <span class="bagde bagde-info">Leere Gruppe</span>    
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+    </tbody>
+    <% else %>
+      <tbody>
+        <tr>
+          <th><span class="bagde bagde-info">Keine Gruppen eingetragen</span></th>
+          <td>
+            <%= link_to new_studentgroup_path, :class => "btn btn-success" do%>
+              Gruppe erstellen <i class="icon-plus icon-white"></i> 
+            <% end %>
+
+          </td>
+        </tr>      
+      </tbody>
+    <% end %>
+
+</table>

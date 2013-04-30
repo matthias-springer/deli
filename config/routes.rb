@@ -65,6 +65,7 @@ Deli::Application.routes.draw do
   
   resources :lectures
   resources :users
+  resources :studentgroups
   resources :sessions
   
 end

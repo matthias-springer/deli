@@ -7,9 +7,9 @@ Exception.install_debug_block do |e|
   case e.class.name
     #when 'RubyThrowException', 'Errno::ENOENT', 'LoadError', 'RubyBreakException'
       #ignore
-    when 'NoMethodError'
+    when 'NameError'
       #m = Maglev::PERSISTENT_ROOT
-      # nil.pause if msg =~ /\+/
+      # nil.pause if msg =~ /Group is not missing constant/
     else
     #ignore
       #puts "-- #{e}    (#{e.class.name})"

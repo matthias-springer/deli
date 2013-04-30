@@ -1,13 +1,15 @@
 
 class LecturesController < ApplicationController
-  
+  load_and_authorize_resource
+
   def index
     MaglevRecord.reset
     @lectures = Lecture.all
   end
 
   def show
-    redirect_to :action => :index
+    MaglevRecord.reset
+    @lecture = Lecture.find_by_objectid(params[:id])
   end
 
   def edit
@@ -28,8 +30,16 @@ class LecturesController < ApplicationController
   end
 
   def destroy
-    redirect_to :action => :index
+    MaglevRecord.reset
+    message = {:notice => "Erfolgreich gelöscht!"}
+    if Lecture.object_pool.delete(params[:id].to_i).nil?
+      message = {:alert => "Objekt nicht vorhanden!"}
+    end
+    MaglevRecord.save
+
+    redirect_to({:action => 'index'}, message)
   end
+
 
   def new
     @lecture = Lecture.new

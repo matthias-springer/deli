@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-
+  load_and_authorize_resource
+  
   def index
 
   end
@@ -24,10 +25,13 @@ class UsersController < ApplicationController
   end
 
   def new
+    redirect_to root_url if current_user
+    
     @user = User.new
   end
 
   def create
+    redirect_to root_url if current_user
 
     MaglevRecord.reset
 
