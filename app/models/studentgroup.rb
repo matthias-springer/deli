@@ -1,6 +1,6 @@
 require "maglev_record"
 
-class StudentGroup
+class Studentgroup
   include MaglevRecord::Base
 
   attr_accessor :students, :tutors

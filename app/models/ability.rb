@@ -48,7 +48,7 @@ class Ability
 
   def student
     can :read, Lecture
-    can :create, StudentGroup
+    can :create, Studentgroup
   end
 
   def tutor

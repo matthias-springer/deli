@@ -98,8 +98,8 @@ lec3 = Lecture.create({
   })
 
 
-group1 = StudentGroup.new
-group2 = StudentGroup.new
+group1 = Studentgroup.new
+group2 = Studentgroup.new
 
 group1.students << st1
 group1.students << st2
