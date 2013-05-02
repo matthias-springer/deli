@@ -1,7 +1,7 @@
 require "maglev_record"
 
 class Studentgroup
-  include MaglevRecord::Base
+  include MaglevRecord::RootedBase
 
   attr_accessor :students, :tutors
   
