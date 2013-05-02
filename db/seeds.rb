@@ -82,19 +82,16 @@ tut2.set_role(:tutor)
 lec1 = Lecture.create({
   :title => "Lecture 1",
   :description => "something",
-  :lecturer => lecturer,
   })
 
 lec2 = Lecture.create({
   :title => "Lecture 2",
   :description => "something",
-  :lecturer => lecturer,
   })
 
 lec3 = Lecture.create({
   :title => "Lecture 3",
   :description => "something",
-  :lecturer => lecturer,
   })
 
 
@@ -111,6 +108,10 @@ group2.students << st2
 group2.students << st3
 group2.students << st4
 group2.tutors << tut2
+
+lec1.lecturer << lecturer
+lec2.lecturer << lecturer
+lec3.lecturer << lecturer
 
 lec1.groups << group2
 lec2.groups << group1

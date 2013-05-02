@@ -21,4 +21,11 @@ module TagsHelper
     link_to(body, url, options)
   end
 
+  def icon_button(url, method, options = {}, &block)
+
+    form_tag(url, :method => method) do
+      button_tag(options, &block)
+    end
+  end
+
 end

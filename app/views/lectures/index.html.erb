@@ -20,7 +20,9 @@
      
         <% @lectures.each do |lecture| %>
           <tr>
-            <td><%= lecture.title %></td>
+            <td>
+              <%= link_to lecture.title, lecture_path(lecture)%>
+            </td>
             <td><%= lecture.description %></td>
             <td>
               <% if !lecture.groups.blank? %>

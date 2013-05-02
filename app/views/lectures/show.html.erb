@@ -1,6 +1,23 @@
 <h2>Vorlesung</h2>
 <h3><%= @lecture.title %></h3>
 
+
+<div class = "actions pull-right">
+  <% if can? :edit, Lecture %>
+    <%= link_to lecture_path(@lecture), :class => "btn btn-mini btn-success" do%>
+      <i class = "icon-pencil"></i>
+    <% end %>
+  <% end %>
+  
+  <% if can? :destroy, Lecture %>
+    <%=form_tag (lecture_path(@lecture), :method => "delete", :class => "delete-button-form") do%>
+      <%= button_tag :confirm => 'Are you sure?', :method => :delete, :class => "btn btn-mini btn-danger" do%>
+        <i class='icon-trash'></i>
+      <% end %>
+    <% end %>
+  <% end %>
+</div> 
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -11,7 +28,30 @@
     <tr>
       <th>Dozent</th>
       <td>
-        <%= link_to @lecture.lecturer.to_s, user_path(@lecture.lecturer.id) %>
+        <% if !@lecture.lecturer.blank? %>
+          <% for lecturer in @lecture.lecturer %>
+            <div class="row-fluid">
+              <div class="span6">
+                <%= link_to lecturer.to_s, user_path(lecturer.id) %>
+              </div>
+              <div class="span6">
+                <%= form_tag remove_user_path(@lecture.id, :lecturer), :method => :delete do%>
+                  <%= hidden_field_tag 'user_id', lecturer.id %>
+                  <%= button_tag :class=> "btn btn-mini btn-danger" do%>
+                    <i class = "icon-minus"></i>          
+                  <% end %>
+                <% end %>
+              </div>
+            </div>        
+          <% end %>
+        <% else %>
+          <p class="badge badge-info">Noch keine Dozenten zugeordnet</p>
+        <% end %>
+      </td>
+      <td>
+        <%= link_to add_user_list_path(@lecture, :lecturer), :class => 'btn btn-mini btn-success pull-right' do%>
+          <i class = "icon-plus"></i>
+        <% end %>
       </td>
     </tr>
 
@@ -20,10 +60,27 @@
       <td>
         <% if !@lecture.staff.blank? %>
           <% for staff in @lecture.staff %>
-            <%= link_to staff.to_s, user_path(staff.id) %> <br>        
+            <div class="row-fluid">
+              <div class="span6">
+                <%= link_to staff.to_s, user_path(staff.id) %> 
+              </div>
+              <div class="span6">
+                <%= form_tag remove_user_path(@lecture.id, :staff), :method => :delete do%>
+                  <%= hidden_field_tag 'user_id', staff.id %>
+                  <%= button_tag :class=> "btn btn-mini btn-danger" do%>
+                    <i class = "icon-minus"></i>          
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
           <% end %>
         <% else %>
           <p class="badge badge-info">Noch keine Assistenten zugeordnet</p>
+        <% end %>
+      </td>
+      <td>
+        <%= link_to add_user_list_path(@lecture, :staff), :class => 'btn btn-mini btn-success pull-right' do%>
+          <i class = "icon-plus"></i>
         <% end %>
       </td>
     </tr>
@@ -33,10 +90,27 @@
       <td>
         <% if !@lecture.tutors.blank? %>
           <% for tutor in @lecture.tutors %>
-            <%= link_to tutor.to_s, user_path(tutor.id) %> <br>        
+            <div class="row-fluid">
+              <div class="span6">
+                <%= link_to tutor.to_s, user_path(tutor.id) %>
+              </div>
+              <div class="span6">
+                <%= form_tag remove_user_path(@lecture.id, :tutors), :method => :delete do%>
+                  <%= hidden_field_tag 'user_id', tutor.id %>
+                  <%= button_tag :class=> "btn btn-mini btn-danger" do%>
+                    <i class = "icon-minus"></i>          
+                  <% end %>
+                <% end %>
+              </div>
+            </div>      
           <% end %>
         <% else %>
           <p class="badge badge-info">Noch keine Tutoren zugeordnet</p>
+        <% end %>
+      </td>
+      <td>
+        <%= link_to add_user_list_path(@lecture, :tutors), :class => 'btn btn-mini btn-success pull-right' do%>
+          <i class = "icon-plus"></i>
         <% end %>
       </td>
     </tr>

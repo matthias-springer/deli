@@ -62,4 +62,61 @@ class LecturesController < ApplicationController
 
   end
 
+
+  def add_user_list
+    @users = User.all
+    render 'add_user_list'
+  end
+
+
+  def add_user
+    MaglevRecord.reset
+    user = User.find_by_objectid(params[:user_id])
+    lec_id = params[:id]
+    role = params[:role].to_sym
+    if not valid_role(role)
+      raise Error, "invalid url!"
+    end
+    if user.nil?
+      redirect_to add_user_list_path(lec_id, role), :error => "der Benutzer existiert nicht!"
+      return
+    end
+    if not user.add_to_lecture(lec_id, role)
+      redirect_to add_user_list_path(lec_id, role), :error => "der Benutzer konnte nicht eingefügt werden!"
+      return
+    end
+    MaglevRecord.save
+    redirect_to lecture_path(lec_id), :notice => "Vorlesung erfolgreich aktuallisiert!"
+  end
+
+  def remove_user
+    MaglevRecord.reset
+    user = User.find_by_objectid(params[:user_id])
+    lec_id = params[:id]
+    role = params[:role].to_sym
+    if not valid_role(role)
+      raise Error, "invalid url!"
+    end
+    message = nil
+    
+    if user.nil?
+      message = {:error => "der Benutzer existiert nicht!"}
+    end
+    if not user.remove_from_lecture(lec_id, role) and message.nil?
+      message = {:error => "der Benutzer konnte nicht entfernt werden!"}
+    end
+    
+    if message.nil?
+      MaglevRecord.save
+      message = {:notice => "Vorlesung erfolgreich aktuallisiert!"} 
+    end
+    redirect_to lecture_path(lec_id), message
+  end
+
+  private
+
+  def valid_role(role)
+    return [:tutors, :lecturer, :staff].include?(role.to_sym)
+  end
+
 end

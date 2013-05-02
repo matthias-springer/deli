@@ -14,6 +14,7 @@ class Lecture
 
   def initialize(*args)
     super(*args)
+    self.lecturer = []
     self.groups = []
     self.students = []
     self.tutors = []

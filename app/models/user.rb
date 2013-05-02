@@ -46,4 +46,23 @@ class User
     @roles[role] = false
   end
 
+  def add_to_lecture(lecture_id, as)
+    lecture = Lecture.find_by_objectid(lecture_id)
+    return false if lecture.nil?
+    list = lecture.attributes[as]
+    list << self unless list.include?(self)
+    return true
+  rescue
+    return false
+  end
+
+  def remove_from_lecture(lecture_id, from)
+    lecture = Lecture.find_by_objectid(lecture_id)
+    return false if lecture.nil?
+    lecture.attributes[from].delete(self)
+    return true
+  rescue 
+    return false
+  end
+
 end
