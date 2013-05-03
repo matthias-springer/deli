@@ -15,4 +15,21 @@ class Studentgroup
     "##{object_id}"
   end
 
+  def add_student(user)
+    return false if user.nil?
+    students << user unless students.include? user
+    return true
+  rescue
+    return false
+  end
+
+  def remove_student(user)
+    return false unless students.include? user
+    return false if user.nil?
+    students.delete(user)
+    return true
+  rescue
+    return false
+  end
+
 end

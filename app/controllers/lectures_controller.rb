@@ -58,8 +58,6 @@ class LecturesController < ApplicationController
     else
       render "new"
     end
-
-
   end
 
 

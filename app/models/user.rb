@@ -65,4 +65,12 @@ class User
     return false
   end
 
+  def my_groups
+    return Studentgroup.select do |group|
+      group.students.include? self
+    end
+  end
+
+
+
 end

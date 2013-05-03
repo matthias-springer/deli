@@ -1,2 +1,45 @@
-<h2>Dein Profil - <%= @user.to_s %></h2>
+<h2>Dein Profil - <%= current_user.to_s %></h2>
 
+<table class = "table table-striped">
+  <tr>
+      <th>Meine Gruppen</th>
+      <% if !current_user.my_groups.blank? %>
+        <td>
+          <% for group in current_user.my_groups %>
+
+            <%= link_to group, studentgroup_path(group.id) %> 
+            <%= form_tag leave_group_path(current_user), :method => :delete do%>
+              <%= hidden_field_tag 'group_id', group.id %>
+              <%= button_tag :class=> "btn btn-mini btn-danger" do%>
+                <i class = "icon-minus"></i>          
+              <% end %>
+            <% end %>
+
+            <br>
+          <% end %>
+        </td>
+      <% else %>
+        <td>
+          <p class="badge badge-info">in keiner Gruppe eingetragen</p>
+        </td>    
+      <% end %>
+        <td>
+          <div class="row-fluid">
+            <div class="span6">
+              <%= link_to join_group_path, :class => "btn btn-small btn-success pull-right" do%>
+                  Gruppe beitreten
+                  <i class="icon-share-alt icon-white"></i>
+                <% end %>
+            </div>
+            <div class="span6">
+              <% if can? :create, Studentgroup %>
+                <%= link_to new_studentgroup_path, :class => "btn btn-small btn-success pull-left" do%>
+                  neue Gruppe erstellen 
+                  <i class="icon-plus icon-white"></i>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </td>
+  </tr>
+</table>

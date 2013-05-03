@@ -1,0 +1,32 @@
+<h2>Gruppe beitreten</h2>
+
+<table class = "table table-striped">
+  <% if !@groups.blank? %>
+    <thead>
+      <tr>
+        <th>Gruppe</th>
+        <td></td>
+      </tr>
+    </thead>
+    <tbody>
+    <% for group in @groups %>
+      <tr>
+        <td><%= link_to group, studentgroup_path(group.id) %></td>
+        <td>
+          <%= form_tag join_group_do_path(params[:id]), :method => :put do%>
+              <%= hidden_field_tag 'group_id', group.id %>
+              <%= button_tag :class=> "btn btn-mini btn-success" do%>
+                <i class = "icon-plus"></i>          
+              <% end %>
+            <% end %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  <% else %>
+    
+  <% end %>
+
+
+
+</table>

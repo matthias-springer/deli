@@ -72,4 +72,8 @@ Deli::Application.routes.draw do
   put "lectures/:id/add/:role" => "lectures#add_user", :as => "add_user"
   delete "lectures/:id/remove/:role" => "lectures#remove_user", :as => "remove_user"
   
+  get "users/:id/join/studentgroup" => "users#join_group_list", :as => "join_group"
+  put "users/:id/join/studentgroup" => "users#join_group", :as => "join_group_do"
+  delete "users/:id/leave/studentgroup" => "users#leave_group", :as => "leave_group"
+
 end
