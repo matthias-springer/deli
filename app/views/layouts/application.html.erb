@@ -3,7 +3,8 @@
 <head>
   <title>Deli</title>
   <%= stylesheet_link_tag    "bootswatch", "bootstrap.min", "bootstrap-responsive.min" %>
-  <%= javascript_include_tag "http://code.jquery.com/jquery.js", "bootstrap.min" %>
+  <%= javascript_include_tag  "application", "bootstrap.min" %>
+  <%= yield :javascript_includes %>
   <%= csrf_meta_tags %>
 </head>
 <body class="index">

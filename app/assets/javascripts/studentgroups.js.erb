@@ -1,0 +1,52 @@
+$(function() {
+  var myOptions = function(mapped_values) {
+    return {
+      source: Object.keys(mapped_values),
+      highlighter: function (item) {
+        return mapped_values[item];
+      },
+      matcher: function (item) {
+        return ~mapped_values[item].toLowerCase().indexOf(this.query.toLowerCase())
+      },
+      highlighter: function (item) {
+        var query = this.query.replace(/[\-\[\]{}()*\\+?.,\\\^$|#\s]/g,"\\$&");
+        var value = mapped_values[item]
+        return value.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+          return '<strong>' + match + '</strong>'
+        })
+      }
+    }
+  };
+
+  var initStudents = function(values) {
+    var opts = myOptions(values)
+    opts['updater'] = function(item){
+      $('#chosen_student').attr('value', item);
+      return values[item];
+    };
+    $('#studentgroup_students').typeahead(opts);
+  };
+
+  var initTutors = function(values) {
+    var opts = myOptions(values)
+    opts['updater'] = function(item){
+      $('#chosen_tutor').attr('value', item);
+      return values[item];
+    };
+    $('#studentgroup_tutors').typeahead(opts);
+  };
+
+  $.ajax({
+    url: '/users/json/students/',
+    data: {},
+    success: initStudents,
+    dataType: "json"
+  });
+
+  $.ajax({
+    url: '/users/json/tutors/',
+    data: {},
+    success: initTutors,
+    dataType: "json"
+  });
+});

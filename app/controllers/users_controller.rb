@@ -98,4 +98,12 @@ class UsersController < ApplicationController
     redirect_to user_path(myId), message
   end
 
+  def json_students
+    render :json => Hash[*User.select{ |user| user.student? }.map{ |user| [user.id, user.to_s] }.flatten]
+  end
+
+  def json_tutors
+    render :json => Hash[*User.select{ |user| user.tutor? }.map{ |user| [user.id, user.to_s] }.flatten]
+  end
+
 end
