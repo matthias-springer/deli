@@ -20,15 +20,35 @@
         <div class="nav-collapse collapse">
           <% if current_user %>
             <ul class="nav">
-              <li><%=link_to "Vorlesungen", :controller => "lectures", :action => "index"%></li>
-              <li><%=link_to "Profil", user_path(current_user.id) %></li>
+              <li>
+                <%=link_to :controller => "lectures", :action => "index" do%>
+                  <i class="icon-th-list icon-white"></i>
+                  Vorlesungen  
+                <%end%>
+              </li>
+              <li>
+                <%=link_to user_path(current_user.id) do%>
+                  <i class="icon-user icon-white"></i>
+                  Profil
+                <%end%>
+              </li>
             </ul>
             <ul class="nav pull-right">
-              <li><%=link_to "Logout", :controller => "sessions", :action => "destroy" %></li>
+              <li>
+                <%=link_to logout_path do%>
+                  <i class="icon-off icon-white"></i>
+                  Logout 
+                <%end%>
+              </li>
             </ul>
           <%else%>
             <ul class="nav pull-right">
-              <li><%=link_to "Login", :controller => "sessions", :action => "new" %></li>
+              <li>
+                <%=link_to login_path do%>
+                  <i class="icon-share-alt icon-white"></i>
+                  Login
+                <%end%>
+              </li>
             </ul>
 
           <%end%>
