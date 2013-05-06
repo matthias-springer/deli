@@ -4,13 +4,6 @@ class User
   include MaglevRecord::RootedBase
 
   attr_accessor :first_name, :last_name, :email, :password_digest
-
-  has_secure_password
-  validates_presence_of :password, :on => :create
-
-  validates :first_name, :presence => true
-  validates :last_name, :presence => true
-  validates :email, :presence => true
   
   def to_s
     "#{first_name} #{last_name}"
@@ -70,7 +63,16 @@ class User
       group.students.include? self
     end
   end
+end
 
+User.maglev_record_persistable
+MaglevRecord.save
+class User
+  include ActiveModel::Validations
+  has_secure_password
+  validates_presence_of :password, :on => :create
 
-
+  validates :first_name, :presence => true
+  validates :last_name, :presence => true
+  validates :email, :presence => true
 end
