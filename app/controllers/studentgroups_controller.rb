@@ -20,43 +20,57 @@ class StudentgroupsController < ApplicationController
 
   def new
     MaglevRecord.reset
-    @group = Studentgroup.new
-
-    @group.students << current_user
+    session[:group] = {
+      :students => {current_user.id => current_user.to_s},
+      :tutors => {}
+    }
   end
 
   def add_student
-    @group = Studentgroup.find_by_objectid(params[:id])
     user = User.find_by_objectid(params[:chosen_student])
     if user.nil?
-      message = {:error => "Dieser Benutzer esistiert nicht!"}
-    elsif not @group.students.include? user
-      @group.students << user
-      MaglevRecord.save
-      message = {:notice => "Benutzer erfolgreich eingefügt!"}
+      render "new", {:error => "Dieser Benutzer esistiert nicht!"}
+      return
     end
-    render "new", message
+    students = session[:group][:students]
+    puts students
+    unless students.include? user.id
+      students[user.id] = user.to_s
+      # 1.pause
+      session[:group][:students].update(students)
+      render "new", {:error => "Student erfolgreich eingefügt!"}
+    else
+      render "new"
+    end
   end
 
   def add_tutor
-    @group = Studentgroup.find_by_objectid(params[:id])
     user = User.find_by_objectid(params[:chosen_tutor])
     if user.nil?
-      message = {:error => "Dieser Benutzer esistiert nicht!"}
-    elsif not @group.tutors.include? user
-      @group.tutors << user
-      MaglevRecord.save
-      message = {:notice => "Tutor erfolgreich eingefügt!"}
+      render "new", {:error => "Dieser Benutzer esistiert nicht!"}
+      return
     end
-    render "new", message
+    tutors = session[:group][:tutors]
+    unless tutors.include? user.id
+      tutors[user.id] = user.to_s
+      session[:group][:tutors] = tutors
+      render "new", {:error => "Tutor erfolgreich eingefügt!"}
+    else
+      render "new"
+    end
   end
 
   def create
-    puts "X"*100
-    puts params
-    @group = Studentgroup.find_by_objectid(params[:studentgroup][:id])
-    if @group.valid?
+    groupInfo = session[:group]
+    students = User.select{ |user| groupInfo[:students].include? user.id }
+    tutors = User.select{ |user| groupInfo[:tutors].include? user.id }
+    
+    @group = Studentgroup.new
 
+    @group.students = students or []
+    @group.tutors = tutors or []
+    
+    if @group.valid?
       MaglevRecord.save
       redirect_to user_path(current_user.id)
     else      

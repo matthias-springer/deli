@@ -22,7 +22,7 @@ Deli::Application.routes.draw do
   get "users/json/students" => "users#json_students", :as => "json_students"
   get "users/json/tutors" => "users#json_tutors", :as => "json_tutors"
 
-  put "studentgroups/:id/add_student" => "studentgroups#add_student", :as => "add_student"
-  put "studentgroups/:id/add_tutor" => "studentgroups#add_tutor", :as => "add_tutor"
+  put "studentgroup/add_student" => "studentgroups#add_student", :as => "add_student"
+  put "studentgroup/add_tutor" => "studentgroups#add_tutor", :as => "add_tutor"
 
 end
