@@ -33,3 +33,6 @@ class Studentgroup
   end
 
 end
+
+Studentgroup.maglev_record_persistable
+MaglevRecord.save
