@@ -10,7 +10,7 @@
             <%= link_to group, studentgroup_path(group.id) %> 
             <%= form_tag leave_group_path(current_user), :method => :delete do%>
               <%= hidden_field_tag 'group_id', group.id %>
-              <%= button_tag :class=> "btn btn-mini btn-danger" do%>
+              <%= button_tag :class=> "btn btn-small btn-primary" do%>
                 <i class = "icon-minus"></i>          
               <% end %>
             <% end %>
@@ -26,14 +26,14 @@
         <td>
           <div class="row-fluid">
             <div class="span6">
-              <%= link_to join_group_path, :class => "btn btn-small btn-success pull-right" do%>
+              <%= link_to join_group_path, :class => "btn btn-small btn-success btn-inverse pull-right" do%>
                   Gruppe beitreten
                   <i class="icon-share-alt icon-white"></i>
                 <% end %>
             </div>
             <div class="span6">
               <% if can? :create, Studentgroup %>
-                <%= link_to new_studentgroup_path, :class => "btn btn-small btn-success pull-left" do%>
+                <%= link_to new_studentgroup_path, :class => "btn btn-small btn-success btn-inverse pull-left" do%>
                   neue Gruppe erstellen 
                   <i class="icon-plus icon-white"></i>
                 <% end %>

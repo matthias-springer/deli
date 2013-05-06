@@ -4,8 +4,8 @@
 
 <div class = "actions pull-right">
   <% if can? :edit, Lecture %>
-    <%= link_to lecture_path(@lecture), :class => "btn btn-mini btn-success" do%>
-      <i class = "icon-pencil"></i>
+    <%= link_to lecture_path(@lecture), :class => "btn btn-mini btn-success btn-inverse" do%>
+      <i class = "icon-pencil icon-white"></i>
     <% end %>
   <% end %>
   
@@ -49,8 +49,8 @@
         <% end %>
       </td>
       <td>
-        <%= link_to add_user_list_path(@lecture, :lecturer), :class => 'btn btn-mini btn-success pull-right' do%>
-          <i class = "icon-plus"></i>
+        <%= link_to add_user_list_path(@lecture, :lecturer), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+          <i class = "icon-plus icon-white"></i>
         <% end %>
       </td>
     </tr>
@@ -79,8 +79,8 @@
         <% end %>
       </td>
       <td>
-        <%= link_to add_user_list_path(@lecture, :staff), :class => 'btn btn-mini btn-success pull-right' do%>
-          <i class = "icon-plus"></i>
+        <%= link_to add_user_list_path(@lecture, :staff), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+          <i class = "icon-plus icon-white"></i>
         <% end %>
       </td>
     </tr>
@@ -109,8 +109,8 @@
         <% end %>
       </td>
       <td>
-        <%= link_to add_user_list_path(@lecture, :tutors), :class => 'btn btn-mini btn-success pull-right' do%>
-          <i class = "icon-plus"></i>
+        <%= link_to add_user_list_path(@lecture, :tutors), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+          <i class = "icon-plus icon-white"></i>
         <% end %>
       </td>
     </tr>
@@ -152,8 +152,8 @@
         <tr>
           <th><span class="bagde bagde-info">Keine Gruppen eingetragen</span></th>
           <td>
-            <%= link_to new_studentgroup_path, :class => "btn btn-success" do%>
-              Gruppe erstellen <i class="icon-plus icon-white"></i> 
+            <%= link_to new_studentgroup_path, :class => "btn btn-success btn-inverse" do%>
+              Gruppe erstellen <i class="icon-plus icon-white icon-white"></i> 
             <% end %>
 
           </td>

@@ -15,8 +15,8 @@
           <td>
             <%= form_tag add_user_path(params[:id], params[:role]), :method => :put do%>
               <%= hidden_field_tag 'user_id', item.id %>
-              <%= button_tag :class=> "btn btn-mini btn-success" do%>
-                <i class = "icon-plus"></i>          
+              <%= button_tag :class=> "btn btn-mini btn-success btn-inverse" do%>
+                <i class = "icon-plus icon-white"></i>          
               <% end %>
             <% end %>
           </td>

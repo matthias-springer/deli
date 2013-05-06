@@ -22,8 +22,8 @@
           <div class="input-append">
             <%= hidden_field_tag 'chosen_student' %>
             <input type="text" autocomplete="off" id="studentgroup_students">
-            <button class="btn btn-success">
-              <i class="icon-plus"></i>
+            <button class="btn btn-success btn-inverse">
+              <i class="icon-plus icon-white"></i>
             </button>
           </div>
         <% end %>
@@ -46,8 +46,8 @@
             <div class="input-append">
               <%= hidden_field_tag 'chosen_tutor' %>
               <input type="text" autocomplete="off" id="studentgroup_tutors">
-              <button class="btn btn-success">
-                <i class="icon-plus"></i>
+              <button class="btn btn-success btn-inverse">
+                <i class="icon-plus icon-white"></i>
               </button>
             </div>
           <% end %>
@@ -59,7 +59,7 @@
 
 <%= form_tag studentgroups_path, :class => "form-horizontal" do%>
   <div class="form-actions">
-    <%= button_tag "Speichern", :class => "btn btn-success pull-right" %>
-    <%= link_to "Reset", new_studentgroup_path, :class => "btn btn-success " %>
+    <%= button_tag "Speichern", :class => "btn btn-success btn-inverse pull-right" %>
+    <%= link_to "Reset", new_studentgroup_path, :class => "btn btn-success btn-inverse " %>
   </div>
 <% end %>
