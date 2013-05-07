@@ -45,7 +45,7 @@
               <% if can? :destroy, Lecture %>
                 <%=form_tag (lecture_path(lecture), :method => "delete", :class => "delete-button-form") do%>
                   <%= button_tag :confirm => 'Are you sure?', :method => :delete, :class => "btn btn-mini btn-danger" do%>
-                    <i class='icon-trash'></i>
+                    <i class='icon-trash icon-white'></i>
                   <% end %>
                 <% end %>
               <% end %>

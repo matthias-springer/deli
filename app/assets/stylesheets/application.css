@@ -11,3 +11,12 @@
  *= require_self
  *= require_tree .
  */
+.centered {
+     text-align: center;
+}
+
+.delete-button-form,
+.add-button-form 
+{
+  display: inline;
+}
