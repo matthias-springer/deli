@@ -70,12 +70,8 @@ class StudentgroupsController < ApplicationController
     @group.students = students or []
     @group.tutors = tutors or []
     
-    if @group.valid?
-      MaglevRecord.save
-      redirect_to user_path(current_user.id)
-    else      
-      render "new", {:error => "Die Gruppe konnte nicht erstellt werden"}
-    end
+    MaglevRecord.save
+    redirect_to user_path(current_user.id)
   end
 
 end

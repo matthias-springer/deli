@@ -64,12 +64,12 @@ class UsersController < ApplicationController
     end
 
     if !group.add_student(User.find_by_objectid(myId)) and message.nil?
-      message = {:error => "Du kannst in diese Gruppe nicht beitreten!"}
+      message = {:error => "Du kannst dieser Gruppe nicht beitreten!"}
     end
     
     if message.nil?
       MaglevRecord.save
-      message = {:notice => "Du hast die Gruppe #{group.to_s} erfolgreich beigetreten!"}
+      message = {:notice => "Du bist der Gruppe #{group.to_s} erfolgreich beigetreten!"}
     end
 
     redirect_to user_path(myId), message
