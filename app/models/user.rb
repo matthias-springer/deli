@@ -63,6 +63,31 @@ class User
       group.students.include? self
     end
   end
+
+  def my_lectures
+    return Lecture.select do |lecture|
+      lecture.students.include? self
+    end
+  end
+
+  def in_lecture?(lecture_id)
+    lecture = Lecture.find_by_objectid(lecture_id)
+    if lecture
+      return lecture.students.include? self
+    else
+      return false
+    end
+  end
+
+  def in_group?(group_id)
+    group = Studentgroup.find_by_objectid(group_id)
+    if group
+      return group.students.include? self
+    else
+      return false
+    end
+  end
+
 end
 
 User.maglev_record_persistable

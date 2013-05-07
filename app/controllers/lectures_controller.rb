@@ -40,6 +40,29 @@ class LecturesController < ApplicationController
     redirect_to({:action => 'index'}, message)
   end
 
+  def join
+    MaglevRecord.reset
+    lec = Lecture.find_by_objectid(params[:id])
+    if lec
+      lec.students << current_user unless lec.students.include? current_user
+      MaglevRecord.save
+      redirect_to :back, :notice => "Du hast dich erfolgreich in einer Vorlesung angemeldet!"
+    else
+      redirect_to :back, :error => "Diese Vorlesung existiert nicht!" 
+    end
+  end
+
+  def leave
+    MaglevRecord.reset
+    lec = Lecture.find_by_objectid(params[:id])
+    if lec
+      lec.students.delete(current_user) if lec.students.include? current_user
+      MaglevRecord.save
+      redirect_to :back, :notice => "Du hast dich erfolgreich aus der Vorlesung abgemeldet!"
+    else
+      redirect_to :back, :error => "Diese Vorlesung existiert nicht!" 
+    end
+  end
 
   def new
     @lecture = Lecture.new

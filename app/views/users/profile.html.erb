@@ -3,19 +3,19 @@
 <div class="row-fluid">
   <div class="span6 well">
     <h3>Meine Vorlesungen</h3>
-    <% if !current_user.my_groups.blank? %>
+    <% if !current_user.my_lectures.blank? %>
       <table class = "table table-striped">
-        <% for group in current_user.my_groups %>
+        <% for lecture in current_user.my_lectures %>
           <tr>
             <td>
-              <%= link_to group, studentgroup_path(group.id) %> 
+              <%= link_to lecture, studentgroup_path(lecture.id) %> 
             </td>
 
             <td>
-              <%= form_tag leave_group_path(current_user), :method => :delete do%>
-                  <%= hidden_field_tag 'group_id', group.id %>
+              <%= form_tag leave_lecture_path(lecture), :method => :delete do%>
+                  <%= hidden_field_tag 'lecture_id', lecture.id %>
                   <%= button_tag :class=> "btn btn-small btn-primary pull-right" do%>
-                    <i class = "icon-remove"></i>          
+                    Verlassen <i class = "icon-remove icon-white"></i>          
                   <% end %>
               <% end %>
             </td>
@@ -24,7 +24,7 @@
       </table>
     <% else %>
       <div class="centered">
-        <p class="badge badge-info">in keiner Gruppe eingetragen</p>
+        <p class="badge badge-info">noch in keiner Vorlesung angemeldet</p>
       </div>
     <% end %>
 
@@ -50,7 +50,7 @@
               <%= form_tag leave_group_path(current_user), :method => :delete do%>
                   <%= hidden_field_tag 'group_id', group.id %>
                   <%= button_tag :class=> "btn btn-small btn-primary pull-right" do%>
-                    <i class = "icon-remove"></i>          
+                   Verlassen <i class = "icon-remove icon-white"></i>          
                   <% end %>
               <% end %>
             </td>

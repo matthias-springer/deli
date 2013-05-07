@@ -12,6 +12,9 @@ Deli::Application.routes.draw do
   resources :studentgroups,   :except => :index
   # resources :sessions
 
+  put "lectures/:id/join" => "lectures#join", :as => "join_lecture"
+  delete "lectures/:id/leave" => "lectures#leave", :as => "leave_lecture"
+
   get "lectures/:id/add/:role" => "lectures#add_user_list", :as => "add_user_list"
   put "lectures/:id/add/:role" => "lectures#add_user", :as => "add_user"
   delete "lectures/:id/remove/:role" => "lectures#remove_user", :as => "remove_user"
