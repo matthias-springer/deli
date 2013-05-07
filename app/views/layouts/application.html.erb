@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>SWAglev</title>
+  <title>Panda</title>
   <%= stylesheet_link_tag  "bootswatch", "bootstrap.min", "bootstrap-responsive.min", "application" %>
   <%= javascript_include_tag  "application", "bootstrap.min" %>
   <%= yield :javascript_includes %>
@@ -11,7 +11,10 @@
   <div class="navbar navbar-fixed-top navbar-inverse">
     <div class="navbar-inner">
       <div class="container">
-        <a class="brand" href="/">SWAglev</a>
+        <a class="brand" href="/" style = "padding: 5px 20px 0px 0px; font-size: 14px; text-align: center;">
+          <%= image_tag "panda_white.png", :style => "height: 25px;"%> <br>
+          Panda
+        </a>
         <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
