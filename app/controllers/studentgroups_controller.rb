@@ -27,36 +27,48 @@ class StudentgroupsController < ApplicationController
     }
   end
 
-  def add_student
-    user = User.find_by_objectid(params[:chosen_student])
-    puts params
-    if user.nil?
-      render "new", {:error => "Dieser Benutzer esistiert nicht!"}
-      return
-    end
-    students = session[:group][:students]
-    unless students.include? user.id
-      students[user.id] = user.to_s
-      session[:group][:students].update(students)
-      render "new", {:error => "Student erfolgreich eingefügt!"}
-    else
-      render "new"
-    end
+  def update_new
+    student_id = params[:chosen_student]
+    tutor_id = params[:chosen_tutor]
+
+    session[:group][:name] = params[:studentgroup_name]
+
+    message = {}
+    message = _update_messages(_add_user(student_id, :students), message) unless student_id.empty?
+    message = _update_messages(_add_user(tutor_id, :tutors), message) unless tutor_id.empty?
+        
+    render "new", message
   end
 
-  def add_tutor
-    user = User.find_by_objectid(params[:chosen_tutor])
+  def _update_messages(mes_str_arr, message)
+
+    new_notice = mes_str_arr[0]
+    new_error = mes_str_arr[1]
+
+    notice = (message[:notice] or "")
+    error = (message[:error] or "")
+
+    error += new_error unless new_error.nil?
+
+    notice += new_notice unless new_notice.nil?
+
+    return {:error => error, :notice => notice}
+  end
+
+  def _add_user(user_id, dict_sym)
+    user = User.find_by_objectid(user_id)
+
     if user.nil?
-      render "new", {:error => "Dieser Benutzer esistiert nicht!"}
-      return
+      return [nil, "Benutzer existiert nicht!"]
     end
-    tutors = session[:group][:tutors]
-    unless tutors.include? user.id
-      tutors[user.id] = user.to_s
-      session[:group][:tutors].update(tutors)
-      render "new", {:error => "Tutor erfolgreich eingefügt!"}
+
+    user_dict = session[:group][dict_sym]
+    unless user_dict.include? user.id
+      user_dict[user.id] = user.to_s
+      session[:group][dict_sym].update(user_dict)
+      return ["Benutzer #{user.to_s} erfolgreich eingefügt!", nil]
     else
-      render "new"
+      return [nil, nil]
     end
   end
 
@@ -64,14 +76,15 @@ class StudentgroupsController < ApplicationController
     groupInfo = session[:group]
     students = User.select{ |user| groupInfo[:students].include? user.id }
     tutors = User.select{ |user| groupInfo[:tutors].include? user.id }
-    
-    @group = Studentgroup.new(:name => "Gruppe1")
+    name = params[:studentgroup_name]
+    @group = Studentgroup.new(:name => name)
 
-    @group.students = students or []
-    @group.tutors = tutors or []
+    @group.students = students
+    @group.tutors = tutors 
     
     MaglevRecord.save
     redirect_to user_path(current_user.id)
+    session.delete(:group)
   end
 
 end

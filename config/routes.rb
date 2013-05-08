@@ -7,11 +7,9 @@ Deli::Application.routes.draw do
   
   root :to => 'welcome#index'
   
-  resources :lectures
-  resources :users,           :except => :index
-  resources :studentgroups,   :except => :index
   # resources :sessions
 
+  resources :lectures
   put "lectures/:id/join" => "lectures#join", :as => "join_lecture"
   delete "lectures/:id/leave" => "lectures#leave", :as => "leave_lecture"
 
@@ -19,6 +17,7 @@ Deli::Application.routes.draw do
   put "lectures/:id/add/:role" => "lectures#add_user", :as => "add_user"
   delete "lectures/:id/remove/:role" => "lectures#remove_user", :as => "remove_user"
   
+  resources :users,           :except => :index
   get "users/:id/join/studentgroup" => "users#join_group_list", :as => "join_group"
   put "users/:id/join/studentgroup" => "users#join_group", :as => "join_group_do"
   delete "users/:id/leave/studentgroup" => "users#leave_group", :as => "leave_group"
@@ -26,7 +25,9 @@ Deli::Application.routes.draw do
   get "users/json/students" => "users#json_students", :as => "json_students"
   get "users/json/tutors" => "users#json_tutors", :as => "json_tutors"
 
-  put "studentgroup/add_student" => "studentgroups#add_student", :as => "add_student"
-  put "studentgroup/add_tutor" => "studentgroups#add_tutor", :as => "add_tutor"
+  resources :studentgroups,   :except => :index
+  put "studentgroups" => "studentgroups#update_new", :as => "update_new_studentgroup"
+  # put "studentgroup/add_student" => "studentgroups#add_student", :as => "add_student"
+  # put "studentgroup/add_tutor" => "studentgroups#add_tutor", :as => "add_tutor"
 
 end

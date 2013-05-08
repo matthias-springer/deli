@@ -4,42 +4,40 @@
 
 <h2>Neue Gruppe erstellen</h2>
 
-<table class = "table table-striped" style="margin-bottom: 0px">
-  <tbody>
-    <tr>
-      <th>Name</th>
-      <td colspan="2">
-        <input type="text" name="studentgroup_name" id ="studentgroup_name">
-      </td>
-    </tr>
-    <tr>
-      <th>Studenten</th>
-      <td>
-        <%= form_tag add_student_path, :method => 'put' do%>
-          <div class="input-append">
-            <%= hidden_field_tag 'chosen_student' %>
-            <input type="text" autocomplete="off" id="studentgroup_students">
-            <button class="btn btn-success btn-inverse">
-              <i class="icon-plus icon-white"></i>
-            </button>
-          </div>
-        <% end %>
-      </td>
-      <td>
-        <% if !session[:group][:students].blank? %>
-          <% for student in session[:group][:students] %>
-            <%= link_to student[1], user_path(student[0])%> <br>
-          <% end %>
-        <% else %>
-          <p class="badge badge-info">Noch keine Stundenten vorhanden</p>
-        <% end %>
-      </td>
-    </tr>
-    <% if can? :add_tutor, Studentgroup %>
+<%= form_tag update_new_studentgroup_path, :class => "form-horizontal", :method => "put", :id => "new_group" do%>
+  <table class = "table table-striped" style="margin-bottom: 0px">
+    <tbody>
       <tr>
-        <th>Tutoren</th>
+        <th>Name</th>
+        <td colspan="2">
+          <input type="text" name="studentgroup_name" id ="studentgroup_name" value="<%= session[:group][:name]%>">
+        </td>
+      </tr>
+      <tr>
+        <th>Studenten</th>
         <td>
-          <%= form_tag add_tutor_path, :method => 'put' do%>
+            <div class="input-append">
+              <%= hidden_field_tag 'chosen_student' %>
+              <input type="text" autocomplete="off" id="studentgroup_students">
+              <button class="btn btn-success btn-inverse">
+                <i class="icon-plus icon-white"></i>
+              </button>
+            </div>
+        </td>
+        <td>
+          <% if !session[:group][:students].blank? %>
+            <% for student in session[:group][:students] %>
+              <%= link_to student[1], user_path(student[0])%> <br>
+            <% end %>
+          <% else %>
+            <p class="badge badge-info">Noch keine Stundenten vorhanden</p>
+          <% end %>
+        </td>
+      </tr>
+      <% if can? :add_tutor, Studentgroup %>
+        <tr>
+          <th>Tutoren</th>
+          <td>
             <div class="input-append">
               <%= hidden_field_tag 'chosen_tutor' %>
               <input type="text" autocomplete="off" id="studentgroup_tutors">
@@ -47,25 +45,23 @@
                 <i class="icon-plus icon-white"></i>
               </button>
             </div>
-          <% end %>
-        </td>
-        <td>
-          <% if !session[:group][:tutors].blank? %>
-            <% for tutor in session[:group][:tutors] %>
-              <%= link_to tutor[1], user_path(tutor[0])%> <br>
+          </td>
+          <td>
+            <% if !session[:group][:tutors].blank? %>
+              <% for tutor in session[:group][:tutors] %>
+                <%= link_to tutor[1], user_path(tutor[0])%> <br>
+              <% end %>
+            <% else %>
+              <p class="badge badge-info">Noch keine Tutoren vorhanden</p>
             <% end %>
-          <% else %>
-            <p class="badge badge-info">Noch keine Tutoren vorhanden</p>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= form_tag studentgroups_path, :class => "form-horizontal" do%>
   <div class="form-actions" style="margin-top:0px; background-color: #fff">
     <%= link_to "Reset", new_studentgroup_path, :class => "btn btn-success btn-inverse " %>
-    <%= button_tag "Speichern", :class => "btn btn-success btn-inverse pull-right" %>
+    <%= button_tag "Speichern", :class => "btn btn-success btn-inverse pull-right", :onclick => "change_to_post()" %>
   </div>
 <% end %>

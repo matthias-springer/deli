@@ -50,3 +50,9 @@ $(function() {
     dataType: "json"
   });
 });
+
+
+function change_to_post() {
+  // hook for two actions(put and post) in one form
+  $('#new_group input[name=_method]').remove();
+}
