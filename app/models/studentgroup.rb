@@ -36,3 +36,10 @@ end
 
 Studentgroup.maglev_record_persistable
 MaglevRecord.save
+
+
+class Studentgroup
+  include ActiveModel::Validations
+
+  validates :name, :presence => true
+end

@@ -73,6 +73,7 @@ class StudentgroupsController < ApplicationController
   end
 
   def create
+    MaglevRecord.reset
     groupInfo = session[:group]
     students = User.select{ |user| groupInfo[:students].include? user.id }
     tutors = User.select{ |user| groupInfo[:tutors].include? user.id }
@@ -81,10 +82,13 @@ class StudentgroupsController < ApplicationController
 
     @group.students = students
     @group.tutors = tutors 
-    
-    MaglevRecord.save
-    redirect_to user_path(current_user.id)
-    session.delete(:group)
+    if @group.valid?
+      MaglevRecord.save
+      redirect_to user_path(current_user.id)
+      session.delete(:group)
+    else 
+      render "new"
+    end
   end
 
 end

@@ -5,6 +5,17 @@
 <h2>Neue Gruppe erstellen</h2>
 
 <%= form_tag update_new_studentgroup_path, :class => "form-horizontal", :method => "put", :id => "new_group" do%>
+  <% if not @group.nil? %>
+    <% if not @group.errors.nil? and @group.errors.any? %>
+      <% for err in @group.errors.full_messages %>
+        <div class="alert alert-error">
+          <button class="close" data-dismiss = "alert"> &times;</button>
+          <%= err %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
   <table class = "table table-striped" style="margin-bottom: 0px">
     <tbody>
       <tr>
