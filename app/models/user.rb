@@ -3,7 +3,7 @@ require "maglev_record"
 class User
   include MaglevRecord::RootedBase
 
-  attr_accessor :first_name, :last_name, :email, :password_digest
+  attr_accessor :first_name, :last_name, :email, :password_digest, :password_confirmation
   
   def to_s
     "#{first_name} #{last_name}"

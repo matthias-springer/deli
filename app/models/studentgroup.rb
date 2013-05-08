@@ -3,7 +3,7 @@ require "maglev_record"
 class Studentgroup
   include MaglevRecord::RootedBase
 
-  attr_accessor :students, :tutors
+  attr_accessor :students, :tutors, :name
   
   def initialize(*args)
     super(*args)
@@ -12,7 +12,7 @@ class Studentgroup
   end
 
   def to_s
-    "##{object_id}"
+    "#{name}"
   end
 
   def add_student(user)

@@ -79,6 +79,11 @@ lecturer.set_role(:admin)
 tut1.set_role(:tutor)
 tut2.set_role(:tutor)
 
+[st1, st2, st3, st4, st5, admin, lecturer, tut1, tut2, ].each do |user|
+  user.clear_sensibles
+end
+
+
 lec1 = Lecture.create({
   :title => "Lecture 1",
   :description => "something",
@@ -95,11 +100,11 @@ lec3 = Lecture.create({
   })
 
 
-group1 = Studentgroup.new
-group2 = Studentgroup.new
+group1 = Studentgroup.new(:name => "Gruppe2")
+group2 = Studentgroup.new(:name => "Gruppe4")
 
 group1.students << st1
-group1.students << st2
+group1.students << admin
 group1.students << st3
 group1.students << st5
 group1.tutors << tut1

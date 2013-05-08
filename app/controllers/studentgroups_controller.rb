@@ -21,6 +21,7 @@ class StudentgroupsController < ApplicationController
   def new
     MaglevRecord.reset
     session[:group] = {
+      :name => "",
       :students => {current_user.id => current_user.to_s},
       :tutors => {}
     }
@@ -28,15 +29,14 @@ class StudentgroupsController < ApplicationController
 
   def add_student
     user = User.find_by_objectid(params[:chosen_student])
+    puts params
     if user.nil?
       render "new", {:error => "Dieser Benutzer esistiert nicht!"}
       return
     end
     students = session[:group][:students]
-    puts students
     unless students.include? user.id
       students[user.id] = user.to_s
-      # 1.pause
       session[:group][:students].update(students)
       render "new", {:error => "Student erfolgreich eingefügt!"}
     else
@@ -53,7 +53,7 @@ class StudentgroupsController < ApplicationController
     tutors = session[:group][:tutors]
     unless tutors.include? user.id
       tutors[user.id] = user.to_s
-      session[:group][:tutors] = tutors
+      session[:group][:tutors].update(tutors)
       render "new", {:error => "Tutor erfolgreich eingefügt!"}
     else
       render "new"
@@ -65,7 +65,7 @@ class StudentgroupsController < ApplicationController
     students = User.select{ |user| groupInfo[:students].include? user.id }
     tutors = User.select{ |user| groupInfo[:tutors].include? user.id }
     
-    @group = Studentgroup.new
+    @group = Studentgroup.new(:name => "Gruppe1")
 
     @group.students = students or []
     @group.tutors = tutors or []

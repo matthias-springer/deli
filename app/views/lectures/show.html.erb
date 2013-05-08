@@ -11,8 +11,8 @@
   
   <% if can? :destroy, Lecture %>
     <%=form_tag (lecture_path(@lecture), :method => "delete", :class => "delete-button-form") do%>
-      <%= button_tag :confirm => 'Are you sure?', :method => :delete, :class => "btn btn-mini btn-danger" do%>
-        <i class='icon-trash'></i>
+      <%= button_tag :method => :delete, :class => "btn btn-mini btn-primary" do%>
+        <i class='icon-trash icon-white'></i>
       <% end %>
     <% end %>
   <% end %>
@@ -30,19 +30,13 @@
       <td>
         <% if !@lecture.lecturer.blank? %>
           <% for lecturer in @lecture.lecturer %>
-            <div class="row-fluid">
-              <div class="span6">
-                <%= link_to lecturer.to_s, user_path(lecturer.id) %>
-              </div>
-              <div class="span6">
-                <%= form_tag remove_user_path(@lecture.id, :lecturer), :method => :delete do%>
-                  <%= hidden_field_tag 'user_id', lecturer.id %>
-                  <%= button_tag :class=> "btn btn-mini btn-danger" do%>
-                    <i class = "icon-minus"></i>          
-                  <% end %>
-                <% end %>
-              </div>
-            </div>        
+            <%= link_to lecturer.to_s, user_path(lecturer.id) %>
+            <%= form_tag remove_user_path(@lecture.id, :lecturer), :method => :delete, :class => "delete-button-form" do%>
+              <%= hidden_field_tag 'user_id', lecturer.id %>
+              <%= button_tag :class=> "btn btn-mini btn-primary" do%>
+                <i class = "icon-minus icon-white"></i>          
+              <% end %>
+            <% end %>
           <% end %>
         <% else %>
           <p class="badge badge-info">Noch keine Dozenten zugeordnet</p>
@@ -60,19 +54,13 @@
       <td>
         <% if !@lecture.staff.blank? %>
           <% for staff in @lecture.staff %>
-            <div class="row-fluid">
-              <div class="span6">
-                <%= link_to staff.to_s, user_path(staff.id) %> 
-              </div>
-              <div class="span6">
-                <%= form_tag remove_user_path(@lecture.id, :staff), :method => :delete do%>
-                  <%= hidden_field_tag 'user_id', staff.id %>
-                  <%= button_tag :class=> "btn btn-mini btn-danger" do%>
-                    <i class = "icon-minus"></i>          
-                  <% end %>
-                <% end %>
-              </div>
-            </div>
+            <%= link_to staff.to_s, user_path(staff.id) %> 
+            <%= form_tag remove_user_path(@lecture.id, :staff), :method => :delete, :class => "delete-button-form"  do%>
+              <%= hidden_field_tag 'user_id', staff.id %>
+              <%= button_tag :class=> "btn btn-mini btn-primary" do%>
+                <i class = "icon-minus icon-white"></i>          
+              <% end %>
+            <% end %>
           <% end %>
         <% else %>
           <p class="badge badge-info">Noch keine Assistenten zugeordnet</p>
@@ -90,19 +78,17 @@
       <td>
         <% if !@lecture.tutors.blank? %>
           <% for tutor in @lecture.tutors %>
-            <div class="row-fluid">
-              <div class="span6">
-                <%= link_to tutor.to_s, user_path(tutor.id) %>
-              </div>
-              <div class="span6">
-                <%= form_tag remove_user_path(@lecture.id, :tutors), :method => :delete do%>
-                  <%= hidden_field_tag 'user_id', tutor.id %>
-                  <%= button_tag :class=> "btn btn-mini btn-danger" do%>
-                    <i class = "icon-minus"></i>          
-                  <% end %>
+          <div class="row-fluid">
+            <div class="span12">
+              <%= link_to tutor.to_s, user_path(tutor.id) %>
+              <%= form_tag remove_user_path(@lecture.id, :tutors), :method => :delete, :class => "delete-button-form"  do%>
+                <%= hidden_field_tag 'user_id', tutor.id %>
+                <%= button_tag :class=> "btn btn-mini btn-primary" do%>
+                  <i class = "icon-minus icon-white"></i>          
                 <% end %>
-              </div>
-            </div>      
+              <% end %>
+            </div>
+          </div>  
           <% end %>
         <% else %>
           <p class="badge badge-info">Noch keine Tutoren zugeordnet</p>
