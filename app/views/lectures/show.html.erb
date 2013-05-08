@@ -45,8 +45,10 @@
           <% end %>
         </div>
         <div class="span1">
-          <%= link_to add_user_list_path(@lecture, :lecturer), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
-            <i class = "icon-plus icon-white"></i>
+          <% if can? :add_user_list_path, Lecture%>
+            <%= link_to add_user_list_path(@lecture, :lecturer), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+              <i class = "icon-plus icon-white"></i>
+            <% end %>
           <% end %>
         </div>
       </div>
@@ -76,8 +78,10 @@
           <% end %>
         </div>
         <div class="span1">
-          <%= link_to add_user_list_path(@lecture, :staff), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
-            <i class = "icon-plus icon-white"></i>
+          <% if can? :add_user_list_path, Lecture%>
+            <%= link_to add_user_list_path(@lecture, :staff), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+              <i class = "icon-plus icon-white"></i>
+            <% end %>
           <% end %>
         </div>
       </div>
@@ -108,16 +112,19 @@
           <% end %>
         </div>
         <div class="span1">
-        <%= link_to add_user_list_path(@lecture, :tutors), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
-          <i class = "icon-plus icon-white"></i>
-        <% end %></div>
+          <% if can? :add_user_list_path, Lecture%>
+            <%= link_to add_user_list_path(@lecture, :tutors), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+              <i class = "icon-plus icon-white"></i>
+            <% end %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
   <div class="span6">
     <div class="row-fluid well">
       <div class="span4 header">eingetragene Gruppen</div>
-      <div class="span8">
+      <div class="span7">
         <% if !@lecture.groups.blank? %>
           <% for group in @lecture.groups %>
             <div class="row-fluid row-item">
@@ -142,7 +149,11 @@
           <% end %>
         <% end %>
       </div>
-
+      <div class="span1">
+        <%= link_to "#todo", :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+          <i class = "icon-plus icon-white"></i>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

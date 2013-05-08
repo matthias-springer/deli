@@ -3,6 +3,8 @@ class StudentgroupsController < ApplicationController
   load_and_authorize_resource
   
   def index
+    MaglevRecord.reset
+    @groups = Studentgroup.all
   end
 
   def show
