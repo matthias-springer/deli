@@ -72,7 +72,7 @@ class UsersController < ApplicationController
       message = {:notice => "Du bist der Gruppe #{group.to_s} erfolgreich beigetreten!"}
     end
 
-    redirect_to user_path(myId), message
+    redirect_to :back, message
   end
 
   def leave_group
@@ -95,7 +95,7 @@ class UsersController < ApplicationController
       message = {:notice => "Du hast erfolgreich die Gruppe #{group.to_s} verlassen!"}
     end
 
-    redirect_to user_path(myId), message
+    redirect_to :back, message
   end
 
   def json_students

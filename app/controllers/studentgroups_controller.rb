@@ -86,7 +86,7 @@ class StudentgroupsController < ApplicationController
     @group.tutors = tutors 
     if @group.valid?
       MaglevRecord.save
-      redirect_to user_path(current_user.id)
+      redirect_to studentgroups_path
       session.delete(:group)
     else 
       render "new"
