@@ -5,6 +5,9 @@ class Lecture
 
   attr_accessor :title, :lecturer, :description, :groups, :students, :tutors, :staff
 
+  validates :title, :presence => true
+  validates :description, :presence => true
+
   def to_s
     "#{title}, #{description}"
   end
@@ -21,11 +24,4 @@ end
 
 Lecture.maglev_record_persistable
 MaglevRecord.save
-class Lecture
-  include ActiveModel::Validations
-
-  validates :title, :presence => true
-  validates :description, :presence => true
-end
-
 Lecture.redo_include_and_extend
