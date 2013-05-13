@@ -1,23 +1,30 @@
 <h2>Gruppe <%= @group%></h2>
-<table class="table table-striped">
-  <tbody>
-    <tr>
-      <th>Tutoren</th>
-      <td>
-        <% if !@group.tutors.blank? %>
-          <% for tutor in @group.tutors %>
-            <%= link_to tutor, user_path(tutor.id) %> <br>
+
+<div class="row-fluid">
+  <div class="span12 right-aligned">
+    <% if current_user.in_group? @group.id%>
+      <%= form_tag leave_group_path(current_user), :method => :delete do%>
+          <%= hidden_field_tag 'group_id', @group.id %>
+          <%= button_tag :class=> "btn btn-small btn-primary pull-right" do%>
+           Verlassen <i class = "icon-remove icon-white"></i>          
           <% end %>
-        <% else %>
-          <span class="badge badge-info">
-            keine Studenten zugeordnet
-          </span>
+      <% end %>
+    <% else %>
+      <%= form_tag join_group_do_path(current_user.id), :method => :put, :class => "add-button-form" do%>
+          <%= hidden_field_tag 'group_id', @group.id %>
+          <%= button_tag :class=> "btn btn-small btn-success btn-inverse" do%>
+            dieser Gruppe beitreten <i class = "icon-plus icon-white"></i>          
+          <% end %>
         <% end %>
-      </td>
-    </tr>
-    <tr>
-      <th>Studenten</th>
-      <td>
+    <% end %>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <div class="span6 well">
+    <div class="row-fluid">
+      <div class="span4 header">Studenten</div>
+      <div class="span8">
         <% if !@group.students.blank? %>
           <% for student in @group.students %>
             <%= link_to student, user_path(student.id) %> <br>
@@ -27,7 +34,24 @@
             keine Studenten zugeordnet
           </span>
         <% end %>
-      </td>
-    </tr>
-  </tbody>
-</table>
+      </div>
+    </div>
+  </div>
+  <div class="span6 well">
+    <div class="row-fluid">
+      <div class="span4 header">Tutoren</div>
+      <div class="span8">
+        <% if !@group.tutors.blank? %>
+          <% for tutor in @group.tutors %>
+            <%= link_to tutor, user_path(tutor.id) %> <br>
+          <% end %>
+        <% else %>
+          <span class="badge badge-info">
+            keine Studenten zugeordnet
+          </span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
