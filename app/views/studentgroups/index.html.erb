@@ -51,7 +51,21 @@
               <% end %>
             </td>
             <td>
-              ACTIONS
+              <% if can? :edit, Studentgroup %>
+                <%= link_to edit_studentgroup_path(group), :class => "btn btn-mini btn-success btn-inverse" do %><i class="icon-pencil icon-white"></i><% end %>
+              <% end %>
+
+              <% if can? :show, Studentgroup %>
+                <%= link_to studentgroup_path(group), :class => "btn btn-mini btn-success btn-inverse", :confirm => "really?" do%> <i class="icon-eye-open icon-white"></i><% end %>
+              <% end %>
+
+              <% if can? :destroy, Studentgroup %>
+                <%=form_tag (studentgroup_path(group), :method => "delete", :class => "delete-button-form") do%>
+                  <%= button_tag :method => :delete, :class => "btn btn-mini btn-primary" do%>
+                    <i class='icon-trash icon-white'></i>
+                  <% end %>
+                <% end %>
+              <% end %>
             </td>
           </tr>
         <% end %>
