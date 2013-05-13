@@ -3,22 +3,18 @@ class LecturesController < ApplicationController
   load_and_authorize_resource
 
   def index
-    MaglevRecord.reset
     @lectures = Lecture.all
   end
 
   def show
-    MaglevRecord.reset
     @lecture = Lecture.find_by_objectid(params[:id])
   end
 
   def edit
-    MaglevRecord.reset
     @lecture = Lecture.find_by_objectid(params[:id])
   end
 
   def update
-    MaglevRecord.reset
     @lecture = Lecture.find_by_objectid(params[:id]).update_attributes(params[:lecture])
 
     if @lecture.valid?
@@ -30,7 +26,6 @@ class LecturesController < ApplicationController
   end
 
   def destroy
-    MaglevRecord.reset
     message = {:notice => "Erfolgreich gelöscht!"}
     if Lecture.object_pool.delete(params[:id].to_i).nil?
       message = {:error => "Objekt nicht vorhanden!"}
@@ -41,7 +36,6 @@ class LecturesController < ApplicationController
   end
 
   def join
-    MaglevRecord.reset
     lec = Lecture.find_by_objectid(params[:id])
     if lec
       lec.students << current_user unless lec.students.include? current_user
@@ -53,7 +47,6 @@ class LecturesController < ApplicationController
   end
 
   def leave
-    MaglevRecord.reset
     lec = Lecture.find_by_objectid(params[:id])
     if lec
       lec.students.delete(current_user) if lec.students.include? current_user
@@ -69,7 +62,6 @@ class LecturesController < ApplicationController
   end
 
   def create
-    MaglevRecord.reset
     @lecture = Lecture.new(params[:lecture])
     if @lecture.valid?
       MaglevRecord.save
@@ -86,7 +78,6 @@ class LecturesController < ApplicationController
   end
 
   def add_user
-    MaglevRecord.reset
     user = User.find_by_objectid(params[:user_id])
     lec_id = params[:id]
     role = params[:role].to_sym
@@ -106,7 +97,6 @@ class LecturesController < ApplicationController
   end
 
   def remove_user
-    MaglevRecord.reset
     user = User.find_by_objectid(params[:user_id])
     lec_id = params[:id]
     role = params[:role].to_sym

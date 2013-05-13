@@ -3,7 +3,6 @@ class StudentgroupsController < ApplicationController
   load_and_authorize_resource
   
   def index
-    MaglevRecord.reset
     @groups = Studentgroup.all
   end
 
@@ -12,7 +11,6 @@ class StudentgroupsController < ApplicationController
   end
 
   def edit
-    MaglevRecord.reset
     group = Studentgroup.find_by_objectid(params[:id])
     students = {}
     group.students.each{|student| students[student.id] = student.to_s}
@@ -29,7 +27,6 @@ class StudentgroupsController < ApplicationController
   end
 
   def update
-    MaglevRecord.reset
     groupInfo = session[:group]
     @group = Studentgroup.find_by_objectid(groupInfo[:id])
     if @group.nil?
@@ -55,7 +52,6 @@ class StudentgroupsController < ApplicationController
   end
 
   def destroy
-    MaglevRecord.reset
     message = {:notice => "Erfolgreich gelöscht!"}
     if Studentgroup.object_pool.delete(params[:id].to_i).nil?
       message = {:error => "Objekt nicht vorhanden!"}
@@ -67,7 +63,6 @@ class StudentgroupsController < ApplicationController
   end
 
   def new
-    MaglevRecord.reset
     session[:group] = {
       :name => "",
       :lecture => [nil, ""],
@@ -157,7 +152,6 @@ class StudentgroupsController < ApplicationController
   end
 
   def create
-    MaglevRecord.reset
     groupInfo = session[:group]
     students = User.select{ |user| groupInfo[:students].include? user.id }
     tutors = User.select{ |user| groupInfo[:tutors].include? user.id }

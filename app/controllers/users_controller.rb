@@ -2,36 +2,29 @@ class UsersController < ApplicationController
   load_and_authorize_resource
   
   def show
-    MaglevRecord.reset
     @user = User.find_by_objectid(params[:id])
     render "profile" if current_user and current_user == @user
   end
 
   def edit
     redirect_to :action => :index
-
   end
 
   def update
     redirect_to :action => :index
-
   end
 
   def destroy
     redirect_to :action => :index
-
   end
 
   def new
     redirect_to root_url if current_user
-    
     @user = User.new
   end
 
   def create
     redirect_to root_url if current_user
-
-    MaglevRecord.reset
 
     @user = User.new(params[:user])
     if @user.valid?
@@ -41,9 +34,7 @@ class UsersController < ApplicationController
     else
       render "new"
     end
-
   end
-
 
   def join_group_list
     raise "wrong url!" unless params[:id].to_i == current_user.id
@@ -56,7 +47,6 @@ class UsersController < ApplicationController
   def join_group
     myId = params[:id].to_i
     raise "wrong url!" unless myId == current_user.id
-    MaglevRecord.reset
     group = Studentgroup.find_by_objectid(params[:group_id])
     message = nil
     if group.nil?
@@ -79,7 +69,6 @@ class UsersController < ApplicationController
     myId = params[:id].to_i
     raise "wrong url!" unless myId == current_user.id
     
-    MaglevRecord.reset
     group = Studentgroup.find_by_objectid(params[:group_id])
     message = nil
     if group.nil?
