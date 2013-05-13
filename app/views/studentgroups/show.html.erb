@@ -1,7 +1,7 @@
 <h2>Gruppe <%= @group%></h2>
 
 <div class="row-fluid">
-  <div class="span12 right-aligned">
+  <div class="span6">
     <% if current_user.in_group? @group.id%>
       <%= form_tag leave_group_path(current_user), :method => :delete do%>
           <%= hidden_field_tag 'group_id', @group.id %>
@@ -17,6 +17,23 @@
           <% end %>
         <% end %>
     <% end %>
+  </div>
+  <div class="span6 right-aligned">
+    
+    <% if can? :edit, Studentgroup %>
+      <%= link_to edit_studentgroup_path(@group), :class => "btn btn-mini btn-success btn-inverse" do%>
+        <i class = "icon-pencil icon-white"></i>
+      <% end %>
+    <% end %>
+    
+    <% if can? :destroy, Studentgroup %>
+      <%=form_tag (studentgroup_path(@group), :method => "delete", :class => "delete-button-form") do%>
+        <%= button_tag :method => :delete, :class => "btn btn-mini btn-primary" do%>
+          <i class='icon-remove icon-white'></i>
+        <% end %>
+      <% end %>
+    <% end %>
+
   </div>
 </div>
 

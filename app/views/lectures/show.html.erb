@@ -11,7 +11,7 @@
     <% if can? :destroy, Lecture %>
       <%=form_tag (lecture_path(@lecture), :method => "delete", :class => "delete-button-form") do%>
         <%= button_tag :method => :delete, :class => "btn btn-mini btn-primary" do%>
-          <i class='icon-trash icon-white'></i>
+          <i class='icon-remove icon-white'></i>
         <% end %>
       <% end %>
     <% end %>
@@ -34,7 +34,7 @@
                   <%= form_tag remove_user_path(@lecture.id, :lecturer), :method => :delete, :class => "delete-button-form" do%>
                     <%= hidden_field_tag 'user_id', lecturer.id %>
                     <%= button_tag :class=> "btn btn-mini btn-primary" do%>
-                      <i class = "icon-trash icon-white"></i>          
+                      <i class = "icon-remove icon-white"></i>          
                     <% end %>
                   <% end %>
                 </div>
@@ -67,7 +67,7 @@
                   <%= form_tag remove_user_path(@lecture.id, :staff), :method => :delete, :class => "delete-button-form"  do%>
                     <%= hidden_field_tag 'user_id', staff.id %>
                     <%= button_tag :class=> "btn btn-mini btn-primary" do%>
-                      <i class = "icon-trash icon-white"></i>          
+                      <i class = "icon-remove icon-white"></i>          
                     <% end %> 
                   <% end %>
                 </div>
@@ -101,7 +101,7 @@
                 <%= form_tag remove_user_path(@lecture.id, :tutors), :method => :delete, :class => "delete-button-form"  do%>
                   <%= hidden_field_tag 'user_id', tutor.id %>
                   <%= button_tag :class=> "btn btn-mini btn-primary" do%>
-                    <i class = "icon-trash icon-white"></i>          
+                    <i class = "icon-remove icon-white"></i>          
                   <% end %>
                 <% end %>
               </div>
