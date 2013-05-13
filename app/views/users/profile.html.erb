@@ -8,7 +8,7 @@
         <% for lecture in current_user.my_lectures %>
           <tr>
             <td>
-              <%= link_to lecture, studentgroup_path(lecture.id) %> 
+              <%= link_to lecture, lecture_path(lecture.id) %> 
             </td>
 
             <td>
