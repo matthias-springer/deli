@@ -69,11 +69,8 @@ class LecturesController < ApplicationController
   end
 
   def create
-
     MaglevRecord.reset
-
-    @lecture = Lecture.new(params[:lecture]) #
-
+    @lecture = Lecture.new(params[:lecture])
     if @lecture.valid?
       MaglevRecord.save
       flash[:message] = "Vorlesung erfolgreich erstellt!"
@@ -83,12 +80,10 @@ class LecturesController < ApplicationController
     end
   end
 
-
   def add_user_list
     @users = User.all
     render 'add_user_list'
   end
-
 
   def add_user
     MaglevRecord.reset
