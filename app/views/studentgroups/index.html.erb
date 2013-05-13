@@ -13,6 +13,7 @@
       <table class="table table-striped">
         <tr>
           <th>Gruppenname</th>
+          <th>Vorlesung</th>
           <th>Stundenten</th>
           <th>Tutoren</th>
           <th></th>
@@ -23,6 +24,9 @@
             <th>
               <%= link_to group.to_s, studentgroup_path(group.id) %> <br>
             </th>
+            <td>
+              <%= link_to group.lecture.to_s, lecture_path(group.lecture.id) %> <br>
+            </td>
             <td>
               <% if !group.students.blank? %>
                 <% for student in group.students %>

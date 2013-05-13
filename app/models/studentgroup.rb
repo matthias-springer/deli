@@ -3,9 +3,10 @@ require "maglev_record"
 class Studentgroup
   include MaglevRecord::RootedBase
 
-  attr_accessor :students, :tutors, :name
+  attr_accessor :students, :tutors, :name, :lecture
 
   validates :name, :presence => true
+  validates :lecture, :presence => true
 
   def initialize(*args)
     super(*args)

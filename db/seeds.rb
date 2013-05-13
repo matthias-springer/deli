@@ -118,9 +118,8 @@ lec1.lecturer << lecturer
 lec2.lecturer << lecturer
 lec3.lecturer << lecturer
 
-lec1.groups << group2
-lec2.groups << group1
-
+group2.lecture = lec1
+group1.lecture = lec2
 
 lec1.tutors << tut1
 lec1.tutors << tut2

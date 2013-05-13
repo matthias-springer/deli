@@ -134,10 +134,15 @@ class LecturesController < ApplicationController
     redirect_to lecture_path(lec_id), message
   end
 
+  def json_index
+    render :json => Hash[*Lecture.all.map{ |lecture| [lecture.id, lecture.title] }.flatten]
+  end
+  
   private
 
   def valid_role(role)
     return [:tutors, :lecturer, :staff].include?(role.to_sym)
   end
+
 
 end

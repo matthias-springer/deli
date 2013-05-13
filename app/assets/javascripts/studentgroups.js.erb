@@ -35,6 +35,15 @@ $(function() {
     };
     $('#studentgroup_tutors').typeahead(opts);
   };
+  
+  var initLectures = function(values) {
+    var opts = myOptions(values)
+    opts['updater'] = function(item){
+      $('#chosen_lecture').attr('value', item);
+      return values[item];
+    };
+    $('#studentgroup_lecture').typeahead(opts);
+  };
 
   $.ajax({
     url: '/users/json/students/',
@@ -47,6 +56,13 @@ $(function() {
     url: '/users/json/tutors/',
     data: {},
     success: initTutors,
+    dataType: "json"
+  });
+
+  $.ajax({
+    url: '/lectures/json/index/',
+    data: {},
+    success: initLectures,
     dataType: "json"
   });
 

@@ -18,7 +18,13 @@ class StudentgroupsController < ApplicationController
     group.students.each{|student| students[student.id] = student.to_s}
     tutors = {}
     group.tutors.each{|tutor| tutors[tutor.id] = tutor.to_s}
-    session[:group] = {:id => group.id, :name => group.name, :students => students, :tutors => tutors, :is_new => false}
+    session[:group] = {
+      :id => group.id, 
+      :name => group.name, 
+      :lecture => [group.lecture.id, group.lecture.title],
+      :students => students, 
+      :tutors => tutors, 
+      :is_new => false}
     @link = update_studentgroup_path(group.id)
   end
 
@@ -31,7 +37,12 @@ class StudentgroupsController < ApplicationController
       return
     end
     @group.name = params[:studentgroup_name]
-
+    lecture = Lecture.find_by_objectid(params[:chosen_lecture])
+    if lecture.nil?
+      redirect_to studentgroups_path, {:error => "Die Vorlesung existiert nicht!"}
+      return
+    end
+    @group.lecture = lecture
     @group.students = User.select{ |user| groupInfo[:students].include? user.id }
     @group.tutors = User.select{ |user| groupInfo[:tutors].include? user.id }
     if @group.valid?
@@ -59,6 +70,7 @@ class StudentgroupsController < ApplicationController
     MaglevRecord.reset
     session[:group] = {
       :name => "",
+      :lecture => [nil, ""],
       :students => {current_user.id => current_user.to_s},
       :tutors => {},
       :is_new => true
@@ -75,6 +87,7 @@ class StudentgroupsController < ApplicationController
 
     session[:group][:name] = params[:studentgroup_name]
 
+
     message = {}
     if student_to_delete.empty? and tutor_to_delete.empty?
       message = _update_messages(_add_user(student_id, :students), message) unless student_id.empty?
@@ -84,6 +97,11 @@ class StudentgroupsController < ApplicationController
       message = _update_messages(_remove_user(tutor_to_delete, :tutors), message) unless tutor_to_delete.empty?
     end
         
+    lecture_id = params[:chosen_lecture]
+    lecture = Lecture.find_by_objectid(lecture_id)
+
+    session[:group][:lecture] = [lecture.id, lecture.title] unless lecture.nil?
+
     if session[:group][:is_new]
       render "new", message
     else
@@ -139,10 +157,18 @@ class StudentgroupsController < ApplicationController
     students = User.select{ |user| groupInfo[:students].include? user.id }
     tutors = User.select{ |user| groupInfo[:tutors].include? user.id }
     name = params[:studentgroup_name]
+
     @group = Studentgroup.new(:name => name)
 
+    lecture = Lecture.find_by_objectid(params[:chosen_lecture])
+    if lecture.nil?
+      render "new", {:error => "Die Vorlesung existiert nicht!"}
+      return
+    end
+    @group.lecture = lecture
     @group.students = students
     @group.tutors = tutors 
+
     if @group.valid?
       MaglevRecord.save
       redirect_to studentgroups_path

@@ -3,7 +3,7 @@ require "maglev_record"
 class Lecture
   include MaglevRecord::RootedBase
 
-  attr_accessor :title, :lecturer, :description, :groups, :students, :tutors, :staff
+  attr_accessor :title, :lecturer, :description, :students, :tutors, :staff
 
   validates :title, :presence => true
   validates :description, :presence => true
@@ -15,10 +15,13 @@ class Lecture
   def initialize(*args)
     super(*args)
     self.lecturer = []
-    self.groups = []
     self.students = []
     self.tutors = []
     self.staff = []
+  end
+
+  def groups
+    Studentgroup.find_all{ |group| group.lecture == self }
   end
 end
 
