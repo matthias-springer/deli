@@ -127,26 +127,14 @@
       <div class="span7">
         <% if !@lecture.groups.blank? %>
           <% for group in @lecture.groups %>
-            <div class="row-fluid row-item">
-              <div class="span4">
-                <%= link_to "#{group.to_s}", studentgroup_path(group.id) %>
-              </div>
-              <div class="span8">
-                <% if !group.students.blank? %>
-                  <% for student in group.students %>
-                    <%= link_to student.to_s, user_path(student.id) %> <br>        
-                  <% end %>
-                <% else %>
-                  <span class="bagde bagde-info">Leere Gruppe</span>    
-                <% end %>
-              </div>
-            </div>
+          <div class="row-fluid row-item">
+            <div class="span12">
+              <%= link_to "#{group.to_s}", studentgroup_path(group.id) %>
+            </div>  
+          </div>
           <% end %>
         <% else %>
-          <span class="bagde bagde-info">Keine Gruppen eingetragen</span>
-          <%= link_to new_studentgroup_path, :class => "btn btn-success btn-inverse" do%>
-            Gruppe erstellen <i class="icon-plus icon-white"></i> 
-          <% end %>
+          <span class="badge badge-info">Keine Gruppen eingetragen</span>
         <% end %>
       </div>
       <div class="span1">
