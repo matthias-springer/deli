@@ -100,7 +100,12 @@ class StudentgroupsController < ApplicationController
     lecture_id = params[:chosen_lecture]
     lecture = Lecture.find_by_objectid(lecture_id)
 
-    session[:group][:lecture] = [lecture.id, lecture.title] unless lecture.nil?
+    if lecture.nil?
+      puts session
+      puts params
+    else
+      session[:group][:lecture] = [lecture.id, lecture.title] 
+    end
 
     if session[:group][:is_new]
       render "new", message
@@ -165,6 +170,8 @@ class StudentgroupsController < ApplicationController
       render "new", {:error => "Die Vorlesung existiert nicht!"}
       return
     end
+    
+
     @group.lecture = lecture
     @group.students = students
     @group.tutors = tutors 

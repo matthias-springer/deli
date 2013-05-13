@@ -21,7 +21,7 @@
       <tr>
         <th>Vorlesung</th>
         <td colspan="2">
-          <%= hidden_field_tag 'chosen_lecture' %>
+          <%= hidden_field_tag 'chosen_lecture', session[:group][:lecture][0] %>
           <input type="text" autocomplete="off" name="studentgroup_lecture" id ="studentgroup_lecture" value="<%= session[:group][:lecture][1]%>">
         </td>
       </tr>
