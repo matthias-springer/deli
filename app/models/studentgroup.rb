@@ -4,7 +4,9 @@ class Studentgroup
   include MaglevRecord::RootedBase
 
   attr_accessor :students, :tutors, :name
-  
+
+  validates :name, :presence => true
+
   def initialize(*args)
     super(*args)
     self.students = []
@@ -36,10 +38,4 @@ end
 
 Studentgroup.maglev_record_persistable
 MaglevRecord.save
-
-
-class Studentgroup
-  include ActiveModel::Validations
-
-  validates :name, :presence => true
-end
+Studentgroup.redo_include_and_extend
