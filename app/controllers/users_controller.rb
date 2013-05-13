@@ -99,11 +99,15 @@ class UsersController < ApplicationController
   end
 
   def json_students
-    render :json => Hash[*User.select{ |user| user.student? }.map{ |user| [user.id, user.to_s] }.flatten]
+    render :json => json { |user| user.student? }
   end
 
   def json_tutors
-    render :json => Hash[*User.select{ |user| user.tutor? }.map{ |user| [user.id, user.to_s] }.flatten]
+    render :json => json { |user| user.tutor? }
+  end
+
+  def json(&block)
+    Hash[*User.select(&block).map{ |user| [user.id, user.to_s] }.flatten]
   end
 
 end
