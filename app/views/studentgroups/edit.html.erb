@@ -2,6 +2,6 @@
   <%= javascript_include_tag "studentgroups.js" %>
 <% end %>
 
-<h2>Neue Gruppe erstellen</h2>
+<h2>Gruppe <%= session[:group][:name]%> bearbeiten</h2>
 
 <%= render 'form'%>

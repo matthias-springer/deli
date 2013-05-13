@@ -26,7 +26,8 @@ Deli::Application.routes.draw do
   get "users/json/tutors" => "users#json_tutors", :as => "json_tutors"
 
   resources :studentgroups
-  put "studentgroups" => "studentgroups#update_new", :as => "update_new_studentgroup"
+  put "studentgroups" => "studentgroups#update_from_session", :as => "update_new_studentgroup"
+  put "studentgroups/:id/edit" => "studentgroups#update_from_session", :as => "update_studentgroup"
   # put "studentgroup/add_student" => "studentgroups#add_student", :as => "add_student"
   # put "studentgroup/add_tutor" => "studentgroups#add_tutor", :as => "add_tutor"
 

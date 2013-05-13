@@ -33,7 +33,7 @@ class LecturesController < ApplicationController
     MaglevRecord.reset
     message = {:notice => "Erfolgreich gelöscht!"}
     if Lecture.object_pool.delete(params[:id].to_i).nil?
-      message = {:alert => "Objekt nicht vorhanden!"}
+      message = {:error => "Objekt nicht vorhanden!"}
     end
     MaglevRecord.save
 

@@ -49,10 +49,20 @@ $(function() {
     success: initTutors,
     dataType: "json"
   });
+
+  $('#change_to_post_btn').on('click', function(event) {
+    // hook for two actions(put and post) in one form
+    $('#group_form input[name=_method]').remove();
+  });
+
+  $('#change_action_btn').on('click', function(event) {
+    $('#group_form').attr('action', $(this).attr('action'));
+  });
+
+  $('.btn-delete-student').on('click', function(event) {
+    $('#student_to_delete').attr('value', $(this).attr('data-student-id'));
+  });  
+  $('.btn-delete-tutor').on('click', function(event) {
+    $('#tutor_to_delete').attr('value', $(this).attr('data-tutor-id'));
+  });  
 });
-
-
-function change_to_post() {
-  // hook for two actions(put and post) in one form
-  $('#new_group input[name=_method]').remove();
-}
