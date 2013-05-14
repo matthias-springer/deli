@@ -2,18 +2,22 @@ require 'test_helper'
 
 class LecturesControllerTest < ActionController::TestCase
 
-  def login
-    user = User.new
-    user.set_role(:admin)
-    session[:user_id] = user.id
+  def login_student
+    @user = User.new
+    session[:user_id] = @user.id
     MaglevRecord.save
   end
+  def login_admin
+    @user.set_role(:admin)
+    MaglevRecord.save
+  end
+
   def logout
     session[:user_id] = nil
   end
 
   def setup
-    login
+    login_student
   end
   def teardown
     User.clear
@@ -47,6 +51,7 @@ class LecturesControllerTest < ActionController::TestCase
   end
 
   test "should create lecture" do
+    login_admin
     prev_count = Lecture.count
     post :create, :lecture => lecture_attrs
     assert_equal Lecture.count, prev_count + 1
