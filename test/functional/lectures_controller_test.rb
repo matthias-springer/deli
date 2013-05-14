@@ -40,6 +40,14 @@ class LecturesControllerTest < ActionController::TestCase
     assert_equal l, assigns(:lecture)
   end
 
+  test "should not show lecture when given invalid lecture id" do
+    get :show, id: 3
+    assert_response 302
+    assert_nil assigns(:lecture)
+    assert_redirected_to lectures_path
+    assert_equal "Diese Vorlesung existiert nicht!", flash[:notice]
+  end
+
   test "should create lecture" do
     login_admin
     prev_count = Lecture.count
@@ -63,11 +71,22 @@ class LecturesControllerTest < ActionController::TestCase
     put :update, id: Lecture.first.id, lecture: params
     assert_equal, Lecture.first.title = "Another lecture"
   end
+  test "should not update invalid lecture" do
+    login_admin
+    params = lecture_params
+    params[:title] = "Another lecture"
+    assert_equal, Lecture.first.title = ""
+    put :update, id: Lecture.first.id, lecture: params
+    assert_equal, Lecture.first.title = "A lecture"
+  end
 
   test "should show add_user_list" do
     login_admin
     get :add_user_list, id: Lecture.first.id, role: 'admin'
     assert_not_nil assigns(:users)
     assert_template 'add_user_list'
+  end
+
+  test "should add an user" do
   end
 end
