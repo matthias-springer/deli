@@ -24,6 +24,17 @@ class StudentgroupsControllerTest < ActionController::TestCase
       }
   end
 
+  def create_session_from_group(group)
+    session[:group] = {
+      id: group.id, 
+      name: group.name, 
+      lecture: [group.lecture.id, group.lecture.title],
+      students: {@user.id => @user.to_s}, 
+      tutors: {}, 
+      is_new: false
+    }
+  end
+
   def clear_group_session
     session.delete(:group)
   end
@@ -135,6 +146,25 @@ class StudentgroupsControllerTest < ActionController::TestCase
   end
 
   # update
+  test "update with errors" do
+    login_admin
+    create_test_group
+
+    session[:group] = {id: 1}
+    put :update, id: @group.id
+    assert_redirected_to studentgroups_path
+    assert_equal flash[:error], "Die Gruppe existiert nicht!"
+    
+    create_session_from_group(@group)
+    put :update, id: @group.id
+    assert_redirected_to studentgroups_path
+    assert_equal flash[:error], "Die Vorlesung existiert nicht!"
+  end
+
+  test "successfull update" do
+    
+  end
+
   # update_from_session
 
 

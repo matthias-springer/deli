@@ -30,13 +30,15 @@ class StudentgroupsController < ApplicationController
     groupInfo = session[:group]
     @group = Studentgroup.find_by_objectid(groupInfo[:id])
     if @group.nil?
-      redirect_to studentgroups_path, {error: "Die Gruppe existiert nicht!"}
+      flash[:error] = "Die Gruppe existiert nicht!"
+      redirect_to studentgroups_path
       return
     end
     @group.name = params[:studentgroup_name]
     lecture = Lecture.find_by_objectid(params[:chosen_lecture])
     if lecture.nil?
-      redirect_to studentgroups_path, {error: "Die Vorlesung existiert nicht!"}
+      flash[:error] = "Die Vorlesung existiert nicht!"
+      redirect_to studentgroups_path
       return
     end
     @group.lecture = lecture
