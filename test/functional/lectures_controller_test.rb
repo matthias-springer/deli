@@ -39,6 +39,7 @@ class LecturesControllerTest < ActionController::TestCase
 
   test "should show lecture" do
     l = Lecture.new(lecture_attrs)
+    MaglevRecord.save
     get :show, :id => l.id
     assert_response :success
     assert_not_nil assigns(:lecture)
