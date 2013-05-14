@@ -3,9 +3,10 @@ require 'test_helper'
 class LecturesControllerTest < ActionController::TestCase
 
   def login
-    user = User.create
+    user = User.new
     user.set_role(:admin)
     session[:user_id] = user.id
+    MaglevRecord.save
   end
   def logout
     session[:user_id] = nil
@@ -13,6 +14,10 @@ class LecturesControllerTest < ActionController::TestCase
 
   def setup
     login
+  end
+  def teardown
+    User.clear
+    MaglevRecord.save
   end
 
   test "should not get index without authorization" do
