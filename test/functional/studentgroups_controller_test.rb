@@ -67,7 +67,6 @@ class StudentgroupsControllerTest < ActionController::TestCase
     MaglevRecord.save
     post :create, :chosen_lecture => l.id
     assert_response :success
-    assert_equal flash[:error], "Der Name darf nicht leer sein!"
 
     assert_not_nil session[:group]
     

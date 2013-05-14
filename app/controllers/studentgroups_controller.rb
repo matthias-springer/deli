@@ -176,7 +176,6 @@ class StudentgroupsController < ApplicationController
       redirect_to studentgroups_path
       session.delete(:group)
     else 
-      flash[:error] = "Der Name darf nicht leer sein!"
       render "new"
     end
   end
