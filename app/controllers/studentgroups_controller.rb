@@ -52,13 +52,14 @@ class StudentgroupsController < ApplicationController
   end
 
   def destroy
-    message = {notice: "Erfolgreich gelöscht!"}
     if Studentgroup.object_pool.delete(params[:id].to_i).nil?
-      message = {error: "Objekt nicht vorhanden!"}
+      flash[:error] = "Gruppe ist nicht vorhanden!"
+    else
+      flash[:notice] = "Gruppe erfolgreich gelöscht!"
     end
     MaglevRecord.save
 
-    redirect_to studentgroups_path, message
+    redirect_to studentgroups_path
 
   end
 

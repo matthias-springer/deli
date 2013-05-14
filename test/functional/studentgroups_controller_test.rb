@@ -28,6 +28,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
     session.delete(:group)
   end
 
+  # index
   test "guest cannot list groups" do
     logout
     assert_raise(CanCan::AccessDenied) do
@@ -35,11 +36,13 @@ class StudentgroupsControllerTest < ActionController::TestCase
     end    
   end
 
+  # new
   test "new-action should create entry in session" do
     get :new
     assert_not_nil session[:group]
   end
 
+  # create
   test "should be able to create new group successfully" do
     l = Lecture.new({title: "New Lecture", description: "This is really good!"})
     MaglevRecord.save
@@ -54,8 +57,6 @@ class StudentgroupsControllerTest < ActionController::TestCase
 
     assert_nil session[:group]
   end
-
-
   test "creating invalid group shoul render to 'new'" do
     create_clear_session
 
@@ -69,20 +70,49 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_response :success
 
     assert_not_nil session[:group]
-    
   end
 
+  def create_test_group
+    l = Lecture.new({title: "New Lecture", description: "This is really good!"})
+    @group = Studentgroup.new({name: "New group", lecture: l})
+    MaglevRecord.save
+  end
 
+  # show
   test "should show studentgroup" do
     login_admin
-    l = Lecture.new({title: "New Lecture", description: "This is really good!"})
-    group = Studentgroup.new({name: "New group", lecture: l})
-    MaglevRecord.save
-    get :show, id: group.id
+    create_test_group
+    get :show, id: @group.id
 
     assert_response :success
     assert_not_nil assigns(:group)
-    assert_equal assigns(:group), group
+    assert_equal assigns(:group), @group
   end
+
+  # destroy
+  test "destroy not existing studentgroup" do
+    login_admin
+    delete :destroy, id: 1
+    assert_redirected_to studentgroups_path
+    assert_equal flash[:error], "Gruppe ist nicht vorhanden!"
+    assert_nil flash[:notice]
+  end
+  
+  test "destroy existing studentgroup" do
+    login_admin
+    create_test_group
+    counter = Studentgroup.size
+    delete :destroy, id: @group.id
+    assert_redirected_to studentgroups_path
+    assert_equal flash[:notice], "Gruppe erfolgreich gelöscht!"
+    assert_nil flash[:error]
+    assert_equal Studentgroup.size, counter-1
+    assert_nil Studentgroup.find_by_objectid(@group.id)
+  end
+
+  # edit
+  # update
+  # update_from_session
+
 
 end
