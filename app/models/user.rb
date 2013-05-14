@@ -12,58 +12,58 @@ class User
   validates :last_name, :presence => true
   validates :email, :presence => true
 
-  def to_s
+  def full_name
     "#{first_name} #{last_name}"
+  end
+
+  def to_s
+    full_name
   end
 
   def admin?
     @roles[:admin]
   end
-
+  def admin!
+    set_role(:admin)
+  end
+  def no_admin!
+    unset_role(:admin)
+  end
   def tutor?
     @roles[:tutor]
   end
-
+  def tutor!
+    set_role(:tutor)
+  end
+  def no_tutor!
+    unset_role(:tutor)
+  end
   def student?
     @roles[:student]
+  end
+  def student!
+    set_role(:student)
+  end
+  def no_student!
+    unset_role(:tutor)
   end
 
   def initialize(*args)
     super(*args)
-    
     @roles = Hash.new
-
-    set_role(:student)
-    unset_role(:admin)
-    unset_role(:tutor)
+    student!
+    no_admin!
+    no_tutor!
   end
 
   def set_role(role)
     @roles[role] = true
   end
-
   def unset_role(role)
     @roles[role] = false
   end
+  protected :set_role, :unset_role
 
-  def add_to_lecture(lecture_id, as)
-    lecture = Lecture.find_by_objectid(lecture_id)
-    return false if lecture.nil?
-    list = lecture.attributes[as]
-    list << self unless list.include?(self)
-    return true
-  rescue
-    return false
-  end
-
-  def remove_from_lecture(lecture_id, from)
-    lecture = Lecture.find_by_objectid(lecture_id)
-    return false if lecture.nil?
-    lecture.attributes[from].delete(self)
-    return true
-  rescue 
-    return false
-  end
 
   def my_groups
     return Studentgroup.select do |group|
