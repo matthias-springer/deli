@@ -44,7 +44,8 @@ class StudentgroupsControllerTest < ActionController::TestCase
 
   test "should show studentgroup" do
     login_admin
-    group = Studentgroup.new(:name => "New group")
+    l = Lecture.new({:title => "New Lecture", :description => "This is really good!"})
+    group = Studentgroup.new({:name => "New group", :lecture => l})
     MaglevRecord.save
     get :show, :id => group.id
 
