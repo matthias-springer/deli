@@ -4,6 +4,15 @@ require "functional/controller_test_base"
 class LecturesControllerTest < ActionController::TestCase
   include DeliControllerTestCase
 
+  def setup
+    login_student
+  end
+  
+  def teardown
+    User.clear
+    MaglevRecord.save
+  end
+
   def lecture_attrs
     { :title => 'A lecture', :description => 'An interesting lecture.'}
   end
