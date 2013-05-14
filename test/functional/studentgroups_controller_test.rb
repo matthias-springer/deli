@@ -16,11 +16,11 @@ class StudentgroupsControllerTest < ActionController::TestCase
 
   def create_clear_session
     session[:group] = {
-        :name => "",
-        :lecture => [nil, ""],
-        :students => {@user.id => @user.to_s},
-        :tutors => {},
-        :is_new => true
+        name: "",
+        lecture: [nil, ""],
+        students: {@user.id => @user.to_s},
+        tutors: {},
+        is_new: true
       }
   end
 
@@ -41,12 +41,12 @@ class StudentgroupsControllerTest < ActionController::TestCase
   end
 
   test "should be able to create new group successfully" do
-    l = Lecture.new({:title => "New Lecture", :description => "This is really good!"})
+    l = Lecture.new({title: "New Lecture", description: "This is really good!"})
     MaglevRecord.save
     old_count = Studentgroup.size
     
     create_clear_session
-    post :create, :studentgroup_name => "new group", :chosen_lecture => l.id
+    post :create, studentgroup_name: "new group", chosen_lecture: l.id
     assert_redirected_to studentgroups_path
     
     assert_not_nil assigns(:group)
@@ -59,13 +59,13 @@ class StudentgroupsControllerTest < ActionController::TestCase
   test "creating invalid group shoul render to 'new'" do
     create_clear_session
 
-    post :create, :studentgroup_name => "new group", :chosen_lecture => 2
+    post :create, studentgroup_name: "new group", chosen_lecture: 2
     assert_response :success
     assert_equal flash[:error], "Die Vorlesung existiert nicht!"
 
-    l = Lecture.new({:title => "New Lecture", :description => "This is really good!"})
+    l = Lecture.new({title: "New Lecture", description: "This is really good!"})
     MaglevRecord.save
-    post :create, :chosen_lecture => l.id
+    post :create, chosen_lecture: l.id
     assert_response :success
 
     assert_not_nil session[:group]
@@ -75,10 +75,10 @@ class StudentgroupsControllerTest < ActionController::TestCase
 
   test "should show studentgroup" do
     login_admin
-    l = Lecture.new({:title => "New Lecture", :description => "This is really good!"})
-    group = Studentgroup.new({:name => "New group", :lecture => l})
+    l = Lecture.new({title: "New Lecture", description: "This is really good!"})
+    group = Studentgroup.new({name: "New group", lecture: l})
     MaglevRecord.save
-    get :show, :id => group.id
+    get :show, id: group.id
 
     assert_response :success
     assert_not_nil assigns(:group)

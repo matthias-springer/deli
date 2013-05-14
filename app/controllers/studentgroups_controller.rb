@@ -17,12 +17,12 @@ class StudentgroupsController < ApplicationController
     tutors = {}
     group.tutors.each{|tutor| tutors[tutor.id] = tutor.to_s}
     session[:group] = {
-      :id => group.id, 
-      :name => group.name, 
-      :lecture => [group.lecture.id, group.lecture.title],
-      :students => students, 
-      :tutors => tutors, 
-      :is_new => false}
+      id: group.id, 
+      name: group.name, 
+      lecture: [group.lecture.id, group.lecture.title],
+      students: students, 
+      tutors: tutors, 
+      is_new: false}
     @link = update_studentgroup_path(group.id)
   end
 
@@ -30,13 +30,13 @@ class StudentgroupsController < ApplicationController
     groupInfo = session[:group]
     @group = Studentgroup.find_by_objectid(groupInfo[:id])
     if @group.nil?
-      redirect_to studentgroups_path, {:error => "Die Gruppe existiert nicht!"}
+      redirect_to studentgroups_path, {error: "Die Gruppe existiert nicht!"}
       return
     end
     @group.name = params[:studentgroup_name]
     lecture = Lecture.find_by_objectid(params[:chosen_lecture])
     if lecture.nil?
-      redirect_to studentgroups_path, {:error => "Die Vorlesung existiert nicht!"}
+      redirect_to studentgroups_path, {error: "Die Vorlesung existiert nicht!"}
       return
     end
     @group.lecture = lecture
@@ -52,9 +52,9 @@ class StudentgroupsController < ApplicationController
   end
 
   def destroy
-    message = {:notice => "Erfolgreich gelöscht!"}
+    message = {notice: "Erfolgreich gelöscht!"}
     if Studentgroup.object_pool.delete(params[:id].to_i).nil?
-      message = {:error => "Objekt nicht vorhanden!"}
+      message = {error: "Objekt nicht vorhanden!"}
     end
     MaglevRecord.save
 
@@ -64,11 +64,11 @@ class StudentgroupsController < ApplicationController
 
   def new
     session[:group] = {
-      :name => "",
-      :lecture => [nil, ""],
-      :students => {current_user.id => current_user.to_s},
-      :tutors => {},
-      :is_new => true
+      name: "",
+      lecture: [nil, ""],
+      students: {current_user.id => current_user.to_s},
+      tutors: {},
+      is_new: true
     }
     @link = update_new_studentgroup_path
   end
@@ -121,7 +121,7 @@ class StudentgroupsController < ApplicationController
 
     notice += new_notice unless new_notice.nil?
 
-    return {:error => error, :notice => notice}
+    return {error: error, notice: notice}
   end
 
   def _add_user(user_id, dict_sym)
@@ -157,7 +157,7 @@ class StudentgroupsController < ApplicationController
     tutors = User.select{ |user| groupInfo[:tutors].include? user.id }
     name = params[:studentgroup_name]
 
-    @group = Studentgroup.new(:name => name)
+    @group = Studentgroup.new name: name
 
     lecture = Lecture.find_by_objectid(params[:chosen_lecture])
     if lecture.nil?
