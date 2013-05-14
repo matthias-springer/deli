@@ -12,6 +12,6 @@ before_script:
   - "maglev-gem install bundler"
   - "bundle install"
 script:
-  - "bundle exec rake test"
+  - "bundle exec rake test:functionals"
 notifications:
     email: false
