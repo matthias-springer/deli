@@ -16,7 +16,7 @@ class LecturesControllerTest < ActionController::TestCase
   end
 
   def lecture_params
-    { :title => 'A lecture', :description => 'An interesting lecture.'}
+    { title: 'A lecture', description: 'An interesting lecture.'}
   end
 
   test "should not get index without authorization" do
@@ -34,7 +34,7 @@ class LecturesControllerTest < ActionController::TestCase
 
   test "should show lecture" do
     l = Lecture.first
-    get :show, :id => l.id
+    get :show, id: l.id
     assert_response :success
     assert_not_nil assigns(:lecture)
     assert_equal l, assigns(:lecture)
@@ -43,14 +43,14 @@ class LecturesControllerTest < ActionController::TestCase
   test "should create lecture" do
     login_admin
     prev_count = Lecture.count
-    post :create, :lecture => lecture_params
+    post :create, lecture: lecture_params
     assert_equal Lecture.count, prev_count + 1
     assert_redirected_to lectures_path
   end
 
   test "should get edit" do
     login_admin
-    get :edit, :id => Lecture.first.id
+    get :edit, id: Lecture.first.id
     assert_response :success
     assert_not_nil assigns(:lecture)
   end
@@ -60,7 +60,14 @@ class LecturesControllerTest < ActionController::TestCase
     params = lecture_params
     params[:title] = "Another lecture"
     assert_equal, Lecture.first.title = "A lecture"
-    put :update, :id => Lecture.first.id, :lecture => params
+    put :update, id: Lecture.first.id, lecture: params
     assert_equal, Lecture.first.title = "Another lecture"
+  end
+
+  test "should show add_user_list" do
+    login_admin
+    get :add_user_list, id: Lecture.first.id, role: 'admin'
+    assert_not_nil assigns(:users)
+    assert_template 'add_user_list'
   end
 end
