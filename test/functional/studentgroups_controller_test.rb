@@ -11,6 +11,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
   def teardown
     [User, Lecture, Studentgroup].each do |cls| cls.clear end
     MaglevRecord.save
+    clear_group_session
   end
 
   def create_clear_session
@@ -23,16 +24,8 @@ class StudentgroupsControllerTest < ActionController::TestCase
       }
   end
 
-  test "should be able to create new group" do
-    l = Lecture.new({:title => "New Lecture", :description => "This is really good!"})
-    MaglevRecord.save
-    old_count = Studentgroup.size
-    create_clear_session
-    post :create, :group => {:name => "new group", :lecture => l}
-    assert_response :success
-    assert_not_nil assigns(:group)
-    groups = Studentgroup.all
-    assert_equal old_count+1, Studentgroup.size
+  def clear_group_session
+    session.delete(:group)
   end
 
   test "guest cannot list groups" do
@@ -41,6 +34,26 @@ class StudentgroupsControllerTest < ActionController::TestCase
       get :index
     end    
   end
+
+  test "new-action should create entry in session" do
+    get :new
+    assert_not_nil session[:group]
+  end
+
+  test "should be able to create new group successfully" do
+    l = Lecture.new({:title => "New Lecture", :description => "This is really good!"})
+    MaglevRecord.save
+    old_count = Studentgroup.size
+    create_clear_session
+
+    post :create, :studentgroup_name => "new group", :chosen_lecture => l.id
+    assert_not_nil assigns(:group)
+    assert_equal old_count+1, Studentgroup.size
+
+    assert_redirected_to studentgroups_path
+    assert_nil session[:group]
+  end
+
 
   test "should show studentgroup" do
     login_admin
@@ -53,4 +66,5 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:group)
     assert_equal assigns(:group), group
   end
+
 end
