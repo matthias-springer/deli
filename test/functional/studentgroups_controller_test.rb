@@ -159,10 +159,27 @@ class StudentgroupsControllerTest < ActionController::TestCase
     put :update, id: @group.id
     assert_redirected_to studentgroups_path
     assert_equal flash[:error], "Die Vorlesung existiert nicht!"
+
+    # TODO: group if not valid!
+    # create_session_from_group(@group)
+    # put :update, id: @group.id
+    # assert_response :succes
+    # assert_equal flash[:error], "Die Vorlesung existiert nicht!"
   end
 
   test "successfull update" do
-    
+    login_admin
+    create_test_group
+
+    create_session_from_group(@group)
+    params = {
+      id: @group.id, 
+      chosen_lecture: @group.lecture.id, 
+      studentgroup_name: @group.name
+    }
+
+    put :update, params
+    assert_redirected_to studentgroups_path
   end
 
   # update_from_session
