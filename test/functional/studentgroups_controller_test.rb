@@ -39,7 +39,9 @@ class StudentgroupsControllerTest < ActionController::TestCase
   # new
   test "new-action should create entry in session" do
     get :new
-    assert_not_nil session[:group]
+    group_info = session[:group]
+    assert_not_nil group_info
+    assert group_info[:is_new]
   end
 
   # create
@@ -97,7 +99,6 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_equal flash[:error], "Gruppe ist nicht vorhanden!"
     assert_nil flash[:notice]
   end
-  
   test "destroy existing studentgroup" do
     login_admin
     create_test_group
@@ -110,7 +111,29 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_nil Studentgroup.find_by_objectid(@group.id)
   end
 
+
+  def map_list(user_list)
+    result = {}
+    user_list.each { |user| result[user.id] = user.to_s}
+    result
+  end
+
   # edit
+  test "edit" do
+    login_admin
+    create_test_group
+    get :edit, id: @group.id
+    group_info = session[:group]
+
+    assert_not_nil group_info
+    assert(!group_info[:is_new])
+    assert_equal group_info[:name], @group.name
+    assert_equal group_info[:lecture],  [@group.lecture.id, @group.lecture.title]
+    [:students, :tutors].each do |key|
+      assert_equal group_info[key], map_list(@group.attributes[key]), "#{key.to_s} check fails"
+    end
+  end
+
   # update
   # update_from_session
 
