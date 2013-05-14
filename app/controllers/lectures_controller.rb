@@ -78,55 +78,36 @@ class LecturesController < ApplicationController
 
   def add_user
     user = User.find_by_objectid(params[:user_id])
-    lec_id = params[:id]
+    lecture = Lecture.find_by_object_id(params[:id])
     role = params[:role].to_sym
-    if not valid_role(role)
-      raise Error, "invalid url!"
+
+    if user.nil? or lecture.nil?
+      redirect_to add_user_list_path(lecture.id, role), :error => "Der Benutzer existiert nicht!"
+    elsif not lecture.add_user(user, role)
+      redirect_to add_user_list_path(lec_id, role), :error => "Der Benutzer konnte nicht eingefügt werden!"
+    else
+      MaglevRecord.save
+      redirect_to lecture_path(lecture.id), :notice => "Vorlesung erfolgreich aktualisiert!"
     end
-    if user.nil?
-      redirect_to add_user_list_path(lec_id, role), :error => "der Benutzer existiert nicht!"
-      return
-    end
-    if not user.add_to_lecture(lec_id, role)
-      redirect_to add_user_list_path(lec_id, role), :error => "der Benutzer konnte nicht eingefügt werden!"
-      return
-    end
-    MaglevRecord.save
-    redirect_to lecture_path(lec_id), :notice => "Vorlesung erfolgreich aktuallisiert!"
   end
 
   def remove_user
     user = User.find_by_objectid(params[:user_id])
-    lec_id = params[:id]
+    lecture = Lecture.find_by_objectid(params[:id])
     role = params[:role].to_sym
-    if not valid_role(role)
-      raise Error, "invalid url!"
-    end
-    message = nil
     
     if user.nil?
-      message = {:error => "der Benutzer existiert nicht!"}
-    end
-    if not user.remove_from_lecture(lec_id, role) and message.nil?
-      message = {:error => "der Benutzer konnte nicht entfernt werden!"}
-    end
-    
-    if message.nil?
+      message = { error: "der Benutzer existiert nicht!" }
+    elsif not user.remove_from_lecture(lec_id, role)
+      message = { error: "der Benutzer konnte nicht entfernt werden!" }
+    else
+      message = { notice: "Vorlesung erfolgreich aktualisiert!" }
       MaglevRecord.save
-      message = {:notice => "Vorlesung erfolgreich aktuallisiert!"} 
     end
-    redirect_to lecture_path(lec_id), message
+    redirect_to lecture_path(lecture.id), message
   end
 
   def json_index
-    render :json => Hash[*Lecture.all.map{ |lecture| [lecture.id, lecture.title] }.flatten]
+    render json: Hash[*Lecture.all.map{ |lecture| [lecture.id, lecture.title] }.flatten]
   end
-  
-  private
-
-  def valid_role(role)
-    return [:tutors, :lecturer, :staff].include?(role.to_sym)
-  end
-
-
 end
