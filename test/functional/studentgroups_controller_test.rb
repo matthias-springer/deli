@@ -44,14 +44,33 @@ class StudentgroupsControllerTest < ActionController::TestCase
     l = Lecture.new({:title => "New Lecture", :description => "This is really good!"})
     MaglevRecord.save
     old_count = Studentgroup.size
+    
     create_clear_session
-
     post :create, :studentgroup_name => "new group", :chosen_lecture => l.id
+    assert_redirected_to studentgroups_path
+    
     assert_not_nil assigns(:group)
     assert_equal old_count+1, Studentgroup.size
 
-    assert_redirected_to studentgroups_path
     assert_nil session[:group]
+  end
+
+
+  test "creating invalid group shoul render to 'new'" do
+    create_clear_session
+
+    post :create, :studentgroup_name => "new group", :chosen_lecture => 2
+    assert_response :success
+    assert_equal flash[:error], "Die Vorlesung existiert nicht!"
+
+    l = Lecture.new({:title => "New Lecture", :description => "This is really good!"})
+    MaglevRecord.save
+    post :create, :chosen_lecture => l.id
+    assert_response :success
+    assert_equal flash[:error], "Der Name darf nicht leer sein!"
+
+    assert_not_nil session[:group]
+    
   end
 
 

@@ -161,7 +161,8 @@ class StudentgroupsController < ApplicationController
 
     lecture = Lecture.find_by_objectid(params[:chosen_lecture])
     if lecture.nil?
-      render "new", {:error => "Die Vorlesung existiert nicht!"}
+      flash[:error] = "Die Vorlesung existiert nicht!"
+      render "new"
       return
     end
     
@@ -175,6 +176,7 @@ class StudentgroupsController < ApplicationController
       redirect_to studentgroups_path
       session.delete(:group)
     else 
+      flash[:error] = "Der Name darf nicht leer sein!"
       render "new"
     end
   end
