@@ -5,9 +5,9 @@ before_install:
   - "sudo apt-get install -qq rake"
 before_script:
   - "./install.sh"
-  - "./install_maglevrecord.sh"
   - "export MAGLEV_HOME=/home/travis/build/matthias-springer/deli/maglev"
   - "export PATH=$MAGLEV_HOME/bin:$PATH"
+  - "./install_maglevrecord.sh"
   - "gem uninstall -x -i /home/travis/.rvm/gems/ruby-1.9.3-p327@global bundler"
   - "maglev-gem install bundler"
   - "bundle install"
