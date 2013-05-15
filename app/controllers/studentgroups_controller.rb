@@ -28,7 +28,6 @@ class StudentgroupsController < ApplicationController
       students: students,
       tutors: tutors,
       is_new: false }
-    @link = edit_temp_path(@group.id)
   end
 
   def update
@@ -72,7 +71,6 @@ class StudentgroupsController < ApplicationController
       tutors: {},
       is_new: true
     }
-    @link = edit_new_temp_path
   end
 
   def create

@@ -1,4 +1,11 @@
-<%= form_tag @link, :class => "form-horizontal", :method => "put", :id => "group_form" do%>
+<%
+  link = if @group.nil?
+    edit_new_temp_path
+  else
+    edit_temp_path(@group.id)
+  end
+%>
+<%= form_tag link, :class => "form-horizontal", :method => "put", :id => "group_form" do %>
   <% if not @group.nil? %>
     <% if not @group.errors.nil? and @group.errors.any? %>
       <% for err in @group.errors.full_messages %>
