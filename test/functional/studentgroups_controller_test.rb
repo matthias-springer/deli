@@ -4,6 +4,11 @@ require "functional/controller_test_base"
 class StudentgroupsControllerTest < ActionController::TestCase
   include DeliControllerTestCase
 
+  def assert_false(value)
+    assert_equal false, value
+  end
+
+
   def setup
     login_student
   end
@@ -205,11 +210,15 @@ class StudentgroupsControllerTest < ActionController::TestCase
     create_test_group
     create_clear_session
 
+    users = session[:group][:students]
+
     put :edit_temp, params_for("student", "add", "1")
     assert_equal flash[:error], "Benutzer existiert nicht!"
+    assert_equal users, session[:group][:students]
 
     put :edit_temp, params_for("student", "delete", "1")
     assert_equal flash[:error], "Benutzer existiert nicht!"
+    assert_equal users, session[:group][:students]
   end
 
   test "update new studentgroup with not existing tutor" do
@@ -217,11 +226,121 @@ class StudentgroupsControllerTest < ActionController::TestCase
     create_test_group
     create_clear_session
 
+    users = session[:group][:tutors]
+
     put :edit_temp, params_for("tutor", "add", "1")
     assert_equal flash[:error], "Benutzer existiert nicht!"
+    assert_equal users, session[:group][:tutors]
 
     put :edit_temp, params_for("tutor", "delete", "1")
     assert_equal flash[:error], "Benutzer existiert nicht!"
+    assert_equal users, session[:group][:tutors]
   end
+
+  test "update existing studentgroup with not existing student" do
+    login_admin
+    create_test_group
+    create_session_from_group(@group)
+    users = session[:group][:students]
+
+    put :edit_temp, params_for("student", "add", "1")
+    assert_equal flash[:error], "Benutzer existiert nicht!"
+    assert_equal users, session[:group][:students]
+
+    put :edit_temp, params_for("student", "delete", "1")
+    assert_equal flash[:error], "Benutzer existiert nicht!"
+    assert_equal users, session[:group][:students]
+  end
+
+  test "update existing studentgroup with not existing tutor" do
+    login_admin
+    create_test_group
+    create_session_from_group(@group)
+    users = session[:group][:tutors]
+
+    put :edit_temp, params_for("tutor", "add", "1")
+    assert_equal flash[:error], "Benutzer existiert nicht!"
+    assert_equal users, session[:group][:tutors]
+
+    put :edit_temp, params_for("tutor", "delete", "1")
+    assert_equal flash[:error], "Benutzer existiert nicht!"
+    assert_equal users, session[:group][:tutors]
+  end
+
+
+  test "update new studentgroup with existing student" do
+    login_admin
+    create_test_group
+    create_clear_session
+
+    student = User.new({last_name: "Last2", first_name: "First"})
+    MaglevRecord.save
+    assert_false session[:group][:students].include? student.id
+
+    put :edit_temp, params_for("student", "add", student.id)
+    assert_equal flash[:notice], "Benutzer #{student.to_s} erfolgreich eingefügt!"
+    assert session[:group][:students].include?(student.id)
+
+    put :edit_temp, params_for("student", "delete", student.id)
+    assert_equal flash[:notice], "Benutzer #{student.to_s} erfolgreich aus der Gruppe entfernt!"
+    assert_false session[:group][:students].include? student.id
+  end
+
+  test "update new studentgroup with existing tutor" do
+    login_admin
+    create_test_group
+    create_clear_session
+
+    tutor = User.new({last_name: "Last2", first_name: "First"})
+    MaglevRecord.save
+    assert_false session[:group][:tutors].include? tutor.id
+
+    put :edit_temp, params_for("tutor", "add", tutor.id)
+    assert_equal flash[:notice], "Benutzer #{tutor.to_s} erfolgreich eingefügt!"
+    assert session[:group][:tutors].include?(tutor.id)
+
+    put :edit_temp, params_for("tutor", "delete", tutor.id)
+    assert_equal flash[:notice], "Benutzer #{tutor.to_s} erfolgreich aus der Gruppe entfernt!"
+    assert_false session[:group][:tutors].include? tutor.id
+  end
+
+  test "update existing studentgroup with existing student" do
+    login_admin
+    create_test_group
+    create_session_from_group(@group)
+
+    student = User.new({last_name: "Last2", first_name: "First"})
+    MaglevRecord.save
+
+    assert_false session[:group][:students].include? student.id
+
+    put :edit_temp, params_for("student", "add", student.id)
+    assert_equal flash[:notice], "Benutzer #{student.to_s} erfolgreich eingefügt!"
+    assert session[:group][:students].include?(student.id)
+
+    put :edit_temp, params_for("student", "delete", student.id)
+    assert_equal flash[:notice], "Benutzer #{student.to_s} erfolgreich aus der Gruppe entfernt!"
+    assert_false session[:group][:students].include? student.id
+  end
+
+  test "update existing studentgroup with existing tutor" do
+    login_admin
+    create_test_group
+    create_session_from_group(@group)
+
+    tutor = User.new({last_name: "Last2", first_name: "First"})
+    MaglevRecord.save
+    assert_false session[:group][:tutors].include? tutor.id
+
+    put :edit_temp, params_for("tutor", "add", tutor.id)
+    assert_equal flash[:notice], "Benutzer #{tutor.to_s} erfolgreich eingefügt!"
+    assert session[:group][:tutors].include?(tutor.id)
+
+    put :edit_temp, params_for("tutor", "delete", tutor.id)
+    assert_equal flash[:notice], "Benutzer #{tutor.to_s} erfolgreich aus der Gruppe entfernt!"
+    assert_false session[:group][:tutors].include? tutor.id
+  end
+
+
 
 end
