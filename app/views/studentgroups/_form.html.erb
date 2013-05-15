@@ -31,7 +31,7 @@
             <div class="input-append">
               <%= hidden_field_tag 'chosen_student' %>
               <input type="text" autocomplete="off" id="studentgroup_students">
-              <button class="btn btn-success btn-inverse">
+              <button name="add_student" class="btn btn-success btn-inverse">
                 <i class="icon-plus icon-white"></i>
               </button>
             </div>
@@ -46,7 +46,7 @@
                 </div>
                 <div class="span6">
                   <% if student[0] != current_user.id%>
-                    <button data-student-id="<%= student[0] %>" class="btn btn-primary btn-mini btn-delete-student">
+                    <button name="remove_student" data-student-id="<%= student[0] %>" class="btn btn-primary btn-mini btn-delete-student">
                       <i class="icon icon-remove icon-white"></i>
                     </button>
                   <% end %>
@@ -65,21 +65,21 @@
             <div class="input-append">
               <%= hidden_field_tag 'chosen_tutor' %>
               <input type="text" autocomplete="off" id="studentgroup_tutors">
-              <button class="btn btn-success btn-inverse">
+              <button name="add_tutor" class="btn btn-success btn-inverse">
                 <i class="icon-plus icon-white"></i>
               </button>
             </div>
           </td>
           <td>
-            <%= hidden_field_tag 'tutor_to_delete' %>            
+            <%= hidden_field_tag 'tutor_to_delete' %>
             <% if !session[:group][:tutors].blank? %>
               <% for tutor in session[:group][:tutors] %>
                 <div class="row-fluid row-item">
                   <div class="span6">
-                  <%= link_to tutor[1], user_path(tutor[0])%> 
+                  <%= link_to tutor[1], user_path(tutor[0])%>
                   </div>
                   <div class="span6">
-                    <button data-tutor-id = "<%= tutor[0] %>" class="btn btn-primary btn-mini btn-delete-tutor">
+                    <button name="remove_tutor" data-tutor-id = "<%= tutor[0] %>" class="btn btn-primary btn-mini btn-delete-tutor">
                       <i class="icon icon-remove icon-white"></i>
                     </button>
                   </div>

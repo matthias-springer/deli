@@ -191,24 +191,30 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_redirected_to studentgroups_path
   end
 
-  # update_from_session
+  # edit_temp
   test "update new studentgroup with not existing student" do
     login_admin
     create_test_group
     create_clear_session
-
     params = {
       chosen_student: "1",
       chosen_tutor: "",
       chosen_lecture: @group.lecture.id,
-      student_to_delete: "",
-      tutor_to_delete: "",
+      add_student: "",
     }
+    put :edit_temp, params
 
-    put :update_from_session, params
-
-    assert !flash[:error].nil? and flash[:error].contains?("Benutzer existiert nicht!")
-
+    assert_equal flash[:error], "Benutzer existiert nicht!"
   end
+
+  # test "update new studentgroup with not existing student" do
+  #   login_admin
+  #   create_test_group
+  #   create_clear_session
+
+  #   put :edit_temp, params_with_none_existing_student
+
+  #   assert flash[:error].contains?("Benutzer existiert nicht!")
+  # end
 
 end
