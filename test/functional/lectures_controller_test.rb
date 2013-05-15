@@ -54,7 +54,7 @@ class LecturesControllerTest < ActionController::TestCase
     assert_response 302
     assert_nil assigns(:lecture)
     assert_redirected_to lectures_path
-    assert_equal "Diese Vorlesung existiert nicht!", flash[:notice]
+    assert_equal "Diese Vorlesung existiert nicht!", flash[:error]
   end
 
   test "should get new" do

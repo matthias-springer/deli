@@ -80,7 +80,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
 
     post :create, studentgroup_name: "new group", chosen_lecture: 2
     assert_response :success
-    assert_equal flash[:error], "Die Vorlesung existiert nicht!"
+    assert_equal flash[:error], "Diese Vorlesung existiert nicht!"
 
     l = Lecture.new({title: "New Lecture", description: "This is really good!"})
     MaglevRecord.save
@@ -155,15 +155,14 @@ class StudentgroupsControllerTest < ActionController::TestCase
     login_admin
     create_test_group
 
-    session[:group] = {id: 1}
-    put :update, id: @group.id
+    put :update, id: 3
     assert_redirected_to studentgroups_path
-    assert_equal flash[:error], "Die Gruppe existiert nicht!"
+    assert_equal flash[:error], "Diese Gruppe existiert nicht!"
 
     create_session_from_group(@group)
     put :update, id: @group.id
     assert_redirected_to studentgroups_path
-    assert_equal flash[:error], "Die Vorlesung existiert nicht!"
+    assert_equal flash[:error], "Diese Vorlesung existiert nicht!"
   end
 
   test "update is invalid" do

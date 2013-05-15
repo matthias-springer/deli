@@ -1,53 +1,52 @@
-
 class StudentgroupsController < ApplicationController
   authorize_resource
+
+  before_filter :get_resources, only: [:show, :edit, :update]
+
+  def get_resources
+    id = params[:id]
+    @group = Studentgroup.find_by_objectid(id)
+    if @group.nil?
+      redirect_to studentgroups_path, flash: { error: "Diese Gruppe existiert nicht!" }
+    end
+  end
 
   def index
     @groups = Studentgroup.all
   end
 
   def show
-    @group = Studentgroup.find_by_objectid(params[:id])
   end
 
   def edit
-    group = Studentgroup.find_by_objectid(params[:id])
-    students = {}
-    group.students.each{|student| students[student.id] = student.to_s}
-    tutors = {}
-    group.tutors.each{|tutor| tutors[tutor.id] = tutor.to_s}
+    students = Hash[@group.students.map { |student| [student.id, student.to_s] }]
+    tutors = Hash[@group.tutors.map { |tutor| [tutor.id, tutor.to_s] }]
     session[:group] = {
-      id: group.id,
-      name: group.name,
-      lecture: [group.lecture.id, group.lecture.title],
+      id: @group.id,
+      name: @group.name,
+      lecture: [@group.lecture.id, @group.lecture.title],
       students: students,
       tutors: tutors,
-      is_new: false}
-    @link = edit_temp_path(group.id)
+      is_new: false }
+    @link = edit_temp_path(@group.id)
   end
 
   def update
-    groupInfo = session[:group]
-    @group = Studentgroup.find_by_objectid(groupInfo[:id])
-    if @group.nil?
-      flash[:error] = "Die Gruppe existiert nicht!"
-      redirect_to studentgroups_path
-      return
-    end
+    group_info = session[:group]
     @group.name = params[:studentgroup_name]
     lecture = Lecture.find_by_objectid(params[:chosen_lecture])
     if lecture.nil?
-      flash[:error] = "Die Vorlesung existiert nicht!"
+      flash[:error] = "Diese Vorlesung existiert nicht!"
       redirect_to studentgroups_path
       return
     end
     @group.lecture = lecture
-    @group.students = User.select{ |user| groupInfo[:students].include? user.id }
-    @group.tutors = User.select{ |user| groupInfo[:tutors].include? user.id }
+    @group.students = group_info[:students].keys.map { |id| User.find_by_objectid(id) }
+    @group.tutors = group_info[:tutors].keys.map { |id| User.find_by_objectid(id) }
     if @group.valid?
-      MaglevRecord.save
-      redirect_to studentgroups_path
       session.delete(:group)
+      redirect_to studentgroups_path
+      MaglevRecord.save
     else
       render "edit"
     end
@@ -86,7 +85,7 @@ class StudentgroupsController < ApplicationController
 
     lecture = Lecture.find_by_objectid(params[:chosen_lecture])
     if lecture.nil?
-      flash[:error] = "Die Vorlesung existiert nicht!"
+      flash[:error] = "Diese Vorlesung existiert nicht!"
       render "new"
       return
     end
@@ -129,7 +128,6 @@ class StudentgroupsController < ApplicationController
 
   protected
   def edit_temp_action
-    # just return the first action name found in the params
     action = %w(add_student add_tutor delete_student delete_tutor).detect {|action| params[action] }
     "edit_temp_#{action}"
   end

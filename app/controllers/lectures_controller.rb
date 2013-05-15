@@ -6,7 +6,7 @@ class LecturesController < ApplicationController
   def get_resources
     @lecture = Lecture.find_by_objectid(params[:id])
     if @lecture.nil?
-      redirect_to lectures_path, notice: "Diese Vorlesung existiert nicht!"
+      redirect_to lectures_path, flash: { error: "Diese Vorlesung existiert nicht!" }
     end
   end
 
@@ -101,6 +101,6 @@ class LecturesController < ApplicationController
   end
 
   def index_json
-    render json: Hash[*Lecture.all.map { |lecture| [lecture.id, lecture.title] }.flatten]
+    render json: Hash[Lecture.all.map { |lecture| [lecture.id, lecture.title] }]
   end
 end
