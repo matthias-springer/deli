@@ -29,7 +29,7 @@
         <th width=15%>Studenten</th>
         <td width=35%>
             <div class="input-append">
-              <%= hidden_field_tag 'chosen_student' %>
+              <%= hidden_field_tag 'student_to_add' %>
               <input type="text" autocomplete="off" id="studentgroup_students">
               <button name="add_student" class="btn btn-success btn-inverse">
                 <i class="icon-plus icon-white"></i>
@@ -63,7 +63,7 @@
           <th>Tutoren</th>
           <td>
             <div class="input-append">
-              <%= hidden_field_tag 'chosen_tutor' %>
+              <%= hidden_field_tag 'tutor_to_add' %>
               <input type="text" autocomplete="off" id="studentgroup_tutors">
               <button name="add_tutor" class="btn btn-success btn-inverse">
                 <i class="icon-plus icon-white"></i>

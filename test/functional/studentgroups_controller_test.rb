@@ -192,29 +192,36 @@ class StudentgroupsControllerTest < ActionController::TestCase
   end
 
   # edit_temp
+  def params_for(role, action, user_id)
+    {
+      chosen_lecture: @group.lecture.id,
+      "#{action}_#{role}".to_sym => "",
+      "#{role}_to_#{action}".to_sym => user_id
+    }
+  end
+
   test "update new studentgroup with not existing student" do
     login_admin
     create_test_group
     create_clear_session
-    params = {
-      chosen_student: "1",
-      chosen_tutor: "",
-      chosen_lecture: @group.lecture.id,
-      add_student: "",
-    }
-    put :edit_temp, params
 
+    put :edit_temp, params_for("student", "add", "1")
+    assert_equal flash[:error], "Benutzer existiert nicht!"
+
+    put :edit_temp, params_for("student", "delete", "1")
     assert_equal flash[:error], "Benutzer existiert nicht!"
   end
 
-  # test "update new studentgroup with not existing student" do
-  #   login_admin
-  #   create_test_group
-  #   create_clear_session
+  test "update new studentgroup with not existing tutor" do
+    login_admin
+    create_test_group
+    create_clear_session
 
-  #   put :edit_temp, params_with_none_existing_student
+    put :edit_temp, params_for("tutor", "add", "1")
+    assert_equal flash[:error], "Benutzer existiert nicht!"
 
-  #   assert flash[:error].contains?("Benutzer existiert nicht!")
-  # end
+    put :edit_temp, params_for("tutor", "delete", "1")
+    assert_equal flash[:error], "Benutzer existiert nicht!"
+  end
 
 end

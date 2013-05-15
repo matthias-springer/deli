@@ -130,7 +130,7 @@ class StudentgroupsController < ApplicationController
   protected
   def edit_temp_action
     # just return the first action name found in the params
-    action = %w(add_student add_tutor remove_student remove_tutor).detect {|action| params[action] }
+    action = %w(add_student add_tutor delete_student delete_tutor).detect {|action| params[action] }
     "edit_temp_#{action}"
   end
 
@@ -138,31 +138,31 @@ class StudentgroupsController < ApplicationController
     edit_temp_add("student")
   end
 
-  def edit_temp_remove_student
-    edit_temp_remove("student")
+  def edit_temp_delete_student
+    edit_temp_delete("student")
   end
 
   def edit_temp_add_tutor
     edit_temp_add("tutor")
   end
 
-  def edit_temp_remove_tutor
-    edit_temp_remove("tutor")
+  def edit_temp_delete_tutor
+    edit_temp_delete("tutor")
   end
 
 
 
   def edit_temp_add(role)
-    user_id = params["chosen_#{role}".to_sym]
+    user_id = params["#{role}_to_add".to_sym]
     unless user_id.empty?
       _add_user(user_id, "#{role}s".to_sym)
     end
   end
 
-  def edit_temp_remove(role)
+  def edit_temp_delete(role)
     user_id = params["#{role}_to_delete".to_sym]
     unless user_id.empty?
-      _remove_user(user_id, "#{role}s".to_sym)
+      _delete_user(user_id, "#{role}s".to_sym)
     end
   end
 
@@ -182,7 +182,7 @@ class StudentgroupsController < ApplicationController
     end
   end
 
-  def _remove_user(user_id, dict_sym)
+  def _delete_user(user_id, dict_sym)
     user_dict = session[:group][dict_sym]
     nil.pause if user_dict.nil?
     user = user_dict.delete(user_id.to_i)
