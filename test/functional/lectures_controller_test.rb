@@ -57,6 +57,13 @@ class LecturesControllerTest < ActionController::TestCase
     assert_equal "Diese Vorlesung existiert nicht!", flash[:notice]
   end
 
+  test "should get new" do
+    login_admin
+    get :new
+    assert_response :success
+    assert_not_nil assigns(:lecture)
+  end
+
   test "should create lecture" do
     login_admin
     prev_count = Lecture.count
@@ -87,6 +94,37 @@ class LecturesControllerTest < ActionController::TestCase
     assert_equal, Lecture.first.title = ""
     put :update, id: Lecture.first.id, lecture: params
     assert_equal, Lecture.first.title = "A lecture"
+  end
+
+  test "should destroy lecture" do
+    login_admin
+    assert_equal Lecture.size, 1
+    delete :destroy, id: Lecture.first.id
+    assert_equal Lecture.size, 0
+  end
+
+  test "should not destroy non-existing lecture" do
+    login_admin
+    assert_equal Lecture.size, 1
+    delete :destroy, id: 3
+    assert_equal Lecture.size, 1
+  end
+
+  test "should join lecture" do
+    request.env["HTTP_REFERER"] = "http://www.google.de"
+    assert_equal Lecture.first.students.size, 0
+    put :join, id: Lecture.first.id
+    assert_equal Lecture.first.students.size, 1
+    assert_redirected_to "http://www.google.de"
+  end
+
+  test "should leave lecture" do
+    request.env["HTTP_REFERER"] = "http://www.google.de"
+    Lecture.first.add_student(User.first)
+    assert_equal Lecture.first.students.size, 1
+    delete :leave, id: Lecture.first.id
+    assert_equal Lecture.first.students.size, 0
+    assert_redirected_to "http://www.google.de"
   end
 
   test "should show add_user_list" do

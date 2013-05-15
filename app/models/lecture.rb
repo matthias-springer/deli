@@ -22,7 +22,7 @@ class Lecture
   end
 
   def valid_role(role)
-    return [:lecturer, :staff_member, :tutor].include?(role.to_sym)
+    return [:lecturer, :staff_member, :tutor, :student].include?(role.to_sym)
   end
   private :valid_role
 
@@ -36,6 +36,12 @@ class Lecture
     return false if not valid_role(role)
     attributes[pluralize(role)].delete(user)
     true
+  end
+  def add_student(student)
+    add_user(student, :student)
+  end
+  def remove_student(student)
+    remove_user(student, :student)
   end
 
   def groups

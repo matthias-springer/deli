@@ -17,6 +17,21 @@ class LecturesController < ApplicationController
   def show
   end
 
+  def new
+    @lecture = Lecture.new
+  end
+
+  def create
+    @lecture = Lecture.new(params[:lecture])
+    if @lecture.valid?
+      MaglevRecord.save
+      flash[:message] = "Vorlesung erfolgreich erstellt!"
+      redirect_to :action => :index
+    else
+      render "new"
+    end
+  end
+
   def edit
   end
 
@@ -33,7 +48,7 @@ class LecturesController < ApplicationController
 
   def destroy
     if Lecture.object_pool.delete(params[:id].to_i).nil?
-      redirect_to action: 'index' , notice: "Objekt nicht vorhanden!"
+      redirect_to action: 'index' , notice: "Vorlesung nicht vorhanden!"
     else
       redirect_to action: 'index' , notice: "Erfolgreich gelöscht!"
       MaglevRecord.save
@@ -41,35 +56,19 @@ class LecturesController < ApplicationController
   end
 
   def join
-    @lecture.students << current_user unless @lecture.students.include? current_user
+    @lecture.add_student(current_user)
     redirect_to :back, :notice => "Du hast dich erfolgreich in der Vorlesung angemeldet!"
     MaglevRecord.save
   end
 
   def leave
-    @lecture.students.delete(current_user)
+    @lecture.remove_student(current_user)
     redirect_to :back, :notice => "Du hast dich erfolgreich aus der Vorlesung abgemeldet!"
     MaglevRecord.save
   end
 
-  def new
-    @lecture = Lecture.new
-  end
-
-  def create
-    @lecture = Lecture.new(params[:lecture])
-    if @lecture.valid?
-      MaglevRecord.save
-      flash[:message] = "Vorlesung erfolgreich erstellt!"
-      redirect_to :action => :index
-    else
-      render "new"
-    end
-  end
-
   def add_user_list
     @users = User.all
-    render 'add_user_list'
   end
 
   def add_user
@@ -98,7 +97,7 @@ class LecturesController < ApplicationController
       message = { notice: "Vorlesung erfolgreich aktualisiert!" }
       MaglevRecord.save
     end
-    redirect_to lecture_path(@lecture.id), message
+    redirect_to lecture_path(@lecture), message
   end
 
   def index_json
