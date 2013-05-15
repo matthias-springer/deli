@@ -7,6 +7,7 @@ class LecturesControllerTest < ActionController::TestCase
   def setup
     login_student
     Lecture.new(lecture_params)
+    User.new(user_params)
     MaglevRecord.save
   end
   def teardown
@@ -16,7 +17,15 @@ class LecturesControllerTest < ActionController::TestCase
   end
 
   def lecture_params
-    { title: 'A lecture', description: 'An interesting lecture.'}
+    { title: 'A lecture', description: 'An interesting lecture.' }
+  end
+  def user_params
+    {
+      first_name: 'John',
+      last_name: 'Doe',
+      email: 'test@email.com',
+      password: 'pass'
+    }
   end
 
   test "should not get index without authorization" do
@@ -88,5 +97,16 @@ class LecturesControllerTest < ActionController::TestCase
   end
 
   test "should add an user" do
+    login_admin
+    assert_equal Lecture.first.lecturers.size, 0
+    put :add_user, id: Lecture.first.id, user_id: User.first.id, role: :lecturer
+    assert_equal Lecture.first.lecturers.size, 1
+  end
+
+  test "should not add a non-existing user" do
+    login_admin
+    assert_equal Lecture.first.lecturers.size, 0
+    put :add_user, id: Lecture.first.id, user_id: 3, role: :lecturer
+    assert_equal Lecture.first.lecturers.size, 0
   end
 end
