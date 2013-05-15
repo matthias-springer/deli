@@ -18,18 +18,15 @@ Deli::Application.routes.draw do
   put "lectures/:id/add/:role" => "lectures#add_user", :as => "add_user"
   delete "lectures/:id/remove/:role" => "lectures#remove_user", :as => "remove_user"
 
-  resources :users,           :except => :index
-  get "users/:id/join/studentgroup" => "users#join_group_list", :as => "join_group"
-  put "users/:id/join/studentgroup" => "users#join_group"
-  delete "users/:id/leave/studentgroup" => "users#leave_group"
-
+  resources :users, :except => :index
   get "users/json/students" => "users#json_students", :as => "json_students"
   get "users/json/tutors" => "users#json_tutors", :as => "json_tutors"
+  delete "users/:id/leave/studentgroup" => "users#leave_group"
 
   resources :studentgroups
   put "studentgroups" => "studentgroups#edit_temp", :as => "edit_new_temp"
+  put "studentgroups/:id/join" => "studentgroups#join", :as => "join_studentgroup"
+  get "studentgroups/:id/list_for_join" => "users#join_group_list", :as => "join_studentgroup_list"
+  put "studentgroups/:id/leave" => "studentgroups#leave", :as => "leave_studentgroup"
   put "studentgroups/:id/edit" => "studentgroups#edit_temp", :as => "edit_temp"
-  # put "studentgroup/add_student" => "studentgroups#add_student", :as => "add_student"
-  # put "studentgroup/add_tutor" => "studentgroups#add_tutor", :as => "add_tutor"
-
 end

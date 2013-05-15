@@ -1,9 +1,7 @@
-<h2>Gruppe <%= @group%></h2>
-
-
+<h2>Gruppe <%= @group %></h2>
 <div class="row-fluid">
   <div class="span6">
-    <% if current_user.in_group? @group.id%>
+    <% if current_user.in_group? @group.id %>
       <%= form_tag leave_group_path(current_user), :method => :delete, :class => "delete-button-form" do %>
           <%= hidden_field_tag 'group_id', @group.id %>
           <%= button_tag :class=> "btn btn-small btn-primary" do %>
@@ -11,7 +9,7 @@
           <% end %>
       <% end %>
     <% else %>
-      <%= form_tag join_group_do_path(current_user.id), :method => :put, :class => "add-button-form" do %>
+      <%= form_tag join_studentgroup_path(current_user.id), :method => :put, :class => "add-button-form" do %>
           <%= hidden_field_tag 'group_id', @group.id %>
           <%= button_tag class: "btn btn-small btn-success btn-inverse" do %>
             dieser Gruppe beitreten <i class = "icon-plus icon-white"></i>
