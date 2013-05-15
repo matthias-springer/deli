@@ -4,7 +4,7 @@ class User
   include MaglevRecord::RootedBase
 
   attr_accessor :first_name, :last_name, :email, :password_digest, :password_confirmation
-  
+
   has_secure_password
   validates_presence_of :password, :on => :create
 

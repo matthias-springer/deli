@@ -8,14 +8,14 @@
         <% for lecture in current_user.my_lectures %>
           <tr>
             <td>
-              <%= link_to lecture, lecture_path(lecture.id) %> 
+              <%= link_to lecture, lecture_path(lecture.id) %>
             </td>
 
             <td>
               <%= form_tag leave_lecture_path(lecture), :method => :delete do%>
                   <%= hidden_field_tag 'lecture_id', lecture.id %>
                   <%= button_tag :class=> "btn btn-small btn-primary pull-right" do%>
-                    Verlassen <i class = "icon-remove icon-white"></i>          
+                    Verlassen <i class = "icon-remove icon-white"></i>
                   <% end %>
               <% end %>
             </td>
@@ -43,14 +43,14 @@
         <% for group in current_user.my_groups %>
           <tr>
             <td>
-              <%= link_to group, studentgroup_path(group.id) %> 
+              <%= link_to group, studentgroup_path(group.id) %>
             </td>
 
             <td>
               <%= form_tag leave_group_path(current_user), :method => :delete do%>
                   <%= hidden_field_tag 'group_id', group.id %>
                   <%= button_tag :class=> "btn btn-small btn-primary pull-right" do%>
-                   Verlassen <i class = "icon-remove icon-white"></i>          
+                   Verlassen <i class = "icon-remove icon-white"></i>
                   <% end %>
               <% end %>
             </td>
@@ -62,7 +62,7 @@
         <p class="badge badge-info">in keiner Gruppe eingetragen</p>
       </div>
     <% end %>
-    
+
     <div class="row-fluid">
       <div class="span6 centered">
         <%= link_to join_group_path, :class => "btn btn-small btn-success btn-inverse" do%>
@@ -73,7 +73,7 @@
       <div class="span6 centered">
         <% if can? :create, Studentgroup %>
           <%= link_to new_studentgroup_path, :class => "btn btn-small btn-success btn-inverse" do%>
-            neue Gruppe erstellen 
+            neue Gruppe erstellen
             <i class="icon-plus icon-white"></i>
           <% end %>
         <% end %>

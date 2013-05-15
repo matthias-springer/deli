@@ -81,15 +81,15 @@ class LecturesController < ApplicationController
     elsif not @lecture.add_user(user, role)
       redirect_to add_user_list_path(@lecture, role), error: "Der Benutzer konnte nicht eingefügt werden!"
     else
-      MaglevRecord.save
       redirect_to lecture_path(@lecture.id), notice: "Vorlesung erfolgreich aktualisiert!"
+      MaglevRecord.save
     end
   end
 
   def remove_user
     user = User.find_by_objectid(params[:user_id])
     role = params[:role].to_sym
-    
+
     if user.nil?
       message = { error: "Der Benutzer existiert nicht!" }
     elsif not @lecture.remove_user(user, role)

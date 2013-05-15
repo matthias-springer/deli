@@ -109,4 +109,31 @@ class LecturesControllerTest < ActionController::TestCase
     put :add_user, id: Lecture.first.id, user_id: 3, role: :lecturer
     assert_equal Lecture.first.lecturers.size, 0
   end
+
+  test "should not add an user with wrong role" do
+    login_admin
+    assert_equal Lecture.first.lecturers.size, 0
+    put :add_user, id: Lecture.first.id, user_id: User.first.id, role: :wrong_role
+    assert_equal Lecture.first.lecturers.size, 0
+  end
+
+  test "should remove an user" do
+    login_admin
+    Lecture.first.add_user(User.first, :lecturer)
+    assert_equal Lecture.first.lecturers.size, 1
+    delete :remove_user, id: Lecture.first.id, user_id: User.first.id, role: :lecturer
+    assert_equal Lecture.first.lecturers.size, 0
+    $ABC = 1
+    assert_redirected_to lectures_path(Lecture.first.id)
+  end
+
+  # test "should not remove an user with wrong role" do
+  #   login_admin
+  #   Lecture.first.add_user(User.first, :lecturer)
+  #   assert_equal Lecture.first.lecturers.size, 1
+  #   delete :remove_user, id: Lecture.first.id, user_id: User.first.id, role: :lecturer
+  #   assert_equal Lecture.first.lecturers.size, 0
+  #   assert_redirected_to lectures_path(Lecture.first)
+  # end
+
 end

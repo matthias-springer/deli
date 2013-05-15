@@ -25,7 +25,7 @@
         <i class = "icon-pencil icon-white"></i>
       <% end %>
     <% end %>
-    
+
     <% if can? :destroy, Lecture %>
       <%=form_tag (lecture_path(@lecture), :method => "delete", :class => "delete-button-form") do%>
         <%= button_tag :method => :delete, :class => "btn btn-mini btn-primary" do%>
@@ -40,10 +40,10 @@
   <div class="span6">
     <div class="well">
       <div class="row-fluid">
-        <div class="span3 header">Dozenten</div> 
+        <div class="span3 header">Dozenten</div>
         <div class="span8">
-          <% if !@lecture.lecturer.blank? %>
-            <% for lecturer in @lecture.lecturer %>
+          <% if !@lecture.lecturers.blank? %>
+            <% for lecturer in @lecture.lecturers %>
               <div class="row-fluid row-item">
                 <div class="span8">
                   <%= link_to lecturer.to_s, user_path(lecturer.id) %>
@@ -52,7 +52,7 @@
                   <%= form_tag remove_user_path(@lecture.id, :lecturer), :method => :delete, :class => "delete-button-form" do%>
                     <%= hidden_field_tag 'user_id', lecturer.id %>
                     <%= button_tag :class=> "btn btn-mini btn-primary" do%>
-                      <i class = "icon-remove icon-white"></i>          
+                      <i class = "icon-remove icon-white"></i>
                     <% end %>
                   <% end %>
                 </div>
@@ -79,14 +79,14 @@
             <% for staff in @lecture.staff %>
               <div class="row-fluid row-item">
                 <div class="span8">
-                  <%= link_to staff.to_s, user_path(staff.id) %> 
+                  <%= link_to staff.to_s, user_path(staff.id) %>
                 </div>
                 <div class="span4">
                   <%= form_tag remove_user_path(@lecture.id, :staff), :method => :delete, :class => "delete-button-form"  do%>
                     <%= hidden_field_tag 'user_id', staff.id %>
                     <%= button_tag :class=> "btn btn-mini btn-primary" do%>
-                      <i class = "icon-remove icon-white"></i>          
-                    <% end %> 
+                      <i class = "icon-remove icon-white"></i>
+                    <% end %>
                   <% end %>
                 </div>
               </div>
@@ -119,11 +119,11 @@
                 <%= form_tag remove_user_path(@lecture.id, :tutors), :method => :delete, :class => "delete-button-form"  do%>
                   <%= hidden_field_tag 'user_id', tutor.id %>
                   <%= button_tag :class=> "btn btn-mini btn-primary" do%>
-                    <i class = "icon-remove icon-white"></i>          
+                    <i class = "icon-remove icon-white"></i>
                   <% end %>
                 <% end %>
               </div>
-            </div>  
+            </div>
             <% end %>
           <% else %>
             <p class="badge badge-info">Noch keine Tutoren zugeordnet</p>
@@ -148,7 +148,7 @@
           <div class="row-fluid row-item">
             <div class="span12">
               <%= link_to "#{group.to_s}", studentgroup_path(group.id) %>
-            </div>  
+            </div>
           </div>
           <% end %>
         <% else %>

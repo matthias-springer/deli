@@ -28,18 +28,23 @@ class Lecture
 
   def add_user(user, role)
     return false if not valid_role(role)
-    persons = attributes[(role.to_s + "s").to_sym] # pluralizing role
+    persons = attributes[pluralize(role)] # pluralizing role
     persons << user unless persons.include?(user)
     true
   end
   def remove_user(user, role)
     return false if not valid_role(role)
-    lecture.attributes[role].delete(user)
+    attributes[pluralize(role)].delete(user)
     true
   end
 
   def groups
     Studentgroup.find_all { |group| group.lecture == self }
+  end
+
+  private
+  def pluralize(role)
+    (role.to_s + "s").to_sym
   end
 end
 
