@@ -26,11 +26,11 @@ class StudentgroupsControllerTest < ActionController::TestCase
 
   def create_session_from_group(group)
     session[:group] = {
-      id: group.id, 
-      name: group.name, 
+      id: group.id,
+      name: group.name,
       lecture: [group.lecture.id, group.lecture.title],
-      students: {@user.id => @user.to_s}, 
-      tutors: {}, 
+      students: {@user.id => @user.to_s},
+      tutors: {},
       is_new: false
     }
   end
@@ -44,7 +44,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
     logout
     assert_raise(CanCan::AccessDenied) do
       get :index
-    end    
+    end
   end
 
   # new
@@ -60,11 +60,11 @@ class StudentgroupsControllerTest < ActionController::TestCase
     l = Lecture.new({title: "New Lecture", description: "This is really good!"})
     MaglevRecord.save
     old_count = Studentgroup.size
-    
+
     create_clear_session
     post :create, studentgroup_name: "new group", chosen_lecture: l.id
     assert_redirected_to studentgroups_path
-    
+
     assert_not_nil assigns(:group)
     assert_equal old_count+1, Studentgroup.size
 
@@ -154,7 +154,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
     put :update, id: @group.id
     assert_redirected_to studentgroups_path
     assert_equal flash[:error], "Die Gruppe existiert nicht!"
-    
+
     create_session_from_group(@group)
     put :update, id: @group.id
     assert_redirected_to studentgroups_path
@@ -167,8 +167,8 @@ class StudentgroupsControllerTest < ActionController::TestCase
 
     create_session_from_group(@group)
     params = {
-      id: @group.id, 
-      chosen_lecture: @group.lecture.id, 
+      id: @group.id,
+      chosen_lecture: @group.lecture.id,
       studentgroup_name: ""
     }
     put :update, params
@@ -182,8 +182,8 @@ class StudentgroupsControllerTest < ActionController::TestCase
 
     create_session_from_group(@group)
     params = {
-      id: @group.id, 
-      chosen_lecture: @group.lecture.id, 
+      id: @group.id,
+      chosen_lecture: @group.lecture.id,
       studentgroup_name: @group.name
     }
 
@@ -210,7 +210,5 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert !flash[:error].nil? and flash[:error].contains?("Benutzer existiert nicht!")
 
   end
-
-
 
 end

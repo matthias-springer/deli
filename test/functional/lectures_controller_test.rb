@@ -123,17 +123,22 @@ class LecturesControllerTest < ActionController::TestCase
     assert_equal Lecture.first.lecturers.size, 1
     delete :remove_user, id: Lecture.first.id, user_id: User.first.id, role: :lecturer
     assert_equal Lecture.first.lecturers.size, 0
-    $ABC = 1
-    assert_redirected_to lectures_path(Lecture.first.id)
+    assert_redirected_to lecture_path(Lecture.first)
   end
 
-  # test "should not remove an user with wrong role" do
-  #   login_admin
-  #   Lecture.first.add_user(User.first, :lecturer)
-  #   assert_equal Lecture.first.lecturers.size, 1
-  #   delete :remove_user, id: Lecture.first.id, user_id: User.first.id, role: :lecturer
-  #   assert_equal Lecture.first.lecturers.size, 0
-  #   assert_redirected_to lectures_path(Lecture.first)
-  # end
+  test "should not remove an user with wrong role" do
+    login_admin
+    Lecture.first.add_user(User.first, :lecturer)
+    assert_equal Lecture.first.lecturers.size, 1
+    delete :remove_user, id: Lecture.first.id, user_id: User.first.id, role: :lecturer
+    assert_equal Lecture.first.lecturers.size, 0
+    assert_redirected_to lecture_path(Lecture.first)
+  end
+
+  test "should get index json" do
+    login_admin
+    get :index_json
+    assert_response :success
+  end
 
 end

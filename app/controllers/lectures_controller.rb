@@ -101,7 +101,7 @@ class LecturesController < ApplicationController
     redirect_to lecture_path(@lecture.id), message
   end
 
-  def json_index
-    render json: Hash[*Lecture.all.map{ |lecture| [lecture.id, lecture.title] }.flatten]
+  def index_json
+    render json: Hash[*Lecture.all.map { |lecture| [lecture.id, lecture.title] }.flatten]
   end
 end
