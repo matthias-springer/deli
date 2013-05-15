@@ -105,10 +105,12 @@ class StudentgroupsController < ApplicationController
       session[:group][:lecture] = [lecture.id, lecture.title] 
     end
 
+    flash[:error] = message[:error]
+    flash[:notice] = message[:notice]
     if session[:group][:is_new]
-      render "new", message
+      render "new"
     else
-      render "edit", message
+      render "edit"
     end
   end
 

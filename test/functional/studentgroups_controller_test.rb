@@ -192,6 +192,25 @@ class StudentgroupsControllerTest < ActionController::TestCase
   end
 
   # update_from_session
+  test "update new studentgroup with not existing student" do
+    login_admin
+    create_test_group
+    create_clear_session
+
+    params = {
+      chosen_student: "1",
+      chosen_tutor: "",
+      chosen_lecture: @group.lecture.id,
+      student_to_delete: "",
+      tutor_to_delete: "",
+    }
+
+    put :update_from_session, params
+
+    assert !flash[:error].nil? and flash[:error].contains?("Benutzer existiert nicht!")
+
+  end
+
 
 
 end
