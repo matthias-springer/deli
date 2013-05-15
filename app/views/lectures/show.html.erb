@@ -3,16 +3,16 @@
 <div class="row-fluid">
   <div class="span6">
     <% if current_user.in_lecture? @lecture.id and can? :leave, Lecture%>
-      <%=form_tag leave_lecture_path(@lecture), :method => "delete", :class => "add-button-form" do%>
-        <%= button_tag :class => "btn btn-small btn-primary" do%>
+      <%=form_tag leave_lecture_path(@lecture), :method => "delete", :class => "add-button-form" do %>
+        <%= button_tag :class => "btn btn-small btn-primary" do %>
           Verlassen
           <i class="icon-remove icon-white"></i>
         <% end %>
       <% end %>
 
     <% elsif can? :join, Lecture%>
-      <%=form_tag join_lecture_path(@lecture), :method => "put", :class => "add-button-form" do%>
-        <%= button_tag :class => "btn btn-small btn-success btn-inverse" do%>
+      <%=form_tag join_lecture_path(@lecture), :method => "put", :class => "add-button-form" do %>
+        <%= button_tag :class => "btn btn-small btn-success btn-inverse" do %>
           Anmelden
           <i class="icon-plus icon-white"></i>
         <% end %>
@@ -21,14 +21,14 @@
   </div>
   <div class="span6 right-aligned">
     <% if can? :edit, Lecture %>
-      <%= link_to edit_lecture_path(@lecture), :class => "btn btn-mini btn-success btn-inverse" do%>
+      <%= link_to edit_lecture_path(@lecture), :class => "btn btn-mini btn-success btn-inverse" do %>
         <i class = "icon-pencil icon-white"></i>
       <% end %>
     <% end %>
 
     <% if can? :destroy, Lecture %>
-      <%=form_tag (lecture_path(@lecture), :method => "delete", :class => "delete-button-form") do%>
-        <%= button_tag :method => :delete, :class => "btn btn-mini btn-primary" do%>
+      <%=form_tag (lecture_path(@lecture), :method => "delete", :class => "delete-button-form") do %>
+        <%= button_tag :method => :delete, :class => "btn btn-mini btn-primary" do %>
           <i class='icon-remove icon-white'></i>
         <% end %>
       <% end %>
@@ -49,9 +49,9 @@
                   <%= link_to lecturer.to_s, user_path(lecturer.id) %>
                 </div>
                 <div class="span4">
-                  <%= form_tag remove_user_path(@lecture.id, :lecturer), :method => :delete, :class => "delete-button-form" do%>
+                  <%= form_tag remove_user_path(@lecture.id, :lecturer), :method => :delete, :class => "delete-button-form" do %>
                     <%= hidden_field_tag 'user_id', lecturer.id %>
-                    <%= button_tag :class=> "btn btn-mini btn-primary" do%>
+                    <%= button_tag :class=> "btn btn-mini btn-primary" do %>
                       <i class = "icon-remove icon-white"></i>
                     <% end %>
                   <% end %>
@@ -64,7 +64,7 @@
         </div>
         <div class="span1">
           <% if can? :add_user_list_path, Lecture%>
-            <%= link_to add_user_list_path(@lecture, :lecturer), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+            <%= link_to add_user_list_path(@lecture, :lecturer), :class => 'btn btn-mini btn-success btn-inverse pull-right' do %>
               <i class = "icon-plus icon-white"></i>
             <% end %>
           <% end %>
@@ -82,9 +82,9 @@
                   <%= link_to staff.to_s, user_path(staff.id) %>
                 </div>
                 <div class="span4">
-                  <%= form_tag remove_user_path(@lecture.id, :staff_member), :method => :delete, :class => "delete-button-form"  do%>
+                  <%= form_tag remove_user_path(@lecture.id, :staff_member), :method => :delete, :class => "delete-button-form"  do %>
                     <%= hidden_field_tag 'user_id', staff.id %>
-                    <%= button_tag :class=> "btn btn-mini btn-primary" do%>
+                    <%= button_tag :class=> "btn btn-mini btn-primary" do %>
                       <i class = "icon-remove icon-white"></i>
                     <% end %>
                   <% end %>
@@ -97,7 +97,7 @@
         </div>
         <div class="span1">
           <% if can? :add_user_list_path, Lecture%>
-            <%= link_to add_user_list_path(@lecture, :staff_member), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+            <%= link_to add_user_list_path(@lecture, :staff_member), :class => 'btn btn-mini btn-success btn-inverse pull-right' do %>
               <i class = "icon-plus icon-white"></i>
             <% end %>
           <% end %>
@@ -116,9 +116,9 @@
                 <%= link_to tutor.to_s, user_path(tutor.id) %>
               </div>
               <div class="span4">
-                <%= form_tag remove_user_path(@lecture.id, :tutor), :method => :delete, :class => "delete-button-form"  do%>
+                <%= form_tag remove_user_path(@lecture.id, :tutor), :method => :delete, :class => "delete-button-form"  do %>
                   <%= hidden_field_tag 'user_id', tutor.id %>
-                  <%= button_tag :class=> "btn btn-mini btn-primary" do%>
+                  <%= button_tag :class=> "btn btn-mini btn-primary" do %>
                     <i class = "icon-remove icon-white"></i>
                   <% end %>
                 <% end %>
@@ -131,7 +131,7 @@
         </div>
         <div class="span1">
           <% if can? :add_user_list_path, Lecture%>
-            <%= link_to add_user_list_path(@lecture, :tutor), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+            <%= link_to add_user_list_path(@lecture, :tutor), :class => 'btn btn-mini btn-success btn-inverse pull-right' do %>
               <i class = "icon-plus icon-white"></i>
             <% end %>
           <% end %>
@@ -156,7 +156,7 @@
         <% end %>
       </div>
       <div class="span1">
-        <%= link_to "#todo", :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+        <%= link_to "#todo", :class => 'btn btn-mini btn-success btn-inverse pull-right' do %>
           <i class = "icon-plus icon-white"></i>
         <% end %>
       </div>

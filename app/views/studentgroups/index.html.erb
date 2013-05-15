@@ -18,7 +18,7 @@
           <th>Tutoren</th>
           <th></th>
         </tr>
-     
+
         <% @groups.each do |group| %>
           <tr>
             <th>
@@ -60,12 +60,12 @@
               <% end %>
 
               <% if can? :show, Studentgroup %>
-                <%= link_to studentgroup_path(group), :class => "btn btn-mini btn-success btn-inverse", :confirm => "really?" do%> <i class="icon-eye-open icon-white"></i><% end %>
+                <%= link_to studentgroup_path(group), :class => "btn btn-mini btn-success btn-inverse", :confirm => "really?" do %> <i class="icon-eye-open icon-white"></i><% end %>
               <% end %>
 
               <% if can? :destroy, Studentgroup %>
-                <%=form_tag (studentgroup_path(group), :method => "delete", :class => "delete-button-form") do%>
-                  <%= button_tag :method => :delete, :class => "btn btn-mini btn-primary" do%>
+                <%=form_tag (studentgroup_path(group), :method => "delete", :class => "delete-button-form") do %>
+                  <%= button_tag :method => :delete, :class => "btn btn-mini btn-primary" do %>
                     <i class='icon-remove icon-white'></i>
                   <% end %>
                 <% end %>

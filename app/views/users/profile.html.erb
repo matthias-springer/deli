@@ -12,9 +12,9 @@
             </td>
 
             <td>
-              <%= form_tag leave_lecture_path(lecture), :method => :delete do%>
+              <%= form_tag leave_lecture_path(lecture), :method => :delete do %>
                   <%= hidden_field_tag 'lecture_id', lecture.id %>
-                  <%= button_tag :class=> "btn btn-small btn-primary pull-right" do%>
+                  <%= button_tag :class=> "btn btn-small btn-primary pull-right" do %>
                     Verlassen <i class = "icon-remove icon-white"></i>
                   <% end %>
               <% end %>
@@ -30,7 +30,7 @@
 
     <div class="row">
       <div class="span12">
-        <%= link_to lectures_path, :class => "btn btn-small btn-success btn-inverse pull-right" do%>
+        <%= link_to lectures_path, :class => "btn btn-small btn-success btn-inverse pull-right" do %>
           Alle Vorlesungen anzeigen
         <% end %>
       </div>
@@ -47,9 +47,9 @@
             </td>
 
             <td>
-              <%= form_tag leave_group_path(current_user), :method => :delete do%>
+              <%= form_tag leave_group_path(current_user), :method => :delete do %>
                   <%= hidden_field_tag 'group_id', group.id %>
-                  <%= button_tag :class=> "btn btn-small btn-primary pull-right" do%>
+                  <%= button_tag :class=> "btn btn-small btn-primary pull-right" do %>
                    Verlassen <i class = "icon-remove icon-white"></i>
                   <% end %>
               <% end %>
@@ -65,14 +65,14 @@
 
     <div class="row-fluid">
       <div class="span6 centered">
-        <%= link_to join_group_path, :class => "btn btn-small btn-success btn-inverse" do%>
+        <%= link_to join_group_path, :class => "btn btn-small btn-success btn-inverse" do %>
             Gruppe beitreten
             <i class="icon-share-alt icon-white"></i>
           <% end %>
       </div>
       <div class="span6 centered">
         <% if can? :create, Studentgroup %>
-          <%= link_to new_studentgroup_path, :class => "btn btn-small btn-success btn-inverse" do%>
+          <%= link_to new_studentgroup_path, :class => "btn btn-small btn-success btn-inverse" do %>
             neue Gruppe erstellen
             <i class="icon-plus icon-white"></i>
           <% end %>
