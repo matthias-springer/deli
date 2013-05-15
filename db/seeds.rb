@@ -114,9 +114,9 @@ group2.students << st3
 group2.students << st4
 group2.tutors << tut2
 
-lec1.lecturer << lecturer
-lec2.lecturer << lecturer
-lec3.lecturer << lecturer
+lec1.lecturers << lecturer
+lec2.lecturers << lecturer
+lec3.lecturers << lecturer
 
 group2.lecture = lec1
 group1.lecture = lec2
