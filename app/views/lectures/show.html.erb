@@ -75,14 +75,14 @@
       <div class="row-fluid">
         <div class="span3 header">Assistenten</div>
         <div class="span8">
-          <% if !@lecture.staff.blank? %>
-            <% for staff in @lecture.staff %>
+          <% if !@lecture.staff_members.blank? %>
+            <% for staff in @lecture.staff_members %>
               <div class="row-fluid row-item">
                 <div class="span8">
                   <%= link_to staff.to_s, user_path(staff.id) %>
                 </div>
                 <div class="span4">
-                  <%= form_tag remove_user_path(@lecture.id, :staff), :method => :delete, :class => "delete-button-form"  do%>
+                  <%= form_tag remove_user_path(@lecture.id, :staff_member), :method => :delete, :class => "delete-button-form"  do%>
                     <%= hidden_field_tag 'user_id', staff.id %>
                     <%= button_tag :class=> "btn btn-mini btn-primary" do%>
                       <i class = "icon-remove icon-white"></i>
@@ -97,7 +97,7 @@
         </div>
         <div class="span1">
           <% if can? :add_user_list_path, Lecture%>
-            <%= link_to add_user_list_path(@lecture, :staff), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+            <%= link_to add_user_list_path(@lecture, :staff_member), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
               <i class = "icon-plus icon-white"></i>
             <% end %>
           <% end %>
@@ -116,7 +116,7 @@
                 <%= link_to tutor.to_s, user_path(tutor.id) %>
               </div>
               <div class="span4">
-                <%= form_tag remove_user_path(@lecture.id, :tutors), :method => :delete, :class => "delete-button-form"  do%>
+                <%= form_tag remove_user_path(@lecture.id, :tutor), :method => :delete, :class => "delete-button-form"  do%>
                   <%= hidden_field_tag 'user_id', tutor.id %>
                   <%= button_tag :class=> "btn btn-mini btn-primary" do%>
                     <i class = "icon-remove icon-white"></i>
@@ -131,7 +131,7 @@
         </div>
         <div class="span1">
           <% if can? :add_user_list_path, Lecture%>
-            <%= link_to add_user_list_path(@lecture, :tutors), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+            <%= link_to add_user_list_path(@lecture, :tutor), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
               <i class = "icon-plus icon-white"></i>
             <% end %>
           <% end %>
