@@ -1,7 +1,7 @@
 class StudentgroupsController < ApplicationController
   authorize_resource
 
-  before_filter :get_resources, only: [:show, :edit, :update]
+  before_filter :get_resources, only: [:show, :edit, :update, :destroy, :join]
 
   def get_resources
     @group = Studentgroup.find_by_objectid(params[:id])
@@ -52,14 +52,9 @@ class StudentgroupsController < ApplicationController
   end
 
   def destroy
-    if Studentgroup.object_pool.delete(params[:id].to_i).nil?
-      flash[:error] = "Gruppe ist nicht vorhanden!"
-    else
-      flash[:notice] = "Gruppe erfolgreich gelöscht!"
-    end
+    @group.destroy
+    redirect_to studentgroups_path, notice: "Gruppe erfolgreich gelöscht!"
     MaglevRecord.save
-
-    redirect_to studentgroups_path
   end
 
   def new
@@ -73,40 +68,22 @@ class StudentgroupsController < ApplicationController
   end
 
   def create
-    groupInfo = session[:group]
-    students = User.select { |user| groupInfo[:students].include? user.id }
-    tutors = User.select { |user| groupInfo[:tutors].include? user.id }
-    name = params[:studentgroup_name]
-
-    @group = Studentgroup.new name: name
-
-    lecture = Lecture.find_by_objectid(params[:chosen_lecture])
-    if lecture.nil?
-      flash[:error] = "Diese Vorlesung existiert nicht!"
-      render "new"
-      return
-    end
-
-    @group.lecture = lecture
-    @group.students = students
-    @group.tutors = tutors
-
+    group_attributes = build_group_attributes
+    @group = Studentgroup.new(group_attributes)
     if @group.valid?
-      MaglevRecord.save
-      redirect_to studentgroups_path
       session.delete(:group)
+      redirect_to studentgroups_path
+      MaglevRecord.save
     else
       render "new"
     end
   end
 
   def join
-    group = Studentgroup.find_by_objectid(params[:id])
-    if group.students.include? current_user
-      redirect_to studentgroups_path
+    if @group.add_student(current_user)
+      redirect_to studentgroups_path, notice: "Du bist erfolgreich der Gruppe #{@group.to_s} beigetreten!"
     else
-      group.students << current_user
-      redirect_to studentgroups_path, :notice => "Du bist erfolgreich der Gruppe #{group.to_s} beigetreten!"
+      redirect_to studentgroups_path, notice: "Du bist bereits in dieser Gruppe!"
     end
   end
 
@@ -121,10 +98,8 @@ class StudentgroupsController < ApplicationController
     else
       redirect_to studentgroups_path, :notice => "Du hast erfolgreich die Gruppe #{group.to_s} verlassen!"
     end
-
   end
 
-  # your form action
   def edit_temp
     send edit_temp_action
 

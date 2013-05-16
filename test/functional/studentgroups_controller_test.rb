@@ -79,7 +79,6 @@ class StudentgroupsControllerTest < ActionController::TestCase
 
     post :create, studentgroup_name: "new group", chosen_lecture: 2
     assert_response :success
-    assert_equal flash[:error], "Diese Vorlesung existiert nicht!"
 
     l = Lecture.new({title: "New Lecture", description: "This is really good!"})
     MaglevRecord.save
@@ -111,7 +110,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
     login_admin
     delete :destroy, id: 1
     assert_redirected_to studentgroups_path
-    assert_equal flash[:error], "Gruppe ist nicht vorhanden!"
+    assert_equal flash[:error], "Diese Gruppe existiert nicht!"
     assert_nil flash[:notice]
   end
   test "destroy existing studentgroup" do
@@ -356,19 +355,19 @@ class StudentgroupsControllerTest < ActionController::TestCase
     groups = create_test_groups
     myGroups = @user.my_groups
     put :join, id: groups[1].id
-    assert_equal myGroups.size+1, @user.my_groups.size
+    assert_equal myGroups.size + 1, @user.my_groups.size
     assert_redirected_to studentgroups_path
     assert_equal flash[:notice], "Du bist erfolgreich der Gruppe #{groups[1].to_s} beigetreten!"
   end
 
-  test "should not join a studentgroup you are already joined" do
+  test "should not join a studentgroup already joined" do
     login_admin
     groups = create_test_groups
     myGroups = @user.my_groups
     put :join, id: groups[0].id
     assert_equal myGroups.size, @user.my_groups.size
     assert_redirected_to studentgroups_path
-    assert_equal flash[:notice], nil
+    assert_equal flash[:notice], "Du bist bereits in dieser Gruppe!"
   end
 
   # list_for_join
