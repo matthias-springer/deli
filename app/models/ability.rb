@@ -47,6 +47,7 @@ class Ability
   end
 
   def student
+    guest
     can :read, Lecture
     can :join, Lecture
     can :leave, Lecture
@@ -54,7 +55,8 @@ class Ability
   end
 
   def tutor
-
+    guest
+    student
   end
 
 end
