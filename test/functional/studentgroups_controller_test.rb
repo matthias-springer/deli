@@ -161,7 +161,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
 
     create_session_from_group(@group)
     put :update, id: @group.id
-    assert_redirected_to studentgroups_path
+    assert_template "edit"
     assert_equal flash[:error], "Diese Vorlesung existiert nicht!"
   end
 

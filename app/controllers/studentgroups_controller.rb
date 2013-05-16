@@ -4,8 +4,7 @@ class StudentgroupsController < ApplicationController
   before_filter :get_resources, only: [:show, :edit, :update]
 
   def get_resources
-    id = params[:id]
-    @group = Studentgroup.find_by_objectid(id)
+    @group = Studentgroup.find_by_objectid(params[:id])
     if @group.nil?
       redirect_to studentgroups_path, flash: { error: "Diese Gruppe existiert nicht!" }
     end
@@ -30,18 +29,19 @@ class StudentgroupsController < ApplicationController
       is_new: false }
   end
 
-  def update
+  def build_group_attributes
     group_info = session[:group]
-    @group.name = params[:studentgroup_name]
-    lecture = Lecture.find_by_objectid(params[:chosen_lecture])
-    if lecture.nil?
-      flash[:error] = "Diese Vorlesung existiert nicht!"
-      redirect_to studentgroups_path
-      return
-    end
-    @group.lecture = lecture
-    @group.students = group_info[:students].keys.map { |id| User.find_by_objectid(id) }
-    @group.tutors = group_info[:tutors].keys.map { |id| User.find_by_objectid(id) }
+    {
+      name: params[:studentgroup_name],
+      lecture: Lecture.find_by_objectid(params[:chosen_lecture]),
+      students: group_info[:students].keys.map { |id| User.find_by_objectid(id) },
+      tutors: group_info[:tutors].keys.map { |id| User.find_by_objectid(id) }
+
+    }
+  end
+  def update
+    group_attributes = build_group_attributes
+    @group.update_attributes(group_attributes)
     if @group.valid?
       session.delete(:group)
       redirect_to studentgroups_path
@@ -60,7 +60,6 @@ class StudentgroupsController < ApplicationController
     MaglevRecord.save
 
     redirect_to studentgroups_path
-
   end
 
   def new
