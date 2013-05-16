@@ -340,6 +340,59 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_false session[:group][:tutors].include? tutor.id
   end
 
+  def create_test_groups
+    l =  Lecture.new({ title: "a Lecture", description: "something interesting" })
+    g1 = Studentgroup.new({ name: "Group1",  lecture: l })
+    g1.students << @user
+    g2 = Studentgroup.new({ name: "Group2",  lecture: l })
+    g3 = Studentgroup.new({ name: "Group3",  lecture: l })
+    g4 = Studentgroup.new({ name: "Group4",  lecture: l })
+    MaglevRecord.save
+    [g1, g2, g3, g4]
+  end
 
+  # join
+  test "should join a studentgroup" do
+    login_admin
+    groups = create_test_groups
+    myGroups = @user.my_groups
+    put :join, id: groups[1].id
+    assert_equal myGroups.size+1, @user.my_groups.size
+    assert_redirected_to studentgroups_path
+    assert_equal flash[:notice], "Du bist erfolgreich der Gruppe #{groups[1].to_s} beigetreten!"
+  end
+
+  test "should not join a studentgroup you are already joined" do
+    login_admin
+    groups = create_test_groups
+    myGroups = @user.my_groups
+    put :join, id: groups[0].id
+    assert_equal myGroups.size, @user.my_groups.size
+    assert_redirected_to studentgroups_path
+    assert_equal flash[:notice], nil
+  end
+
+  # list_for_join
+  test "should list all, groups user not joined yet" do
+    login_admin
+    create_test_groups
+    get :list_for_join
+    groups = Studentgroup.find_all { |group| not group.students.include?(@user)}
+    assert_response :success
+    assert_template "list_for_join"
+    assert_not_nil assigns(:groups)
+    assert_equal assigns(:groups), groups
+  end
+
+  # leave
+  test "should remove me from group you are in" do
+    login_admin
+    groups = create_test_groups
+    myGroups = @user.my_groups
+    put :leave, id: groups[0].id
+    assert_equal myGroups.size-1, @user.my_groups.size
+    assert_redirected_to studentgroups_path
+    assert_equal flash[:notice], "Du hast erfolgreich die Gruppe #{groups[0].to_s} verlassen!"
+  end
 
 end

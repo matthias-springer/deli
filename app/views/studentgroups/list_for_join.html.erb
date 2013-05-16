@@ -13,12 +13,12 @@
       <tr>
         <td><%= link_to group, studentgroup_path(group.id) %></td>
         <td>
-          <%= form_tag join_group_do_path(params[:id]), :method => :put, :class => "add-button-form" do %>
-              <%= hidden_field_tag 'group_id', group.id %>
-              <%= button_tag :class=> "btn btn-small btn-success btn-inverse" do %>
-                <i class = "icon-plus icon-white"></i>
-              <% end %>
+          <%= form_tag join_studentgroup_path(group.id), :method => :put, :class => "add-button-form" do %>
+            <%= hidden_field_tag 'group_id', group.id %>
+            <%= button_tag :class=> "btn btn-small btn-success btn-inverse" do %>
+              <i class = "icon-plus icon-white"></i>
             <% end %>
+          <% end %>
         </td>
       </tr>
     <% end %>

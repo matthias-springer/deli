@@ -102,6 +102,30 @@ class StudentgroupsController < ApplicationController
     end
   end
 
+  def join
+    group = Studentgroup.find_by_objectid(params[:id])
+    if group.students.include? current_user
+      redirect_to studentgroups_path
+    else
+      group.students << current_user
+      redirect_to studentgroups_path, :notice => "Du bist erfolgreich der Gruppe #{group.to_s} beigetreten!"
+    end
+  end
+
+  def list_for_join
+    @groups = Studentgroup.find_all { |group| not group.students.include?(current_user)}
+  end
+
+  def leave
+    group = Studentgroup.find_by_objectid(params[:id])
+    if group.students.delete(current_user).nil?
+      redirect_to studentgroups_path
+    else
+      redirect_to studentgroups_path, :notice => "Du hast erfolgreich die Gruppe #{group.to_s} verlassen!"
+    end
+
+  end
+
   # your form action
   def edit_temp
     send edit_temp_action
