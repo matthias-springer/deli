@@ -23,7 +23,7 @@ class StudentgroupsController < ApplicationController
     session[:group] = {
       id: @group.id,
       name: @group.name,
-      lecture: [@group.lecture.id, @group.lecture.title],
+      lecture: { id: @group.lecture.id, title: @group.lecture.title },
       students: students,
       tutors: tutors,
       is_new: false }
@@ -65,7 +65,7 @@ class StudentgroupsController < ApplicationController
   def new
     session[:group] = {
       name: "",
-      lecture: [nil, ""],
+      lecture: { title: "" },
       students: {current_user.id => current_user.to_s},
       tutors: {},
       is_new: true
@@ -74,8 +74,8 @@ class StudentgroupsController < ApplicationController
 
   def create
     groupInfo = session[:group]
-    students = User.select{ |user| groupInfo[:students].include? user.id }
-    tutors = User.select{ |user| groupInfo[:tutors].include? user.id }
+    students = User.select { |user| groupInfo[:students].include? user.id }
+    tutors = User.select { |user| groupInfo[:tutors].include? user.id }
     name = params[:studentgroup_name]
 
     @group = Studentgroup.new name: name
@@ -86,7 +86,6 @@ class StudentgroupsController < ApplicationController
       render "new"
       return
     end
-
 
     @group.lecture = lecture
     @group.students = students

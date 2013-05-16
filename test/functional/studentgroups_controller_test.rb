@@ -22,8 +22,8 @@ class StudentgroupsControllerTest < ActionController::TestCase
   def create_clear_session
     session[:group] = {
         name: "",
-        lecture: [nil, ""],
-        students: {@user.id => @user.to_s},
+        lecture: { title: "" },
+        students: { @user.id => @user.to_s },
         tutors: {},
         is_new: true
       }
@@ -33,11 +33,10 @@ class StudentgroupsControllerTest < ActionController::TestCase
     session[:group] = {
       id: group.id,
       name: group.name,
-      lecture: [group.lecture.id, group.lecture.title],
-      students: {@user.id => @user.to_s},
+      lecture: { id: group.lecture.id, title: group.lecture.title },
+      students: { @user.id => @user.to_s },
       tutors: {},
-      is_new: false
-    }
+      is_new: false }
   end
 
   def clear_group_session
@@ -71,7 +70,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_redirected_to studentgroups_path
 
     assert_not_nil assigns(:group)
-    assert_equal old_count+1, Studentgroup.size
+    assert_equal old_count + 1, Studentgroup.size
 
     assert_nil session[:group]
   end
@@ -123,7 +122,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_redirected_to studentgroups_path
     assert_equal flash[:notice], "Gruppe erfolgreich gelöscht!"
     assert_nil flash[:error]
-    assert_equal Studentgroup.size, counter-1
+    assert_equal Studentgroup.size, counter - 1
     assert_nil Studentgroup.find_by_objectid(@group.id)
   end
 
@@ -144,7 +143,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_not_nil group_info
     assert(!group_info[:is_new])
     assert_equal group_info[:name], @group.name
-    assert_equal group_info[:lecture],  [@group.lecture.id, @group.lecture.title]
+    assert_equal group_info[:lecture],  { id: @group.lecture.id, title: @group.lecture.title }
     [:students, :tutors].each do |key|
       assert_equal group_info[key], map_list(@group.attributes[key]), "#{key.to_s} check fails"
     end
@@ -161,8 +160,8 @@ class StudentgroupsControllerTest < ActionController::TestCase
 
     create_session_from_group(@group)
     put :update, id: @group.id
+    assert_response :success
     assert_template "edit"
-    assert_equal flash[:error], "Diese Vorlesung existiert nicht!"
   end
 
   test "update is invalid" do
