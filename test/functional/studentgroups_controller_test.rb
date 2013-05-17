@@ -71,6 +71,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
 
     assert_not_nil assigns(:group)
     assert_equal old_count + 1, Studentgroup.size
+    assert_equal Studentgroup.first.creator, @user
 
     assert_nil session[:group]
   end

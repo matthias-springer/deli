@@ -33,6 +33,7 @@ class StudentgroupsController < ApplicationController
     group_info = session[:group]
     {
       name: params[:studentgroup_name],
+      creator: current_user,
       lecture: Lecture.find_by_objectid(params[:chosen_lecture]),
       students: group_info[:students].keys.map { |id| User.find_by_objectid(id) },
       tutors: group_info[:tutors].keys.map { |id| User.find_by_objectid(id) }
@@ -182,5 +183,4 @@ class StudentgroupsController < ApplicationController
       flash[:notice] = "Benutzer #{user.to_s} erfolgreich aus der Gruppe entfernt!"
     end
   end
-
 end

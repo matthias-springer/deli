@@ -3,7 +3,8 @@ require "maglev_record"
 class Studentgroup
   include MaglevRecord::RootedBase
 
-  attr_accessor :students, :tutors, :name, :lecture
+  attr_accessor :name, :creator
+  attr_accessor :students, :tutors, :lecture
 
   validates :name, :presence => true
   validates :lecture, :presence => true
