@@ -123,42 +123,40 @@ class StudentgroupsController < ApplicationController
 
   protected
   def edit_temp_action
-    action = %w(add_student add_tutor delete_student delete_tutor).detect {|action| params[action] }
+    action = [:add_student, :add_tutor, :delete_student, :delete_tutor].detect {|action| params[action] }
     "edit_temp_#{action}"
   end
 
   def edit_temp_add_student
     edit_temp_add("student")
   end
-
   def edit_temp_delete_student
     edit_temp_delete("student")
   end
-
   def edit_temp_add_tutor
     edit_temp_add("tutor")
   end
-
   def edit_temp_delete_tutor
     edit_temp_delete("tutor")
   end
 
-
+  def edit_temp_do(role, action)
+    user_id = params["#{role}_to_#{action}".to_sym]
+    unless user_id.empty?
+      yield(user_id) if block_given?
+    end
+  end
 
   def edit_temp_add(role)
-    user_id = params["#{role}_to_add".to_sym]
-    unless user_id.empty?
+    edit_temp_do(role, "add") do |user_id|
       _add_user(user_id, "#{role}s".to_sym)
     end
   end
-
   def edit_temp_delete(role)
-    user_id = params["#{role}_to_delete".to_sym]
-    unless user_id.empty?
+    edit_temp_do(role, "delete") do |user_id|
       _delete_user(user_id, "#{role}s".to_sym)
     end
   end
-
 
   def _add_user(user_id, dict_sym)
     user = User.find_by_objectid(user_id)
@@ -177,7 +175,6 @@ class StudentgroupsController < ApplicationController
 
   def _delete_user(user_id, dict_sym)
     user_dict = session[:group][dict_sym]
-    nil.pause if user_dict.nil?
     user = user_dict.delete(user_id.to_i)
     if user.nil?
       flash[:error] = "Benutzer existiert nicht!"
@@ -185,6 +182,5 @@ class StudentgroupsController < ApplicationController
       flash[:notice] = "Benutzer #{user.to_s} erfolgreich aus der Gruppe entfernt!"
     end
   end
-
 
 end
