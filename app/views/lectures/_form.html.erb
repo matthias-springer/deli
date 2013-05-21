@@ -1,4 +1,4 @@
-<%= form_for @lecture, :builder => StandardFormBuilder, :html=>{:class => "form-horizontal"} do |f| %>
+<%= form_for @lecture, builder: StandardFormBuilder, html: { class: "form-horizontal" } do |f| %>
   <%= f.errors @lecture.errors%>
 
   <%= f.text_field :title, "Titel" %>

@@ -5,6 +5,7 @@ class Lecture
 
   attr_accessor :title, :description
   attr_accessor :lecturers, :staff_members, :tutors, :students
+  attr_accessor :assignments
 
   validates :title, :presence => true
   validates :description, :presence => true
