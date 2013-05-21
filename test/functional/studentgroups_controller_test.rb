@@ -106,6 +106,19 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_equal assigns(:group), @group
   end
 
+  test "should show studentgroup i am in" do
+    login_admin
+    create_test_group
+    @group.students << @user
+    MaglevRecord.save
+
+    get :show, id: @group.id
+
+    assert_response :success
+    assert_not_nil assigns(:group)
+    assert_equal assigns(:group), @group
+  end
+
   # destroy
   test "destroy not existing studentgroup" do
     login_admin
