@@ -1,3 +1,7 @@
+<% content_for :javascript_includes do %>
+  <%= javascript_include_tag "studentgroups.js" %>
+<% end %>
+
 <%
   link = if @group.nil?
     edit_new_temp_path
