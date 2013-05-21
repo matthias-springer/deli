@@ -46,28 +46,28 @@ $(function() {
   };
 
   $.ajax({
-    url: '/users/json/students/',
+    url: '/users/students.json',
     data: {},
     success: initStudents,
     dataType: "json"
   });
 
   $.ajax({
-    url: '/users/json/tutors/',
+    url: '/users/tutors.json',
     data: {},
     success: initTutors,
     dataType: "json"
   });
 
   $.ajax({
-    url: '/lectures/json/index/',
+    url: '/lectures/index.json',
     data: {},
     success: initLectures,
     dataType: "json"
   });
 
   $('#change_to_post_btn').on('click', function(event) {
-    // hook for two actions(put and post) in one form
+    // hook to have two actions (put and post) in one form
     $('#group_form input[name=_method]').remove();
   });
 
