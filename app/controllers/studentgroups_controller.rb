@@ -98,6 +98,7 @@ class StudentgroupsController < ApplicationController
     if group.students.delete(current_user).nil?
       redirect_to studentgroups_path
     else
+      MaglevRecord.save
       redirect_to studentgroups_path, :notice => "Du hast erfolgreich die Gruppe #{group.to_s} verlassen!"
     end
   end

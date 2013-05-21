@@ -28,5 +28,5 @@ Deli::Application.routes.draw do
   put "studentgroups" => "studentgroups#edit_temp", :as => "edit_new_temp"
   put "studentgroups/:id/edit" => "studentgroups#edit_temp", :as => "edit_temp"
   put "studentgroups/:id/join" => "studentgroups#join", :as => "join_studentgroup"
-  put "studentgroups/:id/leave" => "studentgroups#leave", :as => "leave_studentgroup"
+  delete "studentgroups/:id/leave" => "studentgroups#leave", :as => "leave_studentgroup"
 end

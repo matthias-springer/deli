@@ -390,6 +390,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
     login_admin
     create_test_groups
     get :list_for_join
+    MaglevRecord.reset
     groups = Studentgroup.find_all { |group| not group.students.include?(@user)}
     assert_response :success
     assert_template "list_for_join"
@@ -403,6 +404,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
     groups = create_test_groups
     myGroups = @user.my_groups
     put :leave, id: groups[0].id
+    MaglevRecord.reset
     assert_equal myGroups.size-1, @user.my_groups.size
     assert_redirected_to studentgroups_path
     assert_equal flash[:notice], "Du hast erfolgreich die Gruppe #{groups[0].to_s} verlassen!"

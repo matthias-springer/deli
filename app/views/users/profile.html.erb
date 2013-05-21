@@ -47,7 +47,7 @@
             </td>
 
             <td>
-              <%= form_tag leave_studentgroup_path(current_user), :method => :delete do %>
+              <%= form_tag leave_studentgroup_path(group), :method => :delete do %>
                   <%= hidden_field_tag 'group_id', group.id %>
                   <%= button_tag :class=> "btn btn-small btn-primary pull-right" do %>
                    Verlassen <i class = "icon-remove icon-white"></i>
