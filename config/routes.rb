@@ -23,10 +23,10 @@ Deli::Application.routes.draw do
   get "users/json/tutors" => "users#json_tutors", :as => "json_tutors"
   delete "users/:id/leave/studentgroup" => "users#leave_group"
 
+  get "studentgroups/list_for_join" => "studentgroups#list_for_join", :as => "join_studentgroup_list"
   resources :studentgroups
   put "studentgroups" => "studentgroups#edit_temp", :as => "edit_new_temp"
   put "studentgroups/:id/edit" => "studentgroups#edit_temp", :as => "edit_temp"
   put "studentgroups/:id/join" => "studentgroups#join", :as => "join_studentgroup"
-  get "studentgroups/list_for_join" => "studentgroups#list_for_join", :as => "join_studentgroup_list"
   put "studentgroups/:id/leave" => "studentgroups#leave", :as => "leave_studentgroup"
 end
