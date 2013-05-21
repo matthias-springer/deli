@@ -12,7 +12,7 @@ Deli::Application.routes.draw do
   resources :lectures
   put "lectures/:id/join" => "lectures#join", :as => "join_lecture"
   delete "lectures/:id/leave" => "lectures#leave", :as => "leave_lecture"
-  get "lectures/json/index.json" => "lectures#index_json", :as => "lectures_json"
+  get "lectures/json/index" => "lectures#index_json", :as => "lectures_json"
 
   get "lectures/:id/add/:role" => "lectures#add_user_list", :as => "add_user_list"
   put "lectures/:id/add/:role" => "lectures#add_user", :as => "add_user"
