@@ -20,8 +20,8 @@ $(function() {
 
   var initStudents = function(values) {
     var opts = myOptions(values)
-    opts['updater'] = function(item){
-      $('#chosen_student').attr('value', item);
+    opts['updater'] = function(item) {
+      $('#student_to_add').attr('value', item);
       return values[item];
     };
     $('#studentgroup_students').typeahead(opts);
@@ -30,12 +30,12 @@ $(function() {
   var initTutors = function(values) {
     var opts = myOptions(values)
     opts['updater'] = function(item){
-      $('#chosen_tutor').attr('value', item);
+      $('#tutor_to_add').attr('value', item);
       return values[item];
     };
     $('#studentgroup_tutors').typeahead(opts);
   };
-  
+
   var initLectures = function(values) {
     var opts = myOptions(values)
     opts['updater'] = function(item){
@@ -77,8 +77,8 @@ $(function() {
 
   $('.btn-delete-student').on('click', function(event) {
     $('#student_to_delete').attr('value', $(this).attr('data-student-id'));
-  });  
+  });
   $('.btn-delete-tutor').on('click', function(event) {
     $('#tutor_to_delete').attr('value', $(this).attr('data-tutor-id'));
-  });  
+  });
 });

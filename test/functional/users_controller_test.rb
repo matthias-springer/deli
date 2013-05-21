@@ -5,9 +5,12 @@ class UsersControllerTest < ActionController::TestCase
   include DeliControllerTestCase
 
   def setup
-    User.clear
-    MaglevRecord.save
     login_student
+  end
+
+  def teardown
+    [User, Lecture, Studentgroup].each do |cls| cls.clear end
+    MaglevRecord.save
   end
 
   # show

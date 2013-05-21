@@ -29,7 +29,7 @@
         <th>Vorlesung</th>
         <td colspan="2">
           <%= hidden_field_tag 'chosen_lecture', session[:group][:lecture][:id] %>
-          <input type="text" autocomplete="off" name="studentgroup_lecture" id ="studentgroup_lecture" value="<%= session[:group][:lecture][:title]%>">
+          <input type="text" autocomplete="off" name="studentgroup_lecture" id ="studentgroup_lecture" value="<%= session[:group][:lecture][:title] %>">
         </td>
       </tr>
       <%= render partial: 'member_view', locals: { id_name: "student" } %>

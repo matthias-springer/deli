@@ -114,7 +114,7 @@ class StudentgroupsController < ApplicationController
     if lecture.nil?
       flash[:error] = "Bitte eine Vorlesung auswählen!"
     else
-      session[:group][:lecture] = [lecture.id, lecture.title]
+      session[:group][:lecture] = { id: lecture.id, title: lecture.title }
     end
 
     if session[:group][:is_new]
