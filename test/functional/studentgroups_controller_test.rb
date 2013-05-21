@@ -369,6 +369,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
     groups = create_test_groups
     myGroups = @user.my_groups
     put :join, id: groups[1].id
+    MaglevRecord.reset
     assert_equal myGroups.size + 1, @user.my_groups.size
     assert_redirected_to studentgroups_path
     assert_equal flash[:notice], "Du bist erfolgreich der Gruppe #{groups[1].to_s} beigetreten!"

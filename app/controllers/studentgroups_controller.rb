@@ -83,6 +83,7 @@ class StudentgroupsController < ApplicationController
   def join
     if @group.add_student(current_user)
       redirect_to studentgroups_path, notice: "Du bist erfolgreich der Gruppe #{@group.to_s} beigetreten!"
+      MaglevRecord.save
     else
       redirect_to studentgroups_path, notice: "Du bist bereits in dieser Gruppe!"
     end
