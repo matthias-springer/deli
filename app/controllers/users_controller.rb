@@ -1,6 +1,15 @@
 class UsersController < ApplicationController
   authorize_resource
 
+  before_filter :redirect_if_logged_in, only: [:new, :create]
+  def redirect_if_logged_in
+    @logged_in = false
+    if current_user
+      redirect_to root_url
+      @logged_in = true
+    end
+  end
+
   def show
     @user = User.find_by_objectid(params[:id])
     render "profile" if current_user and current_user == @user
@@ -19,13 +28,12 @@ class UsersController < ApplicationController
   end
 
   def new
-    redirect_to root_url if current_user
+    return if @logged_in
     @user = User.new
   end
 
   def create
-    redirect_to root_url if current_user
-
+    return if @logged_in
     @user = User.new(params[:user])
     if @user.valid?
       @user.clear_sensibles

@@ -46,10 +46,10 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   # create
-  # test "create should redirect to root if logged in" do
-  #   post :create
-  #   assert_redirected_to root_url
-  # end
+  test "create should redirect to root if logged in" do
+    post :create
+    assert_redirected_to root_url
+  end
 
   test "should say the passwort confirm did not match" do
     logout
