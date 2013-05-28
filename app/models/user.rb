@@ -97,6 +97,37 @@ class User
 
 end
 
+Maglev.persistent do
+  class User
+    def custom_database_tabs
+      tabs = []
+
+      html_generator = <<-GENERATOR_STRING
+        |outerHtml|
+        outerHtml := html div.
+        object ensureIsLoaded: 'attributes' from: 1 to: object attributesSize withCallback: [ |innerHtml|
+          innerHtml := HTMLCanvas onJQuery: outerHtml asJQuery.
+          innerHtml with: [
+            innerHtml img
+              style: 'height: 250px; margin-right: 10px; display: inline-block;';
+              src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Bai_yun_giant_panda.jpg/399px-Bai_yun_giant_panda.jpg'.
+            innerHtml div
+              style: 'display: inline-block';
+              with: [
+                innerHtml b 
+                  with: 'Hi, I am Panda!'.
+                innerHtml br.
+                innerHtml 
+                  with: 'You can e-mail me at ';
+                  with: (object attributeAt: 'email') inlineViewComponent]]].
+      GENERATOR_STRING
+
+      tabs.push(["Panda User", "pandaUser", html_generator])
+      tabs
+    end
+  end
+end
+
 User.maglev_record_persistable
 MaglevRecord.save
 User.redo_include_and_extend
