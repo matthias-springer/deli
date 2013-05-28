@@ -115,7 +115,10 @@ Maglev.persistent do
               style: 'display: inline-block';
               with: [
                 innerHtml b 
-                  with: 'Hi, I am Panda!'.
+                  with: [
+                    innerHtml 
+                      with: 'Hi, I am ';
+                      with: (object attributeAt: 'first_name') inlineViewComponent].
                 innerHtml br.
                 innerHtml 
                   with: 'You can e-mail me at ';
