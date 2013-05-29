@@ -1,0 +1,81 @@
+<h2>Gruppen</h2>
+
+<div class="row-fluid">
+  <div class="span12">
+    <% if can? :create, Studentgroup %>
+      <%=mini_button "Gruppe erstellen", new_studentgroup_path, :class => 'btn-success btn-inverse pull-right'%>
+    <% end %>
+  </div>
+</div>
+<% if not @groups.empty? %>
+  <div class="row-fluid">
+    <div class="span12">
+      <table class="table table-striped">
+        <tr>
+          <th>Gruppenname</th>
+          <th>Vorlesung</th>
+          <th>Stundenten</th>
+          <th>Tutoren</th>
+          <th></th>
+        </tr>
+     
+        <% @groups.each do |group| %>
+          <tr>
+            <th>
+              <%= link_to group.to_s, studentgroup_path(group.id) %> <br>
+            </th>
+            <td>
+              <%= link_to group.lecture.to_s, lecture_path(group.lecture.id) %> <br>
+            </td>
+            <td>
+              <% if !group.students.blank? %>
+                <% for student in group.students %>
+                  <%if student == group.students.last %>
+                    <%= link_to student.to_s, user_path(student.id) %>
+                  <% else %>
+                    <%= link_to student.to_s, user_path(student.id) %>,
+                  <% end %>
+                <% end %>
+              <% else %>
+                <span class="badge badge-info"> Leere Gruppe </span>
+              <% end %>
+            </td>
+            <td>
+
+              <% if !group.tutors.blank? %>
+                <% for tutor in group.tutors %>
+                  <%if tutor == group.tutors.last %>
+                    <%= link_to tutor.to_s, user_path(tutor.id) %>
+                  <% else %>
+                    <%= link_to tutor.to_s, user_path(tutor.id) %>,
+                  <% end %>
+                <% end %>
+              <% else %>
+                <span class="badge badge-info"> Keine Tutoren </span>
+              <% end %>
+            </td>
+            <td>
+              <% if can? :edit, Studentgroup %>
+                <%= link_to edit_studentgroup_path(group), :class => "btn btn-mini btn-success btn-inverse" do %><i class="icon-pencil icon-white"></i><% end %>
+              <% end %>
+
+              <% if can? :show, Studentgroup %>
+                <%= link_to studentgroup_path(group), :class => "btn btn-mini btn-success btn-inverse", :confirm => "really?" do%> <i class="icon-eye-open icon-white"></i><% end %>
+              <% end %>
+
+              <% if can? :destroy, Studentgroup %>
+                <%=form_tag (studentgroup_path(group), :method => "delete", :class => "delete-button-form") do%>
+                  <%= button_tag :method => :delete, :class => "btn btn-mini btn-primary" do%>
+                    <i class='icon-remove icon-white'></i>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+<% else %>
+  <div class="alert alert-info">Keine Vorlesungen vorhanden!</div>
+<% end %>

@@ -1,0 +1,30 @@
+<h2>Neuen ---- hinzufügen</h2>
+
+<table class="table table-striped">
+  <% if !@users.blank? %>
+    <thead>
+      <tr>
+        <th>Benutzer</th>
+        <td></td>
+      </tr>
+    </thead>
+    <tbody>
+      <% for item in @users %>
+        <tr>
+          <td><%= link_to item, user_path(item) %></td>
+          <td>
+            <%= form_tag add_user_path(params[:id], params[:role]), :method => :put do%>
+              <%= hidden_field_tag 'user_id', item.id %>
+              <%= button_tag :class=> "btn btn-mini btn-success btn-inverse" do%>
+                <i class = "icon-plus icon-white"></i>          
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  <% else %>
+    
+  <% end %>
+
+</table>
