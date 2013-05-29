@@ -37,7 +37,6 @@ class StudentgroupsController < ApplicationController
       lecture: Lecture.find_by_objectid(params[:chosen_lecture]),
       students: group_info[:students].keys.map { |id| User.find_by_objectid(id) },
       tutors: group_info[:tutors].keys.map { |id| User.find_by_objectid(id) }
-
     }
   end
   def update

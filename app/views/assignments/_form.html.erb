@@ -33,10 +33,15 @@
             <div class="span3"><%= text_field_tag "part_titles[]" %></div>
             <div class="span1 header"><%= label_tag :part_file_types_ %></div>
             <div class="span3"><%= text_field_tag "part_file_types[]" %></div>
-            <div class="span3">
-              <%= button_tag type: "button", class: "add_assignment_part btn btn-small btn-success btn-inverse" do %>
+            <div class="span2">
+              <%= button_tag type: "button", class: "add_assignment_part btn btn-small btn-success btn-inverse", :"data-id" => "1" do %>
                 Weitere Abgabe
                 <i class="icon-plus icon-white"></i>
+              <% end %>
+            </div>
+            <div class="span1">
+              <%= button_tag type: "button", class: "remove_assignment_part btn btn-small btn-primary" do %>
+                <i class="icon-remove icon-white"></i>
               <% end %>
             </div>
           </div>

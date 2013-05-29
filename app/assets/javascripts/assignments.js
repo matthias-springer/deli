@@ -1,7 +1,7 @@
 $(function() {
   $(document).on("click", ".add_assignment_part", function(e) {
     var lastLine = $("form tr:last")
-    var nextNumber = findNextNumber(lastLine)
+    var nextNumber = findNextNumber($(this))
     var clone = lastLine.clone()
     clone.find("input").val("")
     findNumberElement(clone).html("#" + nextNumber)
@@ -9,12 +9,12 @@ $(function() {
     $(this).remove()
   });
 
+  $(document).on("click", ".remove_assignment_part", function(e) {
+    $(this).parents("tr").remove()
+  })
+
   var findNextNumber = function(el) {
-    var numberElement = findNumberElement(el)
-    // use substr(1) to omit the leading '#'
-    var elementText = $.trim(numberElement.html()).substr(1)
-    var currentNumber = parseInt(elementText)
-    return currentNumber + 1
+    return parseInt(el.data("id")) + 1
   }
 
   var findNumberElement = function(el) {

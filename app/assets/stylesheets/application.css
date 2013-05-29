@@ -23,7 +23,7 @@
 }
 
 .delete-button-form,
-.add-button-form 
+.add-button-form
 {
   display: inline;
 }
@@ -52,4 +52,8 @@ table th,
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
+}
+
+table .remove_assignment_part:first-child() {
+  display: none;
 }
