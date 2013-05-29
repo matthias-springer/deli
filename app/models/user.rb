@@ -3,7 +3,6 @@ require "maglev_record"
 class User
   include MaglevRecord::Base
 
-  attr_accessible :first_name, :last_name, :email, :password
   attr_accessor :first_name, :last_name, :email, :password
 
   validates :first_name, :presence => true
@@ -11,3 +10,5 @@ class User
   validates :email, :presence => true
   validates :password_hash, :presence => true
 end
+
+User.maglev_record_persistable
