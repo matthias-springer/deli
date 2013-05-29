@@ -1,0 +1,58 @@
+<h2>Vorlesungen</h2>
+
+<div class="row-fluid">
+  <div class="span12">
+    <% if can? :create, Lecture %>
+      <%=mini_button "Vorlesung erstellen", {:controller => "lectures", :action => "new"}, :class => 'btn-success pull-right'%>
+    <% end %>
+  </div>
+</div>
+<% if not @lectures.empty? %>
+  <div class="row-fluid">
+    <div class="span12">
+      <table class="table table-stripped">
+        <tr>
+          <th>Titel</th>
+          <th>Beschreibung</th>
+          <th>Gruppen</th>
+          <th></th>
+        </tr>
+     
+        <% @lectures.each do |lecture| %>
+          <tr>
+            <td><%= lecture.title %></td>
+            <td><%= lecture.description %></td>
+            <td>
+              <% if !lecture.groups.blank? %>
+                <% for item in lecture.groups %>
+                  <%= link_to item, studentgroup_path(item.id) %> <br>        
+                <% end %>
+              <% else %>
+
+              <% end %>
+            </td>
+            <td>
+              <% if can? :edit, Lecture %>
+                <%= link_to edit_lecture_path(lecture), :class => "btn btn-mini btn-success" do %><i class="icon-pencil"></i><% end %>
+              <% end %>
+
+              <% if can? :show, Lecture %>
+                <%= link_to lecture_path(lecture), :class => "btn btn-mini btn-success", :confirm => "really?" do%> <i class="icon-eye-open"></i><% end %>
+              <% end %>
+
+              <% if can? :destroy, Lecture %>
+                <%=form_tag (lecture_path(lecture), :method => "delete", :class => "delete-button-form") do%>
+                  <%= button_tag :confirm => 'Are you sure?', :method => :delete, :class => "btn btn-mini btn-danger" do%>
+                    <i class='icon-trash'></i>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+<% else %>
+  <div class="alert alert-info">Keine Vorlesungen vorhanden!</div>
+<% end %>
