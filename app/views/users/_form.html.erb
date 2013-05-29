@@ -1,0 +1,14 @@
+<%= form_for @user, :builder => StandardFormBuilder, :html=>{:class => "form-horizontal"} do |f| %>
+  <%= f.errors @user.errors%>
+
+  <%= f.text_field :first_name, "Vorname" %>
+  <%= f.text_field :last_name, "Nachname" %>
+  <%= f.text_field :email, "E-Mail" %>
+  <%= f.password_field :password, "Passwort" %>
+  <%= f.password_field :password_confirmation, "Passwort Wiederholen" %>
+
+  <div class="form-actions">
+    <%= f.submit "Speichern", :class=>"btn btn-success pull-right" %>
+    <%= link_to "Zurück", {:controller => "users", :action => "index"}, :class=>"btn btn-primary pull-left" %>
+  </div>
+<% end %>
