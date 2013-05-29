@@ -1,91 +1,165 @@
-<h2>Vorlesung</h2>
-<%= mini_button "Zurück", {:controller => "lectures", :action => "index"}, :class => "btn-success pull-left"%>
-<h3><%= @lecture.title %></h3>
+<h2><%= @lecture.title %></h2>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th colspan="2">Allgemeine Informationen</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Dozent</th>
-      <td>
-        <%= link_to @lecture.lecturer.to_s, user_path(@lecture.lecturer.id) %>
-      </td>
-    </tr>
-
-    <tr>
-      <th>Assistenten</th>
-      <td>
-        <% if !@lecture.staff.blank? %>
-          <% for staff in @lecture.staff %>
-            <%= link_to staff.to_s, user_path(staff.id) %> <br>        
-          <% end %>
-        <% else %>
-          <p class="badge badge-info">Noch keine Assistenten zugeordnet</p>
+<div class="row-fluid">
+  <div class="span6">
+    <% if current_user.in_lecture? @lecture.id and can? :leave, Lecture%>
+      <%=form_tag leave_lecture_path(@lecture), :method => "delete", :class => "add-button-form" do%>
+        <%= button_tag :class => "btn btn-small btn-primary" do%>
+          Verlassen
+          <i class="icon-remove icon-white"></i>
         <% end %>
-      </td>
-    </tr>
+      <% end %>
 
-    <tr>
-      <th>Tutoren</th>
-      <td>
-        <% if !@lecture.tutors.blank? %>
-          <% for tutor in @lecture.tutors %>
-            <%= link_to tutor.to_s, user_path(tutor.id) %> <br>        
-          <% end %>
-        <% else %>
-          <p class="badge badge-info">Noch keine Tutoren zugeordnet</p>
+    <% elsif can? :join, Lecture%>
+      <%=form_tag join_lecture_path(@lecture), :method => "put", :class => "add-button-form" do%>
+        <%= button_tag :class => "btn btn-small btn-success btn-inverse" do%>
+          Anmelden
+          <i class="icon-plus icon-white"></i>
         <% end %>
-      </td>
-    </tr>
-  </tbody>
-
-</table>
-
-<table class="table table-striped">
-  <% if !@lecture.groups.blank? %>
-    <thead>
-      <tr>
-        <th colspan="2">eingetragene Gruppen</th>
-      </tr>
-      <tr>
-        <th>Gruppe</th>
-        <th>Studenten</th>
-      </tr>
-    </thead>
-    <tbody>
-        <% for group in @lecture.groups %>
-          <tr>
-            <td>
-              <%= link_to "##{group.id}", studentgroup_path(group.id) %> <br>        
-            </td>
-            <td>
-              <% if !group.students.blank? %>
-                <% for student in group.students %>
-                  <%= link_to student.to_s, user_path(student.id) %> <br>        
-                <% end %>
-              <% else %>
-                <span class="bagde bagde-info">Leere Gruppe</span>    
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-    </tbody>
-    <% else %>
-      <tbody>
-        <tr>
-          <th><span class="bagde bagde-info">Keine Gruppen eingetragen</span></th>
-          <td>
-            <%= link_to new_studentgroup_path, :class => "btn btn-success" do%>
-              Gruppe erstellen <i class="icon-plus icon-white"></i> 
-            <% end %>
-
-          </td>
-        </tr>      
-      </tbody>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="span6 right-aligned">
+    <% if can? :edit, Lecture %>
+      <%= link_to edit_lecture_path(@lecture), :class => "btn btn-mini btn-success btn-inverse" do%>
+        <i class = "icon-pencil icon-white"></i>
+      <% end %>
     <% end %>
 
-</table>
+    <% if can? :destroy, Lecture %>
+      <%=form_tag (lecture_path(@lecture), :method => "delete", :class => "delete-button-form") do%>
+        <%= button_tag :method => :delete, :class => "btn btn-mini btn-primary" do%>
+          <i class='icon-remove icon-white'></i>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <div class="span6">
+    <div class="well">
+      <div class="row-fluid">
+        <div class="span3 header">Dozenten</div>
+        <div class="span8">
+          <% if !@lecture.lecturers.blank? %>
+            <% for lecturer in @lecture.lecturers %>
+              <div class="row-fluid row-item">
+                <div class="span8">
+                  <%= link_to lecturer.to_s, user_path(lecturer.id) %>
+                </div>
+                <div class="span4">
+                  <%= form_tag remove_user_path(@lecture.id, :lecturer), :method => :delete, :class => "delete-button-form" do%>
+                    <%= hidden_field_tag 'user_id', lecturer.id %>
+                    <%= button_tag :class=> "btn btn-mini btn-primary" do%>
+                      <i class = "icon-remove icon-white"></i>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="badge badge-info">Noch keine Dozenten zugeordnet</p>
+          <% end %>
+        </div>
+        <div class="span1">
+          <% if can? :add_user_list_path, Lecture%>
+            <%= link_to add_user_list_path(@lecture, :lecturer), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+              <i class = "icon-plus icon-white"></i>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="well">
+      <div class="row-fluid">
+        <div class="span3 header">Assistenten</div>
+        <div class="span8">
+          <% if !@lecture.staff_members.blank? %>
+            <% for staff in @lecture.staff_members %>
+              <div class="row-fluid row-item">
+                <div class="span8">
+                  <%= link_to staff.to_s, user_path(staff.id) %>
+                </div>
+                <div class="span4">
+                  <%= form_tag remove_user_path(@lecture.id, :staff_member), :method => :delete, :class => "delete-button-form"  do%>
+                    <%= hidden_field_tag 'user_id', staff.id %>
+                    <%= button_tag :class=> "btn btn-mini btn-primary" do%>
+                      <i class = "icon-remove icon-white"></i>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="badge badge-info">Noch keine Assistenten zugeordnet</p>
+          <% end %>
+        </div>
+        <div class="span1">
+          <% if can? :add_user_list_path, Lecture%>
+            <%= link_to add_user_list_path(@lecture, :staff_member), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+              <i class = "icon-plus icon-white"></i>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="well">
+      <div class="row-fluid">
+        <div class="span3 header">Tutoren</div>
+        <div class="span8">
+          <% if !@lecture.tutors.blank? %>
+            <% for tutor in @lecture.tutors %>
+            <div class="row-fluid row-item">
+              <div class="span8">
+                <%= link_to tutor.to_s, user_path(tutor.id) %>
+              </div>
+              <div class="span4">
+                <%= form_tag remove_user_path(@lecture.id, :tutor), :method => :delete, :class => "delete-button-form"  do%>
+                  <%= hidden_field_tag 'user_id', tutor.id %>
+                  <%= button_tag :class=> "btn btn-mini btn-primary" do%>
+                    <i class = "icon-remove icon-white"></i>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+            <% end %>
+          <% else %>
+            <p class="badge badge-info">Noch keine Tutoren zugeordnet</p>
+          <% end %>
+        </div>
+        <div class="span1">
+          <% if can? :add_user_list_path, Lecture%>
+            <%= link_to add_user_list_path(@lecture, :tutor), :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+              <i class = "icon-plus icon-white"></i>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="span6">
+    <div class="row-fluid well">
+      <div class="span4 header">eingetragene Gruppen</div>
+      <div class="span7">
+        <% if !@lecture.groups.blank? %>
+          <% for group in @lecture.groups %>
+          <div class="row-fluid row-item">
+            <div class="span12">
+              <%= link_to "#{group.to_s}", studentgroup_path(group.id) %>
+            </div>
+          </div>
+          <% end %>
+        <% else %>
+          <span class="badge badge-info">Keine Gruppen eingetragen</span>
+        <% end %>
+      </div>
+      <div class="span1">
+        <%= link_to "#todo", :class => 'btn btn-mini btn-success btn-inverse pull-right' do%>
+          <i class = "icon-plus icon-white"></i>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

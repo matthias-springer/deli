@@ -1,10 +1,10 @@
 <h2>Anmelden</h2>
-<%= form_tag sessions_path, :class => "form-horizontal" do %>
+<%= form_tag login_path, :class => "form-horizontal" do %>
   <%= labeled_control_group 'email' , text_field_tag('email'), "E-Mail" %>
   <%= labeled_control_group 'password' , password_field_tag('password'), "Passwort" %>
-  <%= control_group mini_button('neu registrieren', {:controller => 'users', :action => 'new'}, :class=>"btn-success")%>
+  <%= control_group mini_button('neu registrieren', {:controller => 'users', :action => 'new'}, :class=>"btn-success btn-inverse")%>
 
   <div class="form-actions">
-    <%= submit_tag "Anmelden" , :class=>"btn btn-success pull-right" %>
+    <%= submit_tag "Anmelden" , :class=>"btn btn-success btn-inverse pull-right" %>
   </div>
 <% end %>

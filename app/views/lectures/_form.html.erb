@@ -4,7 +4,7 @@
   <%= f.text_field :title, "Titel" %>
   <%= f.text_area :description, "Beschreibung", :size => "40x9" %>
   <div class="form-actions">
-    <%= f.submit "Speichern", :class=>"btn btn-success pull-right" %>
+    <%= f.submit "Speichern", :class=>"btn btn-success btn-inverse pull-right" %>
     <%= link_to "Zurück", {:controller => "lectures", :action => "index"}, :class=>"btn btn-primary pull-left" %>
   </div>
 <% end %>

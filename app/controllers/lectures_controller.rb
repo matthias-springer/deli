@@ -1,25 +1,42 @@
-
 class LecturesController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource
+
+  before_filter :get_resources, only: [:show, :edit, :update, :join, :leave, :add_user, :remove_user]
+
+  def get_resources
+    @lecture = Lecture.find_by_objectid(params[:id])
+    if @lecture.nil?
+      redirect_to lectures_path, notice: "Diese Vorlesung existiert nicht!"
+    end
+  end
 
   def index
-    MaglevRecord.reset
     @lectures = Lecture.all
   end
 
   def show
-    MaglevRecord.reset
-    @lecture = Lecture.find_by_objectid(params[:id])
+  end
+
+  def new
+    @lecture = Lecture.new
+  end
+
+  def create
+    @lecture = Lecture.new(params[:lecture])
+    if @lecture.valid?
+      MaglevRecord.save
+      flash[:message] = "Vorlesung erfolgreich erstellt!"
+      redirect_to :action => :index
+    else
+      render "new"
+    end
   end
 
   def edit
-    MaglevRecord.reset
-    @lecture = Lecture.find_by_objectid(params[:id])
   end
 
   def update
-    MaglevRecord.reset
-    @lecture = Lecture.find_by_objectid(params[:id]).update_attributes(params[:lecture])
+    @lecture.update_attributes(params[:lecture])
 
     if @lecture.valid?
       MaglevRecord.save
@@ -30,36 +47,60 @@ class LecturesController < ApplicationController
   end
 
   def destroy
-    MaglevRecord.reset
-    message = {:notice => "Erfolgreich gelöscht!"}
     if Lecture.object_pool.delete(params[:id].to_i).nil?
-      message = {:alert => "Objekt nicht vorhanden!"}
-    end
-    MaglevRecord.save
-
-    redirect_to({:action => 'index'}, message)
-  end
-
-
-  def new
-    @lecture = Lecture.new
-  end
-
-  def create
-
-    MaglevRecord.reset
-
-    @lecture = Lecture.new(params[:lecture]) #
-
-    if @lecture.valid?
-      MaglevRecord.save
-      flash[:message] = "Vorlesung erfolgreich erstellt!"
-      redirect_to :action => :index
+      redirect_to action: 'index' , notice: "Vorlesung nicht vorhanden!"
     else
-      render "new"
+      redirect_to action: 'index' , notice: "Erfolgreich gelöscht!"
+      MaglevRecord.save
     end
-
-
   end
 
+  def join
+    @lecture.add_student(current_user)
+    redirect_to :back, :notice => "Du hast dich erfolgreich in der Vorlesung angemeldet!"
+    MaglevRecord.save
+  end
+
+  def leave
+    @lecture.remove_student(current_user)
+    redirect_to :back, :notice => "Du hast dich erfolgreich aus der Vorlesung abgemeldet!"
+    MaglevRecord.save
+  end
+
+  def add_user_list
+    @users = User.all
+  end
+
+  def add_user
+    user = User.find_by_objectid(params[:user_id])
+    role = params[:role].to_sym
+
+    if user.nil?
+      redirect_to add_user_list_path(@lecture.id, role), error: "Der Benutzer existiert nicht!"
+    elsif not @lecture.add_user(user, role)
+      redirect_to add_user_list_path(@lecture, role), error: "Der Benutzer konnte nicht eingefügt werden!"
+    else
+      redirect_to lecture_path(@lecture.id), notice: "Vorlesung erfolgreich aktualisiert!"
+      MaglevRecord.save
+    end
+  end
+
+  def remove_user
+    user = User.find_by_objectid(params[:user_id])
+    role = params[:role].to_sym
+
+    if user.nil?
+      message = { error: "Der Benutzer existiert nicht!" }
+    elsif not @lecture.remove_user(user, role)
+      message = { error: "Der Benutzer konnte nicht entfernt werden!" }
+    else
+      message = { notice: "Vorlesung erfolgreich aktualisiert!" }
+      MaglevRecord.save
+    end
+    redirect_to lecture_path(@lecture), message
+  end
+
+  def index_json
+    render json: Hash[*Lecture.all.map { |lecture| [lecture.id, lecture.title] }.flatten]
+  end
 end

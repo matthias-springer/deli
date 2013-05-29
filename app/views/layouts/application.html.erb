@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Deli</title>
-  <%= stylesheet_link_tag    "bootswatch", "bootstrap.min", "bootstrap-responsive.min" %>
-  <%= javascript_include_tag "http://code.jquery.com/jquery.js", "bootstrap.min" %>
+  <title>Panda</title>
+  <%= stylesheet_link_tag  "bootswatch", "bootstrap.min", "bootstrap-responsive.min", "application" %>
+  <%= javascript_include_tag  "application", "bootstrap.min" %>
+  <%= yield :javascript_includes %>
   <%= csrf_meta_tags %>
 </head>
 <body class="index">
-  <div class="navbar navbar-fixed-top">
+  <div class="navbar navbar-fixed-top navbar-inverse">
     <div class="navbar-inner">
       <div class="container">
-        <a class="brand" href="/">Deli</a>
+        <a class="brand" href="/" style = "padding: 5px 20px 0px 0px; font-size: 14px; text-align: center;">
+          <%= image_tag "panda_white.png", :style => "height: 25px;"%> <br>
+          Panda
+        </a>
         <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -19,14 +23,41 @@
         <div class="nav-collapse collapse">
           <% if current_user %>
             <ul class="nav">
-              <li><%=link_to "Vorlesungen", :controller => "lectures", :action => "index"%></li>
+              <li>
+                <%=link_to lectures_path do%>
+                  <i class="icon-th-list icon-white"></i>
+                  Vorlesungen  
+                <%end%>
+              </li>
+              <li>
+                <%=link_to user_path(current_user.id) do%>
+                  <i class="icon-user icon-white"></i>
+                  Profil
+                <%end%>
+              </li>
+              <li>
+                <%=link_to studentgroups_path do%>
+                  <i class="icon-list icon-white"></i>
+                  Gruppen
+                <%end%>
+              </li>
             </ul>
             <ul class="nav pull-right">
-              <li><%=link_to "Logout", :controller => "sessions", :action => "destroy" %></li>
+              <li>
+                <%=link_to logout_path do%>
+                  <i class="icon-off icon-white"></i>
+                  Logout 
+                <%end%>
+              </li>
             </ul>
           <%else%>
             <ul class="nav pull-right">
-              <li><%=link_to "Login", :controller => "sessions", :action => "new" %></li>
+              <li>
+                <%=link_to login_path do%>
+                  <i class="icon-share-alt icon-white"></i>
+                  Login
+                <%end%>
+              </li>
             </ul>
 
           <%end%>
