@@ -20,8 +20,8 @@ $(function() {
 
   var initStudents = function(values) {
     var opts = myOptions(values)
-    opts['updater'] = function(item){
-      $('#chosen_student').attr('value', item);
+    opts['updater'] = function(item) {
+      $('#student_to_add').attr('value', item);
       return values[item];
     };
     $('#studentgroup_students').typeahead(opts);
@@ -30,12 +30,12 @@ $(function() {
   var initTutors = function(values) {
     var opts = myOptions(values)
     opts['updater'] = function(item){
-      $('#chosen_tutor').attr('value', item);
+      $('#tutor_to_add').attr('value', item);
       return values[item];
     };
     $('#studentgroup_tutors').typeahead(opts);
   };
-  
+
   var initLectures = function(values) {
     var opts = myOptions(values)
     opts['updater'] = function(item){
@@ -46,28 +46,28 @@ $(function() {
   };
 
   $.ajax({
-    url: '/users/json/students/',
+    url: '/users/students.json',
     data: {},
     success: initStudents,
     dataType: "json"
   });
 
   $.ajax({
-    url: '/users/json/tutors/',
+    url: '/users/tutors.json',
     data: {},
     success: initTutors,
     dataType: "json"
   });
 
   $.ajax({
-    url: '/lectures/json/index/',
+    url: '/lectures/index.json',
     data: {},
     success: initLectures,
     dataType: "json"
   });
 
   $('#change_to_post_btn').on('click', function(event) {
-    // hook for two actions(put and post) in one form
+    // hook to have two actions (put and post) in one form
     $('#group_form input[name=_method]').remove();
   });
 
@@ -77,8 +77,8 @@ $(function() {
 
   $('.btn-delete-student').on('click', function(event) {
     $('#student_to_delete').attr('value', $(this).attr('data-student-id'));
-  });  
+  });
   $('.btn-delete-tutor').on('click', function(event) {
     $('#tutor_to_delete').attr('value', $(this).attr('data-tutor-id'));
-  });  
+  });
 });

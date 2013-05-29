@@ -37,16 +37,16 @@
             <td style = "text-align: center ">
 
               <% if current_user.in_lecture? lecture.id and can? :leave, Lecture%>
-                <%=form_tag leave_lecture_path(lecture), :method => "delete", :class => "add-button-form" do%>
-                  <%= button_tag :class => "btn btn-mini btn-primary" do%>
+                <%=form_tag leave_lecture_path(lecture), :method => "delete", :class => "add-button-form" do %>
+                  <%= button_tag :class => "btn btn-mini btn-primary" do %>
                     Verlassen
                     <i class="icon-remove icon-white"></i>
                   <% end %>
                 <% end %>
 
               <% elsif can? :join, Lecture %>
-                <%=form_tag join_lecture_path(lecture), :method => "put", :class => "add-button-form" do%>
-                  <%= button_tag :class => "btn btn-mini btn-success btn-inverse" do%>
+                <%=form_tag join_lecture_path(lecture), :method => "put", :class => "add-button-form" do %>
+                  <%= button_tag :class => "btn btn-mini btn-success btn-inverse" do %>
                     Anmelden
                     <i class="icon-plus icon-white"></i>
                   <% end %>
@@ -59,12 +59,12 @@
               <% end %>
 
               <% if can? :show, Lecture %>
-                <%= link_to lecture_path(lecture), :class => "btn btn-mini btn-success btn-inverse", :confirm => "really?" do%> <i class="icon-eye-open icon-white"></i><% end %>
+                <%= link_to lecture_path(lecture), :class => "btn btn-mini btn-success btn-inverse", :confirm => "really?" do %> <i class="icon-eye-open icon-white"></i><% end %>
               <% end %>
 
               <% if can? :destroy, Lecture %>
-                <%=form_tag (lecture_path(lecture), :method => "delete", :class => "delete-button-form") do%>
-                  <%= button_tag :method => :delete, :class => "btn btn-mini btn-primary" do%>
+                <%=form_tag (lecture_path(lecture), :method => "delete", :class => "delete-button-form") do %>
+                  <%= button_tag :method => :delete, :class => "btn btn-mini btn-primary" do %>
                     <i class='icon-remove icon-white'></i>
                   <% end %>
                 <% end %>

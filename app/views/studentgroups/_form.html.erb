@@ -1,4 +1,15 @@
-<%= form_tag @link, :class => "form-horizontal", :method => "put", :id => "group_form" do%>
+<% content_for :javascript_includes do %>
+  <%= javascript_include_tag "studentgroups.js" %>
+<% end %>
+
+<%
+  link = if @group.nil?
+    edit_new_temp_path
+  else
+    edit_temp_path(@group.id)
+  end
+%>
+<%= form_tag link, :class => "form-horizontal", :method => "put", :id => "group_form" do %>
   <% if not @group.nil? %>
     <% if not @group.errors.nil? and @group.errors.any? %>
       <% for err in @group.errors.full_messages %>
@@ -21,75 +32,14 @@
       <tr>
         <th>Vorlesung</th>
         <td colspan="2">
-          <%= hidden_field_tag 'chosen_lecture', session[:group][:lecture][0] %>
-          <input type="text" autocomplete="off" name="studentgroup_lecture" id ="studentgroup_lecture" value="<%= session[:group][:lecture][1]%>">
+          <%= hidden_field_tag 'chosen_lecture', session[:group][:lecture][:id] %>
+          <input type="text" autocomplete="off" name="studentgroup_lecture" id ="studentgroup_lecture" value="<%= session[:group][:lecture][:title] %>">
         </td>
       </tr>
-      <tr>
-        <th width=15%>Studenten</th>
-        <td width=35%>
-            <div class="input-append">
-              <%= hidden_field_tag 'student_to_add' %>
-              <input type="text" autocomplete="off" id="studentgroup_students">
-              <button name="add_student" class="btn btn-success btn-inverse">
-                <i class="icon-plus icon-white"></i>
-              </button>
-            </div>
-        </td>
-        <td width=50% >
-          <%= hidden_field_tag 'student_to_delete' %>
-          <% if !session[:group][:students].blank? %>
-            <% for student in session[:group][:students] %>
-              <div class="row-fluid row-item">
-                <div class="span6">
-                  <%= link_to student[1], user_path(student[0])%> <br>
-                </div>
-                <div class="span6">
-                  <% if student[0] != current_user.id%>
-                    <button name="remove_student" data-student-id="<%= student[0] %>" class="btn btn-primary btn-mini btn-delete-student">
-                      <i class="icon icon-remove icon-white"></i>
-                    </button>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
-          <% else %>
-            <p class="badge badge-info">Noch keine Stundenten vorhanden</p>
-          <% end %>
-        </td>
-      </tr>
+      <%= render partial: 'member_view', locals: { id_name: "student" } %>
+
       <% if can? :add_tutor, Studentgroup %>
-        <tr>
-          <th>Tutoren</th>
-          <td>
-            <div class="input-append">
-              <%= hidden_field_tag 'tutor_to_add' %>
-              <input type="text" autocomplete="off" id="studentgroup_tutors">
-              <button name="add_tutor" class="btn btn-success btn-inverse">
-                <i class="icon-plus icon-white"></i>
-              </button>
-            </div>
-          </td>
-          <td>
-            <%= hidden_field_tag 'tutor_to_delete' %>
-            <% if !session[:group][:tutors].blank? %>
-              <% for tutor in session[:group][:tutors] %>
-                <div class="row-fluid row-item">
-                  <div class="span6">
-                  <%= link_to tutor[1], user_path(tutor[0])%>
-                  </div>
-                  <div class="span6">
-                    <button name="remove_tutor" data-tutor-id = "<%= tutor[0] %>" class="btn btn-primary btn-mini btn-delete-tutor">
-                      <i class="icon icon-remove icon-white"></i>
-                    </button>
-                  </div>
-                </div>
-              <% end %>
-            <% else %>
-              <p class="badge badge-info">Noch keine Tutoren vorhanden</p>
-            <% end %>
-          </td>
-        </tr>
+        <%= render partial: 'member_view', locals: { id_name: "tutor" } %>
       <% end %>
     </tbody>
   </table>

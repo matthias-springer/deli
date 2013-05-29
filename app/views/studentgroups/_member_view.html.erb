@@ -1,0 +1,38 @@
+<%
+  # example: id_name = 'student', view_name = 'Studenten', key_name = :students
+  view_name = id_name.capitalize + "en"
+  key_name = (id_name + "s").to_sym
+%>
+<tr>
+  <th width=15%><%= view_name %></th>
+  <td width=35%>
+      <div class="input-append">
+        <%= hidden_field_tag "#{id_name}_to_add" %>
+        <input type="text" autocomplete="off" id="studentgroup_<%= id_name %>s">
+        <button name="add_<%= id_name %>" class="btn btn-success btn-inverse">
+          <i class="icon-plus icon-white"></i>
+        </button>
+      </div>
+  </td>
+  <td width=50% >
+    <%= hidden_field_tag "#{id_name}_to_delete" %>
+    <% if !session[:group][key_name].blank? %>
+      <% session[:group][key_name].each_pair do |member_id, member_name| %>
+        <div class="row-fluid row-item">
+          <div class="span6">
+            <%= link_to member_name, user_path(member_id) %> <br>
+          </div>
+          <div class="span6">
+            <% if id_name == 'student' and member_id != current_user.id %>
+              <button name="remove_<%= id_name %>" data-<%= id_name %>-id="<%= member_id %>" class="btn btn-primary btn-mini btn-delete-<%= id_name %>">
+                <i class="icon icon-remove icon-white"></i>
+              </button>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="badge badge-info">Noch keine <%= view_name %> vorhanden</p>
+    <% end %>
+  </td>
+</tr>

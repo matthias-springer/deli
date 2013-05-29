@@ -1,0 +1,47 @@
+<%= form_for [@lecture, @assignment], builder: StandardFormBuilder, html: { class: "form-horizontal" } do |f| %>
+  <%= f.errors @assignment.errors %>
+
+  <table class = "table table-striped" style="margin-bottom: 0px">
+    <tbody>
+      <tr>
+        <th><%= f.label :title %></th>
+        <td><%= f.unlabeled_text_field :title %></td>
+      </tr>
+      <tr>
+        <th><%= f.label :status %></th>
+        <td><%= f.check_box :status %></td>
+      </tr>
+      <tr>
+        <th><%= f.label :soft_date %></th>
+        <td><%= f.date_select :soft_date %></td>
+      </tr>
+      <tr>
+        <th><%= f.label :hard_date %></th>
+        <td><%= f.date_select :hard_date %></td>
+      </tr>
+      <tr class="assignment_part_definition">
+        <td colspan="2">
+          <div class="row-fluid">
+            <div class="span1">
+              #1
+            </div>
+            <div class="span1 header"><%= label_tag :part_titles_ %></div>
+            <div class="span3"><%= text_field_tag "part_titles[]" %></div>
+            <div class="span1 header"><%= label_tag :part_file_types_ %></div>
+            <div class="span3"><%= text_field_tag "part_file_types[]" %></div>
+            <div class="span3">
+              <%= button_tag type: "button", id: "add_assignment_part", class: "btn btn-small btn-success btn-inverse" do %>
+                Weitere Abgabe
+                <i class="icon-plus icon-white"></i>
+              <% end %>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="form-actions" style="margin-top:0px; background-color: #fff">
+	  <%= button_tag "Speichern", class: "btn btn-success btn-inverse pull-right" %>
+  </div>
+<% end %>

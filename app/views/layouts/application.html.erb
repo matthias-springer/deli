@@ -24,19 +24,19 @@
           <% if current_user %>
             <ul class="nav">
               <li>
-                <%=link_to lectures_path do%>
+                <%=link_to lectures_path do %>
                   <i class="icon-th-list icon-white"></i>
-                  Vorlesungen  
+                  Vorlesungen
                 <%end%>
               </li>
               <li>
-                <%=link_to user_path(current_user.id) do%>
+                <%=link_to user_path(current_user.id) do %>
                   <i class="icon-user icon-white"></i>
                   Profil
                 <%end%>
               </li>
               <li>
-                <%=link_to studentgroups_path do%>
+                <%=link_to studentgroups_path do %>
                   <i class="icon-list icon-white"></i>
                   Gruppen
                 <%end%>
@@ -44,16 +44,16 @@
             </ul>
             <ul class="nav pull-right">
               <li>
-                <%=link_to logout_path do%>
+                <%=link_to logout_path do %>
                   <i class="icon-off icon-white"></i>
-                  Logout 
+                  Logout
                 <%end%>
               </li>
             </ul>
           <%else%>
             <ul class="nav pull-right">
               <li>
-                <%=link_to login_path do%>
+                <%=link_to login_path do %>
                   <i class="icon-share-alt icon-white"></i>
                   Login
                 <%end%>

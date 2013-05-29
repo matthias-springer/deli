@@ -1,111 +1,108 @@
-
 class StudentgroupsController < ApplicationController
   authorize_resource
+
+  before_filter :get_resources, only: [:show, :edit, :update, :destroy, :join]
+
+  def get_resources
+    @group = Studentgroup.find_by_objectid(params[:id])
+    if @group.nil?
+      redirect_to studentgroups_path, flash: { error: "Diese Gruppe existiert nicht!" }
+    end
+  end
 
   def index
     @groups = Studentgroup.all
   end
 
   def show
-    @group = Studentgroup.find_by_objectid(params[:id])
   end
 
   def edit
-    group = Studentgroup.find_by_objectid(params[:id])
-    students = {}
-    group.students.each{|student| students[student.id] = student.to_s}
-    tutors = {}
-    group.tutors.each{|tutor| tutors[tutor.id] = tutor.to_s}
+    students = Hash[@group.students.map { |student| [student.id, student.to_s] }]
+    tutors = Hash[@group.tutors.map { |tutor| [tutor.id, tutor.to_s] }]
     session[:group] = {
-      id: group.id,
-      name: group.name,
-      lecture: [group.lecture.id, group.lecture.title],
+      id: @group.id,
+      name: @group.name,
+      lecture: { id: @group.lecture.id, title: @group.lecture.title },
       students: students,
       tutors: tutors,
-      is_new: false}
-    @link = edit_temp_path(group.id)
+      is_new: false }
   end
 
+  def build_group_attributes
+    group_info = session[:group]
+    {
+      name: params[:studentgroup_name],
+      creator: current_user,
+      lecture: Lecture.find_by_objectid(params[:chosen_lecture]),
+      students: group_info[:students].keys.map { |id| User.find_by_objectid(id) },
+      tutors: group_info[:tutors].keys.map { |id| User.find_by_objectid(id) }
+
+    }
+  end
   def update
-    groupInfo = session[:group]
-    @group = Studentgroup.find_by_objectid(groupInfo[:id])
-    if @group.nil?
-      flash[:error] = "Die Gruppe existiert nicht!"
-      redirect_to studentgroups_path
-      return
-    end
-    @group.name = params[:studentgroup_name]
-    lecture = Lecture.find_by_objectid(params[:chosen_lecture])
-    if lecture.nil?
-      flash[:error] = "Die Vorlesung existiert nicht!"
-      redirect_to studentgroups_path
-      return
-    end
-    @group.lecture = lecture
-    @group.students = User.select{ |user| groupInfo[:students].include? user.id }
-    @group.tutors = User.select{ |user| groupInfo[:tutors].include? user.id }
+    group_attributes = build_group_attributes
+    @group.update_attributes(group_attributes)
     if @group.valid?
-      MaglevRecord.save
-      redirect_to studentgroups_path
       session.delete(:group)
+      redirect_to studentgroups_path
+      MaglevRecord.save
     else
       render "edit"
     end
   end
 
   def destroy
-    if Studentgroup.object_pool.delete(params[:id].to_i).nil?
-      flash[:error] = "Gruppe ist nicht vorhanden!"
-    else
-      flash[:notice] = "Gruppe erfolgreich gelöscht!"
-    end
+    @group.destroy
+    redirect_to studentgroups_path, notice: "Gruppe erfolgreich gelöscht!"
     MaglevRecord.save
-
-    redirect_to studentgroups_path
-
   end
 
   def new
     session[:group] = {
       name: "",
-      lecture: [nil, ""],
+      lecture: { title: "" },
       students: {current_user.id => current_user.to_s},
       tutors: {},
       is_new: true
     }
-    @link = edit_new_temp_path
   end
 
   def create
-    groupInfo = session[:group]
-    students = User.select{ |user| groupInfo[:students].include? user.id }
-    tutors = User.select{ |user| groupInfo[:tutors].include? user.id }
-    name = params[:studentgroup_name]
-
-    @group = Studentgroup.new name: name
-
-    lecture = Lecture.find_by_objectid(params[:chosen_lecture])
-    if lecture.nil?
-      flash[:error] = "Die Vorlesung existiert nicht!"
-      render "new"
-      return
-    end
-
-
-    @group.lecture = lecture
-    @group.students = students
-    @group.tutors = tutors
-
+    group_attributes = build_group_attributes
+    @group = Studentgroup.new(group_attributes)
     if @group.valid?
-      MaglevRecord.save
-      redirect_to studentgroups_path
       session.delete(:group)
+      redirect_to studentgroups_path
+      MaglevRecord.save
     else
       render "new"
     end
   end
 
-  # your form action
+  def join
+    if @group.add_student(current_user)
+      redirect_to studentgroups_path, notice: "Du bist erfolgreich der Gruppe #{@group.to_s} beigetreten!"
+      MaglevRecord.save
+    else
+      redirect_to studentgroups_path, notice: "Du bist bereits in dieser Gruppe!"
+    end
+  end
+
+  def list_for_join
+    @groups = Studentgroup.find_all { |group| not group.students.include?(current_user)}
+  end
+
+  def leave
+    group = Studentgroup.find_by_objectid(params[:id])
+    if group.students.delete(current_user).nil?
+      redirect_to studentgroups_path
+    else
+      MaglevRecord.save
+      redirect_to studentgroups_path, :notice => "Du hast erfolgreich die Gruppe #{group.to_s} verlassen!"
+    end
+  end
+
   def edit_temp
     send edit_temp_action
 
@@ -117,7 +114,7 @@ class StudentgroupsController < ApplicationController
     if lecture.nil?
       flash[:error] = "Bitte eine Vorlesung auswählen!"
     else
-      session[:group][:lecture] = [lecture.id, lecture.title]
+      session[:group][:lecture] = { id: lecture.id, title: lecture.title }
     end
 
     if session[:group][:is_new]
@@ -129,43 +126,40 @@ class StudentgroupsController < ApplicationController
 
   protected
   def edit_temp_action
-    # just return the first action name found in the params
-    action = %w(add_student add_tutor delete_student delete_tutor).detect {|action| params[action] }
+    action = [:add_student, :add_tutor, :delete_student, :delete_tutor].detect {|action| params[action] }
     "edit_temp_#{action}"
   end
 
   def edit_temp_add_student
     edit_temp_add("student")
   end
-
   def edit_temp_delete_student
     edit_temp_delete("student")
   end
-
   def edit_temp_add_tutor
     edit_temp_add("tutor")
   end
-
   def edit_temp_delete_tutor
     edit_temp_delete("tutor")
   end
 
-
+  def edit_temp_do(role, action)
+    user_id = params["#{role}_to_#{action}".to_sym]
+    unless user_id.empty?
+      yield(user_id) if block_given?
+    end
+  end
 
   def edit_temp_add(role)
-    user_id = params["#{role}_to_add".to_sym]
-    unless user_id.empty?
+    edit_temp_do(role, "add") do |user_id|
       _add_user(user_id, "#{role}s".to_sym)
     end
   end
-
   def edit_temp_delete(role)
-    user_id = params["#{role}_to_delete".to_sym]
-    unless user_id.empty?
+    edit_temp_do(role, "delete") do |user_id|
       _delete_user(user_id, "#{role}s".to_sym)
     end
   end
-
 
   def _add_user(user_id, dict_sym)
     user = User.find_by_objectid(user_id)
@@ -184,7 +178,6 @@ class StudentgroupsController < ApplicationController
 
   def _delete_user(user_id, dict_sym)
     user_dict = session[:group][dict_sym]
-    nil.pause if user_dict.nil?
     user = user_dict.delete(user_id.to_i)
     if user.nil?
       flash[:error] = "Benutzer existiert nicht!"
@@ -192,6 +185,4 @@ class StudentgroupsController < ApplicationController
       flash[:notice] = "Benutzer #{user.to_s} erfolgreich aus der Gruppe entfernt!"
     end
   end
-
-
 end

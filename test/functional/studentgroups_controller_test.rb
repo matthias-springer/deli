@@ -22,8 +22,8 @@ class StudentgroupsControllerTest < ActionController::TestCase
   def create_clear_session
     session[:group] = {
         name: "",
-        lecture: [nil, ""],
-        students: {@user.id => @user.to_s},
+        lecture: { title: "" },
+        students: { @user.id => @user.to_s },
         tutors: {},
         is_new: true
       }
@@ -33,11 +33,10 @@ class StudentgroupsControllerTest < ActionController::TestCase
     session[:group] = {
       id: group.id,
       name: group.name,
-      lecture: [group.lecture.id, group.lecture.title],
-      students: {@user.id => @user.to_s},
+      lecture: { id: group.lecture.id, title: group.lecture.title },
+      students: { @user.id => @user.to_s },
       tutors: {},
-      is_new: false
-    }
+      is_new: false }
   end
 
   def clear_group_session
@@ -71,7 +70,8 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_redirected_to studentgroups_path
 
     assert_not_nil assigns(:group)
-    assert_equal old_count+1, Studentgroup.size
+    assert_equal old_count + 1, Studentgroup.size
+    assert_equal Studentgroup.first.creator, @user
 
     assert_nil session[:group]
   end
@@ -80,7 +80,6 @@ class StudentgroupsControllerTest < ActionController::TestCase
 
     post :create, studentgroup_name: "new group", chosen_lecture: 2
     assert_response :success
-    assert_equal flash[:error], "Die Vorlesung existiert nicht!"
 
     l = Lecture.new({title: "New Lecture", description: "This is really good!"})
     MaglevRecord.save
@@ -107,12 +106,25 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_equal assigns(:group), @group
   end
 
+  test "should show studentgroup i am in" do
+    login_admin
+    create_test_group
+    @group.students << @user
+    MaglevRecord.save
+
+    get :show, id: @group.id
+
+    assert_response :success
+    assert_not_nil assigns(:group)
+    assert_equal assigns(:group), @group
+  end
+
   # destroy
   test "destroy not existing studentgroup" do
     login_admin
     delete :destroy, id: 1
     assert_redirected_to studentgroups_path
-    assert_equal flash[:error], "Gruppe ist nicht vorhanden!"
+    assert_equal flash[:error], "Diese Gruppe existiert nicht!"
     assert_nil flash[:notice]
   end
   test "destroy existing studentgroup" do
@@ -123,7 +135,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_redirected_to studentgroups_path
     assert_equal flash[:notice], "Gruppe erfolgreich gelöscht!"
     assert_nil flash[:error]
-    assert_equal Studentgroup.size, counter-1
+    assert_equal Studentgroup.size, counter - 1
     assert_nil Studentgroup.find_by_objectid(@group.id)
   end
 
@@ -144,7 +156,7 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_not_nil group_info
     assert(!group_info[:is_new])
     assert_equal group_info[:name], @group.name
-    assert_equal group_info[:lecture],  [@group.lecture.id, @group.lecture.title]
+    assert_equal group_info[:lecture],  { id: @group.lecture.id, title: @group.lecture.title }
     [:students, :tutors].each do |key|
       assert_equal group_info[key], map_list(@group.attributes[key]), "#{key.to_s} check fails"
     end
@@ -155,15 +167,14 @@ class StudentgroupsControllerTest < ActionController::TestCase
     login_admin
     create_test_group
 
-    session[:group] = {id: 1}
-    put :update, id: @group.id
+    put :update, id: 3
     assert_redirected_to studentgroups_path
-    assert_equal flash[:error], "Die Gruppe existiert nicht!"
+    assert_equal flash[:error], "Diese Gruppe existiert nicht!"
 
     create_session_from_group(@group)
     put :update, id: @group.id
-    assert_redirected_to studentgroups_path
-    assert_equal flash[:error], "Die Vorlesung existiert nicht!"
+    assert_response :success
+    assert_template "edit"
   end
 
   test "update is invalid" do
@@ -341,6 +352,62 @@ class StudentgroupsControllerTest < ActionController::TestCase
     assert_false session[:group][:tutors].include? tutor.id
   end
 
+  def create_test_groups
+    l =  Lecture.new({ title: "a Lecture", description: "something interesting" })
+    g1 = Studentgroup.new({ name: "Group1",  lecture: l })
+    g1.students << @user
+    g2 = Studentgroup.new({ name: "Group2",  lecture: l })
+    g3 = Studentgroup.new({ name: "Group3",  lecture: l })
+    g4 = Studentgroup.new({ name: "Group4",  lecture: l })
+    MaglevRecord.save
+    [g1, g2, g3, g4]
+  end
 
+  # join
+  test "should join a studentgroup" do
+    login_admin
+    groups = create_test_groups
+    myGroups = @user.my_groups
+    put :join, id: groups[1].id
+    MaglevRecord.reset
+    assert_equal myGroups.size + 1, @user.my_groups.size
+    assert_redirected_to studentgroups_path
+    assert_equal flash[:notice], "Du bist erfolgreich der Gruppe #{groups[1].to_s} beigetreten!"
+  end
+
+  test "should not join a studentgroup already joined" do
+    login_admin
+    groups = create_test_groups
+    myGroups = @user.my_groups
+    put :join, id: groups[0].id
+    assert_equal myGroups.size, @user.my_groups.size
+    assert_redirected_to studentgroups_path
+    assert_equal flash[:notice], "Du bist bereits in dieser Gruppe!"
+  end
+
+  # list_for_join
+  test "should list all, groups user not joined yet" do
+    login_admin
+    create_test_groups
+    get :list_for_join
+    MaglevRecord.reset
+    groups = Studentgroup.find_all { |group| not group.students.include?(@user)}
+    assert_response :success
+    assert_template "list_for_join"
+    assert_not_nil assigns(:groups)
+    assert_equal assigns(:groups), groups
+  end
+
+  # leave
+  test "should remove me from group you are in" do
+    login_admin
+    groups = create_test_groups
+    myGroups = @user.my_groups
+    put :leave, id: groups[0].id
+    MaglevRecord.reset
+    assert_equal myGroups.size-1, @user.my_groups.size
+    assert_redirected_to studentgroups_path
+    assert_equal flash[:notice], "Du hast erfolgreich die Gruppe #{groups[0].to_s} verlassen!"
+  end
 
 end

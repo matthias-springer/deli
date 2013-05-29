@@ -11,9 +11,7 @@ require "app/models/user"
 require "app/models/lecture"
 require "app/models/studentgroup"
 
-
 MaglevRecord.reset
-
 User.clear
 
 st1 = User.create({
