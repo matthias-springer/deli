@@ -47,7 +47,7 @@ Maglev.persistent do
           innerHtml with: [
             innerHtml img
               style: 'height: 250px; margin-right: 10px; display: inline-block;';
-              src: 'http://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Chengdu-pandas-d10.jpg/800px-Chengdu-pandas-d10.jpg'.
+              src: '../images/pandas.jpg'.
             innerHtml div
               style: 'display: inline-block';
               with: [

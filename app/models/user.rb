@@ -110,7 +110,7 @@ Maglev.persistent do
           innerHtml with: [
             innerHtml img
               style: 'height: 250px; margin-right: 10px; display: inline-block;';
-              src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Bai_yun_giant_panda.jpg/399px-Bai_yun_giant_panda.jpg'.
+              src: '../images/panda.jpg'.
             innerHtml div
               style: 'display: inline-block';
               with: [
